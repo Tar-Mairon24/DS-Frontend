@@ -1,0 +1,61 @@
+<div class="form-container">
+  <h2>Crear Usuario</h2>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+    <label>Nombre</label>
+    <input type="text" formControlName="nombre" />
+    @if (submitted && f['nombre'].errors) {
+      <div class="error">Nombre obligatorio.</div>
+    }
+
+    <label>Email</label>
+    <input type="email" formControlName="email" />
+    @if (submitted && f['email'].errors) {
+      <div class="error">
+        @if (f['email'].errors['required']) {
+          <span>Email obligatorio.</span>
+        }
+        @if (f['email'].errors['email']) {
+          <span>Formato inválido.</span>
+        }
+      </div>
+    }
+
+    <label>Rol</label>
+    <select formControlName="role">
+      <option value="">Selecciona un rol</option>
+      <option value="admin">Administrador</option>
+      <option value="user">Usuario</option>
+    </select>
+    @if (submitted && f['role'].errors) {
+      <div class="error">Rol obligatorio.</div>
+    }
+
+    <label>Contraseña</label>
+    <input type="password" formControlName="password" />
+    @if (submitted && f['password'].errors) {
+      <div class="error">
+        @if (f['password'].errors['required']) {
+          <span>Contraseña obligatoria.</span>
+        }
+        @if (f['password'].errors['minlength']) {
+          <span>Mínimo 8 caracteres.</span>
+        }
+        @if (f['password'].errors['pattern']) {
+          <span>Debe tener mayúsculas y minúsculas.</span>
+        }
+      </div>
+    }
+
+    <button type="submit">Registrar</button>
+
+    @if (successMsg) {
+      <p class="success">{{ successMsg }}</p>
+    }
+    @if (errorMsg) {
+      <p class="error">{{ errorMsg }}</p>
+    }
+
+  </form>
+</div>
