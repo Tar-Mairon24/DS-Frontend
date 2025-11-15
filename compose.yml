@@ -1,0 +1,13 @@
+services:
+  app:
+    build: ./
+    container_name: ds_frontend
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    networks:
+      - ds_network
+
+networks:
+  ds_network:
+    external: true

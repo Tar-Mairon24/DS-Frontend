@@ -1,0 +1,16 @@
+node_modules
+.angular
+.vscode
+dist
+.e2e
+coverage
+.idea
+npm-debug.log
+yarn-error.log
+.DS_Store
+.env
+.env.local
+.env.*.local
+firebase-debug.log*
+firebase-errors.log*
+
