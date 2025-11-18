@@ -1,1 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
+.login-background {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-image: url("assets/images/FLogin.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    margin: 0;
+}
+
+.register-background {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-image: url("assets/images/FRegister.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+
+html, body, app-root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: transparent !important;
+}
+
+
+
+
+
