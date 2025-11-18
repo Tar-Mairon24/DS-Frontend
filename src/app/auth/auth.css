@@ -1,0 +1,21 @@
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f3f4f6; /* gray-100 de Tailwind */
+}
+
+.auth-card {
+  border-radius: 1rem; /* rounded-2xl */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.auth-input {
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #5A3CF4; /* accent color */
+  text-align: center;
+  font-size: 1.25rem;
+}
