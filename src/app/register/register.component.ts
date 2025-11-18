@@ -4,9 +4,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 
-
-// importante volver a revisar este archivo para entender bien el manejo de formularios reactivos y validaciones en Angular
-//Importante revisar de donde salieron tantos errores alm
 @Component({
   selector: 'app-register',
   standalone: true,
