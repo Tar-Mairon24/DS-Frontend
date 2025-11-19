@@ -26,6 +26,12 @@ html, body, app-root {
     background: transparent !important;
 }
 
+@font-face {
+    font-family: 'Poppins';
+    src: url('/assets/fonts/Poppins-Medium.ttf') format('truetype');
+    font-weight: 500;
+}
+
 
 
 
