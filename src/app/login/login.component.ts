@@ -41,7 +41,7 @@ export class LoginComponent {
     if (this.loginForm.invalid) return;
 
     this.authService.login(this.loginForm.value).subscribe({
-      next: () => this.router.navigate(['/welcome']),
+      next: () => this.router.navigate(['/mfa']),
       error: (err) => (this.errorMsg = err.error?.error || 'Error al iniciar sesión'),
     });
   }
