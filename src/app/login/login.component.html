@@ -46,7 +46,10 @@
           }
         </div>
       }
+      <!-- CAPTCHA -->
+      <app-captcha (tokenGenerated)="onToken($event)"></app-captcha>
 
+      
       <!-- BOTÓN -->
       <button type="submit" class="btn">Entrar</button>
 
