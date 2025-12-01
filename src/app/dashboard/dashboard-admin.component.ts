@@ -1,13 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-}
+import { UserService, UserDTO } from '../services/user.service';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -16,14 +10,25 @@ interface User {
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.css']
 })
-export class DashboardAdminComponent {
+export class DashboardAdminComponent implements OnInit {
 
-  users: User[] = [
-    { id: 1, name: 'Mario Irigoyen', email: 'mario@gmail.com', password: 'ABCDefg1234' },
-    { id: 2, name: 'Daniela Escobedo', email: 'danny@gmail.com', password: 'Admin123' },
-    { id: 3, name: 'Frank Hide', email: 'frank@gmail.com', password: 'passXD123' }
-  ];
+  users: UserDTO[] = [];
 
+  constructor(private userService: UserService) {}
+
+  ngOnInit() {
+    this.loadUsers();
+  }
+loadUsers() {
+    this.userService.getUsers({}).subscribe({
+      next: (data) => {
+        this.users = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar usuarios:', err);
+      }
+    });
+  }
   // Estado de modales
   showDeleteModal = false;
   showPasswordModal = false;
@@ -60,7 +65,7 @@ export class DashboardAdminComponent {
   }
 
   // --- Abrir modal cambiar contraseña ---
-  openPasswordModal(user: User) {
+  openPasswordModal(user: UserDTO) {
     this.selectedUserId = user.id;
     this.newPassword = '';
     this.confirmPassword = '';
