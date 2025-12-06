@@ -19,8 +19,8 @@ export class DashboardAdminComponent implements OnInit {
   ngOnInit() {
     this.loadUsers();
   }
-loadUsers() {
-    this.userService.getUsers({}).subscribe({
+  loadUsers() {
+    this.userService.getUsers().subscribe({
       next: (data) => {
         this.users = data;
       },

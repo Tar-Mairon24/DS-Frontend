@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { BaseHttpService } from './http.service';
 
 export interface UserDTO {
   id: number;
@@ -12,15 +12,20 @@ export interface UserDTO {
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService extends BaseHttpService {
+  getUsers(): Observable<any> {
+    return this.get('/users/all');
+  }
 
-  private apiUrl = 'http://localhost:3001/api/v1'; // ENDPOINT
+  getUserById(id: string): Observable<any> {
+    return this.get(`/users/${id}`);
+  }
 
-  private users: UserDTO[] = [];
+  updateUser(id: string, data: any): Observable<any> {
+    return this.put(`/users/${id}`, data);
+  }
 
-  constructor(private http: HttpClient) {}
-
-  getUsers(users: { [param: string]: string | string[] }): Observable<UserDTO[]> {
-    return this.http.get<UserDTO[]>(`${this.apiUrl}/users/all`, { params: users });
+  deleteUser(id: string): Observable<any> {
+    return this.delete(`/users/${id}`);
   }
 }
