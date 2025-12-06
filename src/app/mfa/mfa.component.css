@@ -1,0 +1,50 @@
+.auth-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-card {
+  background: #fff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  width: 380px;
+  text-align: center;
+}
+
+.hidden-input {
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.boxes {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.box {
+  width: 45px;
+  height: 55px;
+  border: 2px solid #307634;
+  border-radius: 8px;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  background: #0cbe3e;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}

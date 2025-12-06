@@ -1,61 +1,74 @@
-<div class="form-container">
-  <h2>Crear Usuario</h2>
+<div class="page-wrapper register-background">
 
-  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <div class="card">
 
-    <label>Nombre</label>
-    <input type="text" formControlName="nombre" />
-    @if (submitted && f['nombre'].errors) {
-      <div class="error">Nombre obligatorio.</div>
-    }
+    <h2>Crear Usuario</h2>
 
-    <label>Email</label>
-    <input type="email" formControlName="email" />
-    @if (submitted && f['email'].errors) {
-      <div class="error">
-        @if (f['email'].errors['required']) {
-          <span>Email obligatorio.</span>
-        }
-        @if (f['email'].errors['email']) {
-          <span>Formato inválido.</span>
-        }
-      </div>
-    }
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 
-    <label>Rol</label>
-    <select formControlName="role">
-      <option value="">Selecciona un rol</option>
-      <option value="admin">Administrador</option>
-      <option value="user">Usuario</option>
-    </select>
-    @if (submitted && f['role'].errors) {
-      <div class="error">Rol obligatorio.</div>
-    }
+      <label>Nombre</label>
+      <input type="text" formControlName="nombre" placeholder="Tu nombre" />
+      @if (submitted && f['nombre'].errors) {
+        <div class="error">Nombre obligatorio.</div>
+      }
 
-    <label>Contraseña</label>
-    <input type="password" formControlName="password" />
-    @if (submitted && f['password'].errors) {
-      <div class="error">
-        @if (f['password'].errors['required']) {
-          <span>Contraseña obligatoria.</span>
-        }
-        @if (f['password'].errors['minlength']) {
-          <span>Mínimo 8 caracteres.</span>
-        }
-        @if (f['password'].errors['pattern']) {
-          <span>Debe tener mayúsculas y minúsculas.</span>
-        }
-      </div>
-    }
+      <label>Email</label>
+      <input type="email" formControlName="email" placeholder="example@correo.com" />
+      @if (submitted && f['email'].errors) {
+        <div class="error">
+          @if (f['email'].errors['required']) {
+            <span>Email obligatorio.</span>
+          }
+          @if (f['email'].errors['email']) {
+            <span>Formato inválido.</span>
+          }
+        </div>
+      }
 
-    <button type="submit">Registrar</button>
+      <label>Rol</label>
+      <select formControlName="role">
+        <option value="">Selecciona un rol</option>
+        <option value="admin">Administrador</option>
+        <option value="user">Usuario</option>
+      </select>
+      @if (submitted && f['role'].errors) {
+        <div class="error">Rol obligatorio.</div>
+      }
 
-    @if (successMsg) {
-      <p class="success">{{ successMsg }}</p>
-    }
-    @if (errorMsg) {
-      <p class="error">{{ errorMsg }}</p>
-    }
+      <label>Contraseña</label>
+      <input type="password" formControlName="password" placeholder="********" />
+      @if (submitted && f['password'].errors) {
+        <div class="error">
+          @if (f['password'].errors['required']) {
+            <span>Contraseña obligatoria.</span>
+          }
+          @if (f['password'].errors['minlength']) {
+            <span>Mínimo 8 caracteres.</span>
+          }
+          @if (f['password'].errors['pattern']) {
+            <span>Debe tener mayúsculas y minúsculas.</span>
+          }
+        </div>
+      }
 
-  </form>
+      <!-- BOTÓN BONITO -->
+      <button type="submit" class="btn">Registrar</button>
+
+      @if (successMsg) {
+        <p class="success">{{ successMsg }}</p>
+      }
+      @if (errorMsg) {
+        <p class="error">{{ errorMsg }}</p>
+      }
+
+    </form>
+
+    <!-- FOOTER -->
+    <div class="footer-text">
+      ¿Ya tienes cuenta?
+      <a routerLink="/login">Iniciar sesión</a>
+    </div>
+
+  </div>
+
 </div>

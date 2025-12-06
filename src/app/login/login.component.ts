@@ -2,12 +2,14 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -39,7 +41,7 @@ export class LoginComponent {
     if (this.loginForm.invalid) return;
 
     this.authService.login(this.loginForm.value).subscribe({
-      next: () => this.router.navigate(['/welcome']),
+      next: () => this.router.navigate(['/mfa']),
       error: (err) => (this.errorMsg = err.error?.error || 'Error al iniciar sesión'),
     });
   }

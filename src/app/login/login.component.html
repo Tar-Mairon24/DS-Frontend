@@ -1,50 +1,67 @@
-<div class="form-container">
-  <h2>Iniciar sesión</h2>
+<div class="page-wrapper login-background">
 
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-    <!-- EMAIL -->
-    <label>Email</label>
-    <input type="email" formControlName="email" />
+  <div class="card">
+    <h2>Iniciar Sesión</h2>
 
-    @if (submitted && f['email'].errors) {
-      <div class="error">
-        @if (f['email'].errors['required']) {
-          <span>El email es obligatorio.</span>
-        }
-        @if (f['email'].errors['email']) {
-          <span>Formato de email inválido.</span>
-        }
-      </div>
-    }
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-    <!-- PASSWORD -->
-    <label>Contraseña</label>
-    <input type="password" formControlName="password" />
+      <!-- EMAIL -->
+      <label>Correo electrónico</label>
+      <input 
+        type="email" 
+        formControlName="email"
+        placeholder="example@correo.com" 
+      />
 
-    @if (submitted && f['password'].errors) {
-      <div class="error">
-        @if (f['password'].errors['required']) {
-          <span>La contraseña es obligatoria.</span>
-        }
-        @if (f['password'].errors['minlength']) {
-          <span>Debe tener al menos 8 caracteres.</span>
-        }
-        @if (f['password'].errors['pattern']) {
-          <span>Debe contener mayúsculas y minúsculas.</span>
-        }
-      </div>
-    }
+      @if (submitted && f['email'].errors) {
+        <div class="error">
+          @if (f['email'].errors['required']) {
+            <span>El email es obligatorio.</span>
+          }
+          @if (f['email'].errors['email']) {
+            <span>Formato de email inválido.</span>
+          }
+        </div>
+      }
 
-    <!-- BOTÓN -->
-    <button type="submit">Ingresar</button>
+      <!-- PASSWORD -->
+      <label>Contraseña</label>
+      <input 
+        type="password" 
+        formControlName="password"
+        placeholder="********"
+      />
 
-    <!-- MENSAJE DE ERROR -->
-    @if (errorMsg) {
-      <p class="error">{{ errorMsg }}</p>
-    }
+      @if (submitted && f['password'].errors) {
+        <div class="error">
+          @if (f['password'].errors['required']) {
+            <span>La contraseña es obligatoria.</span>
+          }
+          @if (f['password'].errors['minlength']) {
+            <span>Debe tener al menos 8 caracteres.</span>
+          }
+          @if (f['password'].errors['pattern']) {
+            <span>Debe contener mayúsculas y minúsculas.</span>
+          }
+        </div>
+      }
 
-  </form>
+      <!-- BOTÓN -->
+      <button type="submit" class="btn">Entrar</button>
+
+      <!-- MENSAJE DE ERROR -->
+      @if (errorMsg) {
+        <p class="error">{{ errorMsg }}</p>
+      }
+
+    </form>
+
+    <div class="footer-text">
+      ¿No tienes cuenta?
+      <a routerLink="/register">Crear cuenta</a>
+    </div>
+
+  </div>
+
 </div>
-
-
