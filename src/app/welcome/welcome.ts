@@ -12,7 +12,7 @@ import { RouterLink } from "@angular/router";
         <h1>¡Login correcto!</h1>
         <h2>Bienvenido</h2>
         <div class="success-icon">✓</div>
-        <button routerLink="/login" class="btn">Volver al login</button>
+        <button routerLink="/dashboard-admin" class="btn">Entrar al dashboard</button>
       </div>
     </div>
   `,

@@ -1,0 +1,137 @@
+.dashboard-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+    background: #017537;
+    min-height: 100vh;
+}
+
+.dashboard-card {
+    background: #f8f0f0;
+    padding: 40px;
+    width: 90%;
+    max-width: 1000px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.dashboard-card h2 {
+    text-align: center;
+    color: #307634;
+    margin-bottom: 35px;
+    font-size: 40px;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+.user-table th {
+    background: #e9f5ec;
+    color: #307634;
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 2px solid #c8dec9;
+}
+
+.user-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.password-btn {
+    padding: 8px 14px;
+    background: #0cbe3e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.password-btn:hover {
+    background: #017537;
+}
+
+.delete-btn {
+    padding: 8px 14px;
+    background: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.delete-btn:hover {
+    background: #b52b27;
+}
+
+/* --- Modales --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(3px);
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    background: white;
+    padding: 30px;
+    width: 350px;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.modal h3 {
+    color: #307634;
+    margin-bottom: 20px;
+}
+
+.modal input {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.confirm-btn {
+    background: #0cbe3e;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.cancel-btn {
+    background: #ccc;
+    color: #333;
+    padding: 10px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.error {
+    color: #d8000c;
+    margin-bottom: 10px;
+}
+
+
+.dashboard-card {
+    font-family: 'Poppins', sans-serif;
+}
+
