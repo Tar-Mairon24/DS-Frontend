@@ -60,19 +60,14 @@
 
     </form>
 
-    <div class="footer-text">
-      ¿No tienes cuenta?
-      <a routerLink="/register">Crear cuenta</a>
-    </div>
-
   </div>
 
 </div>
 
-<!-- ...existing login form code... -->
-
-<app-mfa
-  *ngIf="showMfa"
-  (verified)="onMfaVerified($event)"
-  (close)="onMfaClose()"
-></app-mfa>
+@if (showMfa) {
+  <app-mfa
+    (close)="onMfaClose()"
+    (verified)="onMfaVerified($event)"
+    [propsEmail]="loginForm.get('email')?.value"
+  ></app-mfa>
+}
