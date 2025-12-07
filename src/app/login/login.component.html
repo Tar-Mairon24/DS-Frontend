@@ -49,7 +49,6 @@
       <!-- CAPTCHA -->
       <app-captcha (tokenGenerated)="onToken($event)"></app-captcha>
 
-
       <!-- BOTÓN -->
       <button type="submit" class="btn">Entrar</button>
 
@@ -69,5 +68,6 @@
     (close)="onMfaClose()"
     (verified)="onMfaVerified($event)"
     [propsEmail]="loginForm.get('email')?.value"
+    [propsReason]="'login'"
   ></app-mfa>
 }

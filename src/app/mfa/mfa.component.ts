@@ -14,9 +14,11 @@ export class MfaComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() verified = new EventEmitter<string>();
   @Input() propsEmail: string = '';
+  @Input() propsReason: string = '';
 
   code = "";
   resendCount = 0;
+  sentCode = false;
 
   constructor(private mfaService: MfaService) {}
 
@@ -26,10 +28,11 @@ export class MfaComponent implements OnInit {
   }
 
   sendInitialCode() {
-    this.mfaService.resendMfaCode(this.propsEmail).subscribe({
+    this.mfaService.sendMfaCode({email: this.propsEmail, reason: this.propsReason}).subscribe({
       next: (response) => {
         console.log("Código MFA enviado:", response);
         alert("Código de verificación enviado a tu correo.");
+        this.sentCode = true;
       },
       error: (err) => {
         console.error("Error al enviar código MFA:", err);
@@ -101,6 +104,7 @@ export class MfaComponent implements OnInit {
   }
 
   closeModal() {
+    this.sentCode = false;
     this.close.emit();
   }
 }

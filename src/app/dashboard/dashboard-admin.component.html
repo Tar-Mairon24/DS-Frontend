@@ -1,7 +1,10 @@
 <div class="dashboard-wrapper">
 
   <div class="dashboard-card">
-    <h2>Panel de Administración</h2>
+    <div class="dashboard-header">
+      <h2>Panel de Administración</h2>
+      <button class="newUser-btn" (click)="createUser()" title="Crear nuevo usuario">+</button>
+    </div>
 
     <table class="user-table">
       <thead>
@@ -10,68 +13,76 @@
           <th>Nombre</th>
           <th>Correo</th>
           <th>Contraseña</th>
+          <th>Rol</th>
           <th>Acciones</th>
         </tr>
       </thead>
 
       <tbody>
-        <tr *ngFor="let user of users">
-          <td>{{ user.id }}</td>
-          <td>{{ user.name }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.password }}</td>
-          <td class="actions">
-            <button class="password-btn" (click)="openPasswordModal(user)">Cambiar contraseña</button>
-            <button class="delete-btn" (click)="openDeleteModal(user.id)">Eliminar</button>
-          </td>
-        </tr>
+        @for (user of users; track user.id) {
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.nombre }}</td>
+            <td>{{ user.email }}</td>
+            <td>*****</td>
+            <td>{{ user.role }}</td>
+            <td class="actions">
+              <button class="password-btn" (click)="openPasswordModal(user)">Cambiar contraseña</button>
+              <button class="delete-btn" (click)="openDeleteModal(user.id)">Eliminar</button>
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   </div>
 
   <!-- Modal Eliminar -->
-  <div class="modal-overlay" *ngIf="showDeleteModal">
-    <div class="modal">
-      <h3>¿Eliminar usuario?</h3>
-      <p>Esta acción no se puede deshacer.</p>
+  @if (showDeleteModal) {
+    <div class="modal-overlay">
+      <div class="modal">
+        <h3>¿Eliminar usuario?</h3>
+        <p>Esta acción no se puede deshacer.</p>
 
-      <button class="confirm-btn" (click)="confirmDelete()">Confirmar</button>
-      <button class="cancel-btn" (click)="showDeleteModal = false">Cancelar</button>
+        <button class="confirm-btn" (click)="confirmDelete()">Confirmar</button>
+        <button class="cancel-btn" (click)="showDeleteModal = false">Cancelar</button>
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Modal Cambiar Contraseña -->
-  <div class="modal-overlay" *ngIf="showPasswordModal">
-    <div class="modal">
-      <h3>Cambiar contraseña</h3>
+  @if (showPasswordModal) {
+    <div class="modal-overlay">
+      <div class="modal">
+        <h3>Cambiar contraseña</h3>
 
-      <input type="password" placeholder="Nueva contraseña" [(ngModel)]="newPassword">
-      <input type="password" placeholder="Confirmar contraseña" [(ngModel)]="confirmPassword">
+        <input type="password" placeholder="Nueva contraseña" [(ngModel)]="newPassword">
+        <input type="password" placeholder="Confirmar contraseña" [(ngModel)]="confirmPassword">
 
-  <!-- Lista de requisitos -->
-<ul class="password-rules">
-  <li [class.valid]="passHasMinLength" [class.invalid]="!passHasMinLength">
-    <span class="symbol">{{ passHasMinLength ? "✔" : "✖" }}</span>
-    Mínimo 8 caracteres
-  </li>
+          <!-- Lista de requisitos -->
+        <ul class="password-rules">
+          <li [class.valid]="passHasMinLength" [class.invalid]="!passHasMinLength">
+            <span class="symbol">{{ passHasMinLength ? "✔" : "✖" }}</span>
+            Mínimo 8 caracteres
+          </li>
 
-  <li [class.valid]="passHasUppercase" [class.invalid]="!passHasUppercase">
-    <span class="symbol">{{ passHasUppercase ? "✔" : "✖" }}</span>
-    Al menos 1 mayúscula
-  </li>
+          <li [class.valid]="passHasUppercase" [class.invalid]="!passHasUppercase">
+            <span class="symbol">{{ passHasUppercase ? "✔" : "✖" }}</span>
+            Al menos 1 mayúscula
+          </li>
 
-  <li [class.valid]="passHasDigit" [class.invalid]="!passHasDigit">
-    <span class="symbol">{{ passHasDigit ? "✔" : "✖" }}</span>
-    Al menos 1 número
-  </li>
-</ul>
-      
+          <li [class.valid]="passHasDigit" [class.invalid]="!passHasDigit">
+            <span class="symbol">{{ passHasDigit ? "✔" : "✖" }}</span>
+            Al menos 1 número
+          </li>
+        </ul>
 
-      <p class="error" *ngIf="passwordError">{{ passwordError }}</p>
+        <p class="error" *ngIf="passwordError">{{ passwordError }}</p>
 
-      <button class="confirm-btn" (click)="saveNewPassword()">Guardar</button>
-      <button class="cancel-btn" (click)="showPasswordModal = false">Cancelar</button>
+        <button class="confirm-btn" (click)="saveNewPassword()">Guardar</button>
+        <button class="cancel-btn" (click)="showPasswordModal = false">Cancelar</button>
+      </div>
     </div>
-  </div>
+  }
+
 
 </div>

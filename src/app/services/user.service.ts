@@ -4,9 +4,10 @@ import { BaseHttpService } from './http.service';
 
 export interface UserDTO {
   id: number;
-  name: string;
+  nombre: string;
   email: string;
   password: string;
+  role: string;
 }
 
 @Injectable({

@@ -22,6 +22,13 @@
     font-size: 40px;
 }
 
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .user-table {
     width: 100%;
     border-collapse: collapse;
@@ -135,3 +142,18 @@
     font-family: 'Poppins', sans-serif;
 }
 
+.newUser-btn {
+    background: #0cbe3e;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.newUser-btn:hover {
+    background: #017537;
+}

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
+import { MfaComponent } from '../mfa/mfa.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, MfaComponent],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
@@ -16,6 +17,7 @@ export class RegisterComponent {
   submitted = false;
   errorMsg = '';
   successMsg = '';
+  showMfa = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
@@ -44,9 +46,19 @@ export class RegisterComponent {
     this.authService.register(this.registerForm.value).subscribe({
       next: () => {
         this.successMsg = 'Usuario registrado correctamente';
-        setTimeout(() => this.router.navigate(['/login']), 1500);
+        this.showMfa = true;
       },
       error: (err) => (this.errorMsg = err.error?.error || 'Error al registrar'),
     });
+  }
+
+  onMfaClose() {
+    this.showMfa = false;
+  }
+
+  onMfaVerified(email: string) {
+    console.log('MFA verificado para:', email);
+    this.showMfa = false;
+    setTimeout(() => this.router.navigate(['/dashboard-admin']), 1500);
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService, UserDTO } from '../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -14,7 +15,7 @@ export class DashboardAdminComponent implements OnInit {
 
   users: UserDTO[] = [];
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit() {
     this.loadUsers();
@@ -110,4 +111,7 @@ export class DashboardAdminComponent implements OnInit {
     this.selectedUserId = null;
   }
 
+  createUser() {
+    this.router.navigate(['/register']);
+  }
 }

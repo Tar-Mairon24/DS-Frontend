@@ -6,11 +6,15 @@ import { BaseHttpService } from './http.service';
   providedIn: 'root'
 })
 export class MfaService extends BaseHttpService {
+  sendMfaCode(credentials:{email: string, reason: string}): Observable<any> {
+    return this.post('/email/enviar-email-verificacion', credentials);
+  }
+
   verifyMfa(credentials:{email: string, code: string}): Observable<any> {
-    return this.post('/verificar-email', credentials);
+    return this.post('/email/verificar-email', credentials);
   }
 
   resendMfaCode(email: string): Observable<any> {
-    return this.post('/reenviar-codigo-verificacion', { email });
+    return this.post('/email/reenviar-codigo-verificacion', { email });
   }
 }
