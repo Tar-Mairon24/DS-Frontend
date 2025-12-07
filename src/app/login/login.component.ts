@@ -5,12 +5,12 @@ import { AuthService } from '../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CaptchaComponent } from '../captcha/captcha.component';
-
+import { MfaComponent } from '../mfa/mfa.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, CaptchaComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, CaptchaComponent, MfaComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -19,6 +19,7 @@ export class LoginComponent {
   submitted = false;
   errorMsg = '';
   captchaToken: string = '';
+  showMfa = false;
 
   constructor(
     private fb: FormBuilder,
@@ -54,7 +55,6 @@ export class LoginComponent {
       return;
     }
 
-    // payload final incluyendo el captcha
     const payload = {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password,
@@ -62,10 +62,22 @@ export class LoginComponent {
     };
 
     this.authService.login(payload).subscribe({
-    next: () => this.router.navigate(['/mfa']),
-    error: (err) => {
-      this.errorMsg = err.error?.error || 'Error al iniciar sesión';
-    }
-  });
+      next: () => {
+        this.showMfa = true; // Show MFA modal instead of navigating
+      },
+      error: (err) => {
+        this.errorMsg = err.error?.error || 'Error al iniciar sesión';
+      }
+    });
+  }
+
+  onMfaVerified(code: string) {
+    console.log('MFA verified with code:', code);
+    this.showMfa = false;
+    // You can add MFA verification logic here if needed
+  }
+
+  onMfaClose() {
+    this.showMfa = false;
   }
 }

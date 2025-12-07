@@ -8,10 +8,10 @@
 
       <!-- EMAIL -->
       <label>Correo electrónico</label>
-      <input 
-        type="email" 
+      <input
+        type="email"
         formControlName="email"
-        placeholder="example@correo.com" 
+        placeholder="example@correo.com"
       />
 
       @if (submitted && f['email'].errors) {
@@ -27,8 +27,8 @@
 
       <!-- PASSWORD -->
       <label>Contraseña</label>
-      <input 
-        type="password" 
+      <input
+        type="password"
         formControlName="password"
         placeholder="********"
       />
@@ -49,7 +49,7 @@
       <!-- CAPTCHA -->
       <app-captcha (tokenGenerated)="onToken($event)"></app-captcha>
 
-      
+
       <!-- BOTÓN -->
       <button type="submit" class="btn">Entrar</button>
 
@@ -68,3 +68,11 @@
   </div>
 
 </div>
+
+<!-- ...existing login form code... -->
+
+<app-mfa
+  *ngIf="showMfa"
+  (verified)="onMfaVerified($event)"
+  (close)="onMfaClose()"
+></app-mfa>

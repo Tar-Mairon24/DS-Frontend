@@ -48,3 +48,176 @@
   border-radius: 8px;
   cursor: pointer;
 }
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: #f8f0f0;
+  padding: 50px;
+  width: 380px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s ease;
+  font-weight: bold;
+}
+
+.close-btn:hover {
+  color: #307634;
+}
+
+h3 {
+  text-align: center;
+  color: #307634;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+p {
+  text-align: center;
+  color: #666666;
+  margin-bottom: 25px;
+  font-size: 16px;
+}
+
+label {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.mfa-input {
+  width: 93%;
+  padding: 12px;
+  font-size: 1.5rem;
+  text-align: center;
+  letter-spacing: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 28px;
+  font-family: monospace;
+}
+
+.mfa-input:focus {
+  border-color: #369258;
+  outline: none;
+}
+
+.verify-btn {
+  width: 100%;
+  padding: 12px;
+  background: #0cbe3e;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s ease;
+  display: block;
+  margin: 0 auto;
+}
+
+.verify-btn:hover {
+  background: #017537;
+}
+
+.verify-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  flex: auto;
+  padding: 12px;
+  background: #e74c3c;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s ease;
+  display: block;
+  margin: 15px auto 0 auto;
+}
+
+.cancel-btn:hover {
+  background: #c0392b;
+}
+
+.resend-btn {
+  flex: auto;
+  padding: 12px;
+  background: #3498db;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s ease;
+  display: block;
+  margin: 15px auto 0 auto;
+}
+
+.resend-btn:hover {
+  background: #2980b9;
+}
+
+.resend-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.auxiliary-btns {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  gap: 10px;
+  flex-wrap: wrap;
+}

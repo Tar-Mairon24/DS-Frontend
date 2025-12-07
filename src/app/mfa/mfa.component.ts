@@ -1,18 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mfa',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './mfa.component.html',
   styleUrls: ['./mfa.component.css']
 })
 export class MfaComponent {
+  @Output() close = new EventEmitter<void>();
+  @Output() verified = new EventEmitter<string>();
 
-  boxes = Array(6).fill(0);
-  code = ""; 
+  code = "";
 
   constructor(private router: Router) {}
 
@@ -21,10 +23,19 @@ export class MfaComponent {
   }
 
   verifyCode() {
-    console.log("Código ingresado:", this.code);
+    if (this.code.length === 6) {
+      console.log("Código ingresado:", this.code);
+      this.verified.emit(this.code);
+      this.router.navigate(['/dashboard-admin']);
+    }
+  }
 
-    // Más adelante esto llamará a tu backend
-    // Por ahora solo redirigimos a Welcome
-    this.router.navigate(['/welcome']);
+  resendCode() {
+    console.log("Reenviando código MFA...");
+    alert("Se ha reenviado el código MFA a tu correo electrónico.");
+  }
+
+  closeModal() {
+    this.close.emit();
   }
 }
