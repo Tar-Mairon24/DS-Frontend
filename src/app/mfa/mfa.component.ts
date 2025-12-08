@@ -18,6 +18,7 @@ export class MfaComponent implements OnInit {
 
   code = "";
   resendCount = 0;
+  private verifyTimeout: any;
   sentCode = false;
 
   constructor(private mfaService: MfaService) {}
@@ -43,28 +44,42 @@ export class MfaComponent implements OnInit {
 
   onCodeInput(event: any) {
     this.code = event.target.value;
+
+    // Clear any existing timeout
+    if (this.verifyTimeout) {
+      clearTimeout(this.verifyTimeout);
+    }
+
+    // Automatically verify when 6 digits are entered (with small delay)
+    if (this.code.length === 6) {
+      this.verifyTimeout = setTimeout(() => {
+        this.verifyCode();
+      }, 300); // 300ms delay for better UX
+    }
   }
 
   verifyCode() {
     if (this.code.length === 6) {
+      console.log("Código ingresado:", this.code);
       const credentials = { email: this.propsEmail, code: this.code };
+
       this.mfaService.verifyMfa(credentials).subscribe({
         next: (response) => {
           console.log("Respuesta de verificación MFA:", response);
           if (response.success) {
             this.handleSuccessfulVerification();
           } else {
-            console.log("Código MFA incorrecto. ", credentials, response.error);
+            console.log("Código MFA incorrecto.");
             alert("Código incorrecto. Intenta nuevamente.");
+            this.code = ""; // Clear the code on error
           }
         },
         error: (err) => {
           console.error("Error al verificar MFA:", err);
           alert("Código incorrecto. Intenta nuevamente.");
+          this.code = ""; // Clear the code on error
         }
       });
-    } else {
-      alert("El código debe tener 6 dígitos.");
     }
   }
 
@@ -104,5 +119,11 @@ export class MfaComponent implements OnInit {
   closeModal() {
     this.sentCode = false;
     this.close.emit();
+  }
+
+  ngOnDestroy() {
+    if (this.verifyTimeout) {
+      clearTimeout(this.verifyTimeout);
+    }
   }
 }

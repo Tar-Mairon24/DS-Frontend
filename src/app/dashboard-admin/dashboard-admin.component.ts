@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { UserService, UserDTO } from '../services/user.service';
 import { Router } from '@angular/router';
 import { SideMenuComponent } from '../side-menu/side-menu.component';
+import { UserStateService } from '../services/user-state.service';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -16,7 +17,7 @@ export class DashboardAdminComponent implements OnInit {
 
   users: UserDTO[] = [];
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router, private userStateService: UserStateService) {}
 
   ngOnInit() {
     this.loadUsers();

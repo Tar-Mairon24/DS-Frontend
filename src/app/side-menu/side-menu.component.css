@@ -73,3 +73,14 @@
 .logout-btn .icon {
   font-size: 1.2rem;
 }
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  color: white;
+  text-decoration: none;
+  transition: background 0.2s ease;
+  gap: 1rem;
+  cursor: pointer; /* Add this */
+}

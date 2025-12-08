@@ -69,7 +69,7 @@ export class LoginComponent {
         console.log('Login successful:', response);
         this.userEmail = response.email;
         this.userRole = response.role;
-        this.userName = response.name;
+        this.userName = response.nombre;
         this.showMfa = true;
       },
       error: (err) => {
@@ -86,10 +86,8 @@ export class LoginComponent {
     this.showMfa = false;
     this.userStateService.setUserName(this.userName);
     this.userStateService.setUserRole(this.userRole);
-    if (this.userRole === 'admin') {
-      this.router.navigate(['/dashboard-admin']);
-    } else if (this.userRole === 'agente') {
-      this.router.navigate(['/dashboard']);
-    }
+    this.userStateService.setUserEmail(this.userEmail);
+    this.userStateService.setMfaVerified(true);
+    this.router.navigate(['/dashboard']);
   }
 }

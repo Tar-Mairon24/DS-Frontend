@@ -4,20 +4,18 @@ import { SideMenuComponent } from '../side-menu/side-menu.component';
 import { UserStateService } from '../services/user-state.service';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-configuracion',
   standalone: true,
   imports: [CommonModule, SideMenuComponent],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+  templateUrl: './configuracion.component.html',
+  styleUrls: ['./configuracion.component.css']
 })
-export class DashboardComponent implements OnInit {
-  userName: string = '';
+export class ConfiguracionComponent implements OnInit {
   userRole: string = '';
 
   constructor(private userStateService: UserStateService) {}
 
   ngOnInit() {
-    this.userName = this.userStateService.getUserName();
     this.userRole = this.userStateService.getUserRole();
   }
 }

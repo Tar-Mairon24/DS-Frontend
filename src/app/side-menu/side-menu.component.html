@@ -4,19 +4,19 @@
   </div>
 
   <nav class="menu-items">
-    <a href="#" class="menu-item">
+    <a class="menu-item" (click)="goDashboard()">
       <span class="icon">🏠</span>
       <span>Dashboard</span>
     </a>
     @if (propsRole === 'admin') {
-      <a href="#" class="menu-item">
+      <a class="menu-item" (click)="goDashboardAdmin()">
       <span class="icon">👥</span>
       <span>Usuarios</span>
     </a>
     }
-    <a href="#" class="menu-item">
+    <a class="menu-item" (click)="goSettings()">
       <span class="icon">⚙️</span>
-      <span>Configuración</span>
+      <span>Mi Usuario</span>
     </a>
   </nav>
 
@@ -27,3 +27,12 @@
     </button>
   </div>
 </div>
+
+@if (showMfa) {
+  <app-mfa
+    (close)="onMfaClose()"
+    (verified)="onMfaVerified($event)"
+    [propsEmail]="propsEmail"
+    [propsReason]="propsReason"
+  ></app-mfa>
+}
