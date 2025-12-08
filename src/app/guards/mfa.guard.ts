@@ -10,7 +10,9 @@ export const mfaGuard: CanActivateFn = (route, state) => {
 
   if (!mfaVerified) {
     router.navigate(['/forbidden'], {
-      state: { message: 'Necesitas verificar tu identidad con MFA para acceder a esta página.' }
+      state: {
+        message: 'Tu sesión MFA ha expirado. Por favor verifica tu identidad nuevamente.'
+      }
     });
     return false;
   }
