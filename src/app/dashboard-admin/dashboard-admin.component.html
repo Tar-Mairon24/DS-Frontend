@@ -1,8 +1,13 @@
-<div class="dashboard-wrapper">
+<div class="dashboard-layout">
+  <app-side-menu
+    [propsRole]="'admin'"
+  >
+  </app-side-menu>
 
+  <div class="dashboard-wrapper">
   <div class="dashboard-card">
     <div class="dashboard-header">
-      <h2>Panel de Administración</h2>
+      <h2>Administración de Usuarios</h2>
       <button class="newUser-btn" (click)="createUser()" title="Crear nuevo usuario">+</button>
     </div>
 

@@ -1,0 +1,29 @@
+<div class="side-menu">
+  <div class="menu-header">
+    <h3>Menú</h3>
+  </div>
+
+  <nav class="menu-items">
+    <a href="#" class="menu-item">
+      <span class="icon">🏠</span>
+      <span>Dashboard</span>
+    </a>
+    @if (propsRole === 'admin') {
+      <a href="#" class="menu-item">
+      <span class="icon">👥</span>
+      <span>Usuarios</span>
+    </a>
+    }
+    <a href="#" class="menu-item">
+      <span class="icon">⚙️</span>
+      <span>Configuración</span>
+    </a>
+  </nav>
+
+  <div class="menu-footer">
+    <button class="logout-btn" (click)="logout()">
+      <span class="icon">🚪</span>
+      <span>Cerrar Sesión</span>
+    </button>
+  </div>
+</div>

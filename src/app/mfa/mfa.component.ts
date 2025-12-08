@@ -47,9 +47,7 @@ export class MfaComponent implements OnInit {
 
   verifyCode() {
     if (this.code.length === 6) {
-      console.log("Código ingresado:", this.code);
       const credentials = { email: this.propsEmail, code: this.code };
-      console.log("Credenciales MFA:", credentials);
       this.mfaService.verifyMfa(credentials).subscribe({
         next: (response) => {
           console.log("Respuesta de verificación MFA:", response);

@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { MfaComponent } from '../mfa/mfa.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, MfaComponent],
+  imports: [CommonModule, ReactiveFormsModule, MfaComponent],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
@@ -40,7 +40,7 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-    this.submitted = true;
+    this.submitted = true;'./side-menu.component.html'
     if (this.registerForm.invalid) return;
 
     this.authService.register(this.registerForm.value).subscribe({

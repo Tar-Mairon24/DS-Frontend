@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService, UserDTO } from '../services/user.service';
 import { Router } from '@angular/router';
+import { SideMenuComponent } from '../side-menu/side-menu.component';
 
 @Component({
   selector: 'app-dashboard-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SideMenuComponent],
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.css']
 })
@@ -60,7 +61,23 @@ export class DashboardAdminComponent implements OnInit {
   }
 
   confirmDelete() {
-    this.users = this.users.filter(u => u.id !== this.selectedUserId);
+    if (this.selectedUserId !== null) {
+      this.userService.deleteUser(this.selectedUserId.toString()).subscribe({
+        next: () => {
+          console.log('Usuario eliminado correctamente');
+          this.loadUsers(); // Reload users after successful deletion
+          this.closeDeleteModal();
+        },
+        error: (err) => {
+          console.error('Error al eliminar usuario:', err);
+          alert('Error al eliminar el usuario');
+          this.closeDeleteModal();
+        }
+      });
+    }
+  }
+
+  closeDeleteModal() {
     this.showDeleteModal = false;
     this.selectedUserId = null;
   }

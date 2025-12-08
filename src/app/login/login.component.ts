@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { CaptchaComponent } from '../captcha/captcha.component';
 import { MfaComponent } from '../mfa/mfa.component';
+import { UserStateService } from '../services/user-state.service';
 
 @Component({
   selector: 'app-login',
@@ -20,11 +21,14 @@ export class LoginComponent {
   captchaToken: string = '';
   showMfa = false;
   userEmail: string = '';
+  userRole: string = '';
+  userName: string = '';
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private userStateService: UserStateService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -61,8 +65,11 @@ export class LoginComponent {
     };
 
     this.authService.login(payload).subscribe({
-      next: () => {
-        this.userEmail = this.loginForm.value.email;
+      next: (response) => {
+        console.log('Login successful:', response);
+        this.userEmail = response.email;
+        this.userRole = response.role;
+        this.userName = response.name;
         this.showMfa = true;
       },
       error: (err) => {
@@ -76,10 +83,13 @@ export class LoginComponent {
   }
 
   onMfaVerified(code: string) {
-  this.showMfa = false;
-  this.router.navigate(['/dashboard-admin']).then(
-    success => console.log('Navigation success:', success),
-    error => console.log('Navigation error:', error)
-    );
+    this.showMfa = false;
+    this.userStateService.setUserName(this.userName);
+    this.userStateService.setUserRole(this.userRole);
+    if (this.userRole === 'admin') {
+      this.router.navigate(['/dashboard-admin']);
+    } else if (this.userRole === 'agente') {
+      this.router.navigate(['/dashboard']);
+    }
   }
 }

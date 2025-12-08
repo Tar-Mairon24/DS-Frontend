@@ -157,3 +157,15 @@
 .newUser-btn:hover {
     background: #017537;
 }
+
+.dashboard-layout {
+  display: flex;
+}
+
+.dashboard-wrapper {
+  margin-left: 250px; /* Width of side menu */
+  width: calc(100% - 250px);
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
