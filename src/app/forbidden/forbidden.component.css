@@ -1,0 +1,50 @@
+.forbidden-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.forbidden-content {
+  background: white;
+  padding: 3rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 500px;
+}
+
+.forbidden-content h1 {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
+
+.forbidden-content h2 {
+  color: #dc3545;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.forbidden-content p {
+  color: #666;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.back-btn {
+  padding: 12px 30px;
+  background: #0cbe3e;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s ease;
+}
+
+.back-btn:hover {
+  background: #017537;
+}

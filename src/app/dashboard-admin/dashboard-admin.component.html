@@ -1,0 +1,93 @@
+<div class="dashboard-layout">
+  <app-side-menu
+    [propsRole]="'admin'"
+  >
+  </app-side-menu>
+
+  <div class="dashboard-wrapper">
+  <div class="dashboard-card">
+    <div class="dashboard-header">
+      <h2>Administración de Usuarios</h2>
+      <button class="newUser-btn" (click)="createUser()" title="Crear nuevo usuario">+</button>
+    </div>
+
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Contraseña</th>
+          <th>Rol</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (user of users; track user.id) {
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.nombre }}</td>
+            <td>{{ user.email }}</td>
+            <td>*****</td>
+            <td>{{ user.role }}</td>
+            <td class="actions">
+              <button class="password-btn" (click)="openPasswordModal(user)">Cambiar contraseña</button>
+              <button class="delete-btn" (click)="openDeleteModal(user.id)">Eliminar</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal Eliminar -->
+  @if (showDeleteModal) {
+    <div class="modal-overlay">
+      <div class="modal">
+        <h3>¿Eliminar usuario?</h3>
+        <p>Esta acción no se puede deshacer.</p>
+
+        <button class="confirm-btn" (click)="confirmDelete()">Confirmar</button>
+        <button class="cancel-btn" (click)="showDeleteModal = false">Cancelar</button>
+      </div>
+    </div>
+  }
+
+  <!-- Modal Cambiar Contraseña -->
+  @if (showPasswordModal) {
+    <div class="modal-overlay">
+      <div class="modal">
+        <h3>Cambiar contraseña</h3>
+
+        <input type="password" placeholder="Nueva contraseña" [(ngModel)]="newPassword">
+        <input type="password" placeholder="Confirmar contraseña" [(ngModel)]="confirmPassword">
+
+          <!-- Lista de requisitos -->
+        <ul class="password-rules">
+          <li [class.valid]="passHasMinLength" [class.invalid]="!passHasMinLength">
+            <span class="symbol">{{ passHasMinLength ? "✔" : "✖" }}</span>
+            Mínimo 8 caracteres
+          </li>
+
+          <li [class.valid]="passHasUppercase" [class.invalid]="!passHasUppercase">
+            <span class="symbol">{{ passHasUppercase ? "✔" : "✖" }}</span>
+            Al menos 1 mayúscula
+          </li>
+
+          <li [class.valid]="passHasDigit" [class.invalid]="!passHasDigit">
+            <span class="symbol">{{ passHasDigit ? "✔" : "✖" }}</span>
+            Al menos 1 número
+          </li>
+        </ul>
+
+        <p class="error" *ngIf="passwordError">{{ passwordError }}</p>
+
+        <button class="confirm-btn" (click)="saveNewPassword()">Guardar</button>
+        <button class="cancel-btn" (click)="showPasswordModal = false">Cancelar</button>
+      </div>
+    </div>
+  }
+
+
+</div>

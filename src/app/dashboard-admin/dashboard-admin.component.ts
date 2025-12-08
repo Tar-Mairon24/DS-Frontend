@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService, UserDTO } from '../services/user.service';
+import { Router } from '@angular/router';
+import { SideMenuComponent } from '../side-menu/side-menu.component';
+import { UserStateService } from '../services/user-state.service';
 
 @Component({
   selector: 'app-dashboard-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SideMenuComponent],
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.css']
 })
@@ -14,13 +17,13 @@ export class DashboardAdminComponent implements OnInit {
 
   users: UserDTO[] = [];
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router, private userStateService: UserStateService) {}
 
   ngOnInit() {
     this.loadUsers();
   }
-loadUsers() {
-    this.userService.getUsers({}).subscribe({
+  loadUsers() {
+    this.userService.getUsers().subscribe({
       next: (data) => {
         this.users = data;
       },
@@ -59,7 +62,23 @@ loadUsers() {
   }
 
   confirmDelete() {
-    this.users = this.users.filter(u => u.id !== this.selectedUserId);
+    if (this.selectedUserId !== null) {
+      this.userService.deleteUser(this.selectedUserId.toString()).subscribe({
+        next: () => {
+          console.log('Usuario eliminado correctamente');
+          this.loadUsers(); // Reload users after successful deletion
+          this.closeDeleteModal();
+        },
+        error: (err) => {
+          console.error('Error al eliminar usuario:', err);
+          alert('Error al eliminar el usuario');
+          this.closeDeleteModal();
+        }
+      });
+    }
+  }
+
+  closeDeleteModal() {
     this.showDeleteModal = false;
     this.selectedUserId = null;
   }
@@ -110,4 +129,7 @@ loadUsers() {
     this.selectedUserId = null;
   }
 
+  createUser() {
+    this.router.navigate(['/register']);
+  }
 }

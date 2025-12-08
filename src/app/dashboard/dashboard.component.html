@@ -1,0 +1,19 @@
+<div class="dashboard-layout">
+  <app-side-menu
+    [propsRole]="userRole"
+  >
+  </app-side-menu>
+
+  <div class="dashboard-wrapper">
+    <div class="content-center">
+      <h1>¡Bienvenido {{ userName }}!!!!</h1>
+      @if (userRole === 'agente') {
+        <h2>Panel de Agente</h2>
+        <img src="https://media1.tenor.com/m/VGWpu8FH82AAAAAC/happy-cat-yippee-cat.gif" alt="Welcome GIF" class="welcome-gif">
+      } @else if (userRole === 'admin') {
+        <h2>Panel de Administrador</h2>
+        <img src="https://media1.tenor.com/m/Xaqg4vcuU2wAAAAC/diekatzlei-katzlei.gif" alt="Welcome GIF" class="welcome-gif">
+      }
+    </div>
+  </div>
+</div>

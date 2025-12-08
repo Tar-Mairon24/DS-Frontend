@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { Router, RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { CaptchaComponent } from '../captcha/captcha.component';
-
+import { MfaComponent } from '../mfa/mfa.component';
+import { UserStateService } from '../services/user-state.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, CaptchaComponent],
+  imports: [CommonModule, ReactiveFormsModule, CaptchaComponent, MfaComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -19,12 +19,16 @@ export class LoginComponent {
   submitted = false;
   errorMsg = '';
   captchaToken: string = '';
+  showMfa = false;
+  userEmail: string = '';
+  userRole: string = '';
+  userName: string = '';
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private http: HttpClient
+    private userStateService: UserStateService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -54,7 +58,6 @@ export class LoginComponent {
       return;
     }
 
-    // payload final incluyendo el captcha
     const payload = {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password,
@@ -62,10 +65,29 @@ export class LoginComponent {
     };
 
     this.authService.login(payload).subscribe({
-    next: () => this.router.navigate(['/mfa']),
-    error: (err) => {
-      this.errorMsg = err.error?.error || 'Error al iniciar sesión';
-    }
-  });
+      next: (response) => {
+        console.log('Login successful:', response);
+        this.userEmail = response.email;
+        this.userRole = response.role;
+        this.userName = response.nombre;
+        this.showMfa = true;
+      },
+      error: (err) => {
+        this.errorMsg = err.error?.error || 'Error al iniciar sesión';
+      }
+    });
+  }
+
+  onMfaClose() {
+    this.showMfa = false;
+  }
+
+  onMfaVerified(code: string) {
+    this.showMfa = false;
+    this.userStateService.setUserName(this.userName);
+    this.userStateService.setUserRole(this.userRole);
+    this.userStateService.setUserEmail(this.userEmail);
+    this.userStateService.setMfaVerified(true);
+    this.router.navigate(['/dashboard']);
   }
 }

@@ -1,19 +1,33 @@
-<div class="auth-container">
-  <div class="auth-card">
-    <h1>Verifica tu código</h1>
-    <p class="lead">Ingresa el código de 6 dígitos enviado a tu correo.</p>
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeModal()">&times;</button>
 
-    <input 
-      id="hiddenCode"
+    <h3>Tenemos que verificar tu identidad</h3>
+    <p>Por favor, revisa tu correo electrónico o aplicación de autenticación para obtener el código.</p>
+    <p>Ingresa el código de 6 dígitos</p>
+
+    <label for="mfa-code">Código de verificación</label>
+    <input
+      id="mfa-code"
+      type="text"
       maxlength="6"
-      inputmode="numeric"
       (input)="onCodeInput($event)"
+      [(ngModel)]="code"
+      placeholder="000000"
+      class="mfa-input"
+      autocomplete="off"
     />
 
-    <div id="codeBoxes" class="boxes">
-      <div *ngFor="let box of boxes; let i = index" class="box">{{ code[i] || '' }}</div>
-    </div>
+    <button
+      (click)="verifyCode()"
+      [disabled]="code.length !== 6"
+      class="verify-btn">
+      Verificar
+    </button>
 
-    <button class="btn" (click)="verifyCode()">Verificar código</button>
+  <div class="auxiliary-btns">
+    <button (click)="closeModal()" class="cancel-btn">Cancelar</button>
+    <button (click)="resendCode()" class="resend-btn">Reenviar código</button>
+  </div>
   </div>
 </div>
