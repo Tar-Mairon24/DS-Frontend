@@ -4,15 +4,18 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class UserStateService{
+export class UserStateService {
   private userNameSubject = new BehaviorSubject<string>('');
   private userRoleSubject = new BehaviorSubject<string>('');
   private userEmailSubject = new BehaviorSubject<string>('');
   private mfaVerifiedSubject = new BehaviorSubject<boolean>(false);
+
   userName$ = this.userNameSubject.asObservable();
   userRole$ = this.userRoleSubject.asObservable();
   userEmail$ = this.userEmailSubject.asObservable();
   mfaVerified$ = this.mfaVerifiedSubject.asObservable();
+
+  private readonly MFA_TIMEOUT = 5 * 60 * 1000; // 5 minutes in milliseconds
 
   setUserName(name: string) {
     this.userNameSubject.next(name);
@@ -43,18 +46,45 @@ export class UserStateService{
 
   setMfaVerified(verified: boolean) {
     this.mfaVerifiedSubject.next(verified);
+
+    if (verified) {
+      // Store the timestamp when MFA was verified
+      const timestamp = Date.now().toString();
+      localStorage.setItem('mfaVerifiedAt', timestamp);
+    } else {
+      localStorage.removeItem('mfaVerifiedAt');
+    }
   }
 
   isMfaVerified(): boolean {
-    return this.mfaVerifiedSubject.value;
+    const verifiedAt = localStorage.getItem('mfaVerifiedAt');
+
+    if (!verifiedAt) {
+      return false;
+    }
+
+    const timestamp = parseInt(verifiedAt, 10);
+    const now = Date.now();
+    const timeSinceVerification = now - timestamp;
+
+    // Check if MFA verification has expired (5 minutes)
+    if (timeSinceVerification > this.MFA_TIMEOUT) {
+      this.setMfaVerified(false);
+      return false;
+    }
+
+    return true;
   }
 
   clearUserData() {
     this.userNameSubject.next('');
     this.userRoleSubject.next('');
     this.userEmailSubject.next('');
+    this.mfaVerifiedSubject.next(false);
+
     localStorage.removeItem('userName');
     localStorage.removeItem('userRole');
     localStorage.removeItem('userEmail');
+    localStorage.removeItem('mfaVerifiedAt');
   }
 }
