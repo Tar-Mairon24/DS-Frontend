@@ -1,14 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BaseHttpService } from './http.service';
-
-export interface UserDTO {
-  id: number;
-  nombre: string;
-  email: string;
-  password: string;
-  role: string;
-}
+import { BaseHttpService } from '@services/http.service';
+import { UserDTO } from '@shared/models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +15,7 @@ export class UserService extends BaseHttpService {
     return this.get(`/users/${id}`);
   }
 
-  updateUser(id: string, data: any): Observable<any> {
+  updateUser(id: string, data: UserDTO): Observable<any> {
     return this.put(`/users/${id}`, data);
   }
 

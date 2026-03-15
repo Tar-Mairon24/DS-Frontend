@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UserService, UserDTO } from '../services/user.service';
+import { UserService } from '@services/user.service';
+import { UserDTO } from '@shared/models/user';
 import { Router } from '@angular/router';
-import { SideMenuComponent } from '../side-menu/side-menu.component';
-import { UserStateService } from '../services/user-state.service';
+import { SideMenuComponent } from '@shared/layout/side-menu/side-menu.component';
+import { UserStateService } from '@services/user-state.service';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -17,7 +18,7 @@ export class DashboardAdminComponent implements OnInit {
 
   users: UserDTO[] = [];
 
-  constructor(private userService: UserService, private router: Router, private userStateService: UserStateService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit() {
     this.loadUsers();

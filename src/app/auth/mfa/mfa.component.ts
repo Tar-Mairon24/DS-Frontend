@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MfaService } from '../services/mfa.service';
+import { MfaService } from '@services/mfa.service';
 
 @Component({
   selector: 'app-mfa',

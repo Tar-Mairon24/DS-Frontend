@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
-import { authGuard } from './guards/auth.guard';
-import { ConfiguracionComponent } from './configuracion/configuracion.component';
-import { mfaGuard } from './guards/mfa.guard';
-import { ForbiddenComponent } from './forbidden/forbidden.component';
-import { loggedInGuard } from './guards/logged-in.guard';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { DashboardComponent } from './properties/dashboard/dashboard.component';
+import { DashboardAdminComponent } from './properties/dashboard-admin/dashboard-admin.component';
+import { authGuard } from './auth/guards/auth.guard';
+import { ConfiguracionComponent } from './shared/layout/configuracion/configuracion.component';
+import { mfaGuard } from './auth/guards/mfa.guard';
+import { ForbiddenComponent } from './auth/forbidden/forbidden.component';
+import { loggedInGuard } from './auth/guards/logged-in.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },

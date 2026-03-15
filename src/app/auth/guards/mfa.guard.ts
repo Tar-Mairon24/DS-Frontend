@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { UserStateService } from '../services/user-state.service';
+import { UserStateService } from '@services/user-state.service';
 
 export const mfaGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);

@@ -1,4 +1,4 @@
-import { validateCode } from "./verificationLogic";
+import { validateCode } from "@auth/verification/verificationLogic";
 
 
 const hidden = document.getElementById("hiddenCode") as HTMLInputElement;

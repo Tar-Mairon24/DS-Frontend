@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { UserStateService } from '../services/user-state.service';
-import { MfaComponent } from '../mfa/mfa.component';
+import { UserStateService } from '@services/user-state.service';
+import { MfaComponent } from '@auth/mfa/mfa.component';
 
 @Component({
   selector: 'app-side-menu',

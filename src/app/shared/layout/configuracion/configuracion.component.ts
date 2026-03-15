@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SideMenuComponent } from '../side-menu/side-menu.component';
-import { UserStateService } from '../services/user-state.service';
+import { SideMenuComponent } from '@shared/layout/side-menu/side-menu.component';
+import { UserStateService } from '@services/user-state.service';
 
 @Component({
   selector: 'app-configuracion',

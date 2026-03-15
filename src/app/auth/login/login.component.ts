@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { CaptchaComponent } from '../captcha/captcha.component';
-import { MfaComponent } from '../mfa/mfa.component';
-import { UserStateService } from '../services/user-state.service';
+import { AuthService } from '@services/auth.service';
+import { CaptchaComponent } from '@auth/captcha/captcha.component';
+import { MfaComponent } from '@auth/mfa/mfa.component';
+import { UserStateService } from '@services/user-state.service';
 
 @Component({
   selector: 'app-login',
