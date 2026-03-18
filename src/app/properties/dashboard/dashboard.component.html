@@ -1,19 +1,50 @@
-<div class="dashboard-layout">
-  <app-side-menu
-    [propsRole]="userRole"
-  >
-  </app-side-menu>
+<app-dashboard-layout>
+  <div class="dashboard">
 
-  <div class="dashboard-wrapper">
-    <div class="content-center">
-      <h1>¡Bienvenido {{ userName }}!!!!</h1>
-      @if (userRole === 'agente') {
-        <h2>Panel de Agente</h2>
-        <img src="https://media1.tenor.com/m/VGWpu8FH82AAAAAC/happy-cat-yippee-cat.gif" alt="Welcome GIF" class="welcome-gif">
-      } @else if (userRole === 'admin') {
-        <h2>Panel de Administrador</h2>
-        <img src="https://media1.tenor.com/m/Xaqg4vcuU2wAAAAC/diekatzlei-katzlei.gif" alt="Welcome GIF" class="welcome-gif">
-      }
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Mis Propiedades</h1>
+      <button class="btn-add" (click)="addProperty()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H4a1 1 0 110-2h6V4a1 1 0 011-1z" clip-rule="evenodd" />
+        </svg>
+        Agregar Propiedad
+      </button>
     </div>
+
+    @if (properties.length > 0) {
+      <div class="properties-grid">
+        @for (property of properties; track property.id) {
+          <app-property-card
+            [property]="property"
+            [image]="property.image || ''"
+            (select)="showDetails($event)"
+            (delete)="confirmDelete($event)"
+            (edit)="handleEdit($event)"
+          />
+        }
+      </div>
+    } @else {
+      <app-empty-state
+        title="Oops — No encontramos propiedades"
+        subtitle="No tenemos propiedades para mostrar en este momento."
+        actionLabel="Crear propiedad"
+        (retry)="fetchProperties()"
+        (action)="addProperty()"
+      />
+    }
+
   </div>
-</div>
+
+  @if (showDeleteConfirm) {
+    <div class="confirm-overlay" (click)="handleDeleteCancel()">
+      <div class="confirm-dialog" (click)="$event.stopPropagation()">
+        <h3 class="confirm-title">Eliminar propiedad</h3>
+        <p class="confirm-message">¿Estás seguro? Esta acción no se puede deshacer.</p>
+        <div class="confirm-actions">
+          <button class="btn-cancel" (click)="handleDeleteCancel()">Cancelar</button>
+          <button class="btn-delete" (click)="handleDeleteConfirm()">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  }
+</app-dashboard-layout>

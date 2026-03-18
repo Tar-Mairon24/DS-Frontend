@@ -27,7 +27,7 @@
         @for (user of users; track user.id) {
           <tr>
             <td>{{ user.id }}</td>
-            <td>{{ user.nombre }}</td>
+            <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
             <td>*****</td>
             <td>{{ user.role }}</td>
@@ -41,7 +41,6 @@
     </table>
   </div>
 
-  <!-- Modal Eliminar -->
   @if (showDeleteModal) {
     <div class="modal-overlay">
       <div class="modal">
@@ -54,7 +53,6 @@
     </div>
   }
 
-  <!-- Modal Cambiar Contraseña -->
   @if (showPasswordModal) {
     <div class="modal-overlay">
       <div class="modal">
@@ -63,7 +61,6 @@
         <input type="password" placeholder="Nueva contraseña" [(ngModel)]="newPassword">
         <input type="password" placeholder="Confirmar contraseña" [(ngModel)]="confirmPassword">
 
-          <!-- Lista de requisitos -->
         <ul class="password-rules">
           <li [class.valid]="passHasMinLength" [class.invalid]="!passHasMinLength">
             <span class="symbol">{{ passHasMinLength ? "✔" : "✖" }}</span>

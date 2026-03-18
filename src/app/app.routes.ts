@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { DashboardComponent } from './properties/dashboard/dashboard.component';
-import { DashboardAdminComponent } from './properties/dashboard-admin/dashboard-admin.component';
+import { DashboardUsersComponent } from './pages/dashboard-users/dashboard-users.component';
 import { authGuard } from './auth/guards/auth.guard';
 import { ConfiguracionComponent } from './shared/layout/configuracion/configuracion.component';
 import { mfaGuard } from './auth/guards/mfa.guard';
@@ -24,8 +24,8 @@ export const routes: Routes = [
     canActivate: [loggedInGuard]
   },
   {
-    path: 'dashboard-admin',
-    component: DashboardAdminComponent,
+    path: 'dashboard-users',
+    component: DashboardUsersComponent,
     canActivate: [authGuard, mfaGuard],
     data: { role: 'admin' }
   },

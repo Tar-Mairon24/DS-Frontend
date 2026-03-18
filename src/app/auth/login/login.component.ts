@@ -67,9 +67,9 @@ export class LoginComponent {
     this.authService.login(payload).subscribe({
       next: (response) => {
         console.log('Login successful:', response);
-        this.userEmail = response.email;
-        this.userRole = response.role;
-        this.userName = response.nombre;
+        this.userEmail = response.data.email;
+        this.userRole = response.data.role;
+        this.userName = response.data.username;
         this.showMfa = true;
       },
       error: (err) => {

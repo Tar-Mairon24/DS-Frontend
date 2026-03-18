@@ -1,0 +1,63 @@
+<div class="card" (click)="onClick()">
+  <img [src]="image" alt="Property" class="card-image" />
+
+  <div class="card-body">
+    <div class="card-header">
+      <h2 class="card-title">{{ property.title }}</h2>
+
+      <div class="menu-wrapper">
+        <button
+          class="menu-trigger"
+          (click)="toggleMenu($event)"
+          [attr.aria-expanded]="isMenuOpen"
+          aria-haspopup="true"
+          title="More actions"
+        >
+          <svg class="dots-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <circle cx="5" cy="12" r="1.5"></circle>
+            <circle cx="12" cy="12" r="1.5"></circle>
+            <circle cx="19" cy="12" r="1.5"></circle>
+          </svg>
+        </button>
+
+        @if (isMenuOpen) {
+          <div class="dropdown">
+            <button class="dropdown-item" (click)="onEdit($event)">
+              <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path>
+              </svg>
+              Editar propiedad
+            </button>
+            <button class="dropdown-item danger" (click)="onDelete($event)">
+              <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                <path d="M10 11v6"></path>
+                <path d="M14 11v6"></path>
+                <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              Borrar propiedad
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+
+    <p class="card-price">${{ property.price.toLocaleString() }}</p>
+
+    @if (showBedrooms) {
+      <div class="card-specs">
+        <span>{{ property.bedrooms }} Habitaciones</span>
+        <span>{{ property.bathrooms }} Baño(s)</span>
+        <span>{{ property.construction_m2 }} m²</span>
+      </div>
+    }
+
+    <p class="card-meta">{{ property.city }}, {{ property.neighborhood }}</p>
+    <p class="card-meta">Tipo: {{ property.property_type }}</p>
+    <p class="card-meta">Transacción: {{ property.transaction_type }}</p>
+    <p class="card-meta">Estado: {{ property.status }}</p>
+    <p class="card-date">Creado el: {{ formatDate(property.created_at) }}</p>
+  </div>
+</div>

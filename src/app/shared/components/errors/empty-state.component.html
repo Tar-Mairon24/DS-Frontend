@@ -1,0 +1,18 @@
+<div class="empty-state">
+  <svg class="empty-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="6" y="10" width="52" height="40" rx="4" stroke="currentColor" stroke-width="2" />
+    <path d="M20 26h24" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    <circle cx="30" cy="38" r="4" fill="currentColor" />
+    <circle cx="40" cy="38" r="4" fill="currentColor" />
+  </svg>
+
+  <h2 class="empty-title">{{ title }}</h2>
+  <p class="empty-subtitle">{{ subtitle }}</p>
+
+  <div class="empty-actions">
+    <button class="btn-primary" (click)="retry.emit()">Volver a intentar</button>
+    @if (actionLabel) {
+      <button class="btn-secondary" (click)="action.emit()">{{ actionLabel }}</button>
+    }
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="layout-wrapper">
+  <app-side-menu [propsRole]="userRole"></app-side-menu>
+
+  <main class="layout-main">
+    <ng-content></ng-content>
+  </main>
+
+  @if (showLogoutConfirm) {
+    <div class="confirm-overlay" (click)="onLogoutCancel()">
+      <div class="confirm-dialog" (click)="$event.stopPropagation()">
+        <h3 class="confirm-title">Cierre de sesión</h3>
+        <p class="confirm-message">¿Estás seguro de que deseas cerrar sesión?</p>
+        <div class="confirm-actions">
+          <button class="btn-cancel" (click)="onLogoutCancel()">Cancelar</button>
+          <button class="btn-confirm" (click)="onLogoutConfirm()">Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -7,18 +7,14 @@ import { BaseHttpService } from '@services/http.service';
 })
 export class AuthService extends BaseHttpService {
   login(credentials: { email: string; password: string; captcha: string }): Observable<any> {
-    return this.post('/login', credentials);
+    return this.post('/auth/login', credentials);
   }
 
-  register(user: { nombre: string; email: string; role: string; password: string }): Observable<any> {
-    return this.post('/users/create', user);
-  }
-
-  logout(): Observable<any> {
-    return this.post('/logout', {});
+  logout(id: string ): Observable<any> {
+    return this.post(`/auth/logout/${id}`, { id });
   }
 
   verifyAuth(): Observable<any> {
-    return this.get('/auth/verify');
+    return this.get('/auth/status');
   }
 }

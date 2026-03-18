@@ -48,7 +48,6 @@ export class UserStateService {
     this.mfaVerifiedSubject.next(verified);
 
     if (verified) {
-      // Store the timestamp when MFA was verified
       const timestamp = Date.now().toString();
       localStorage.setItem('mfaVerifiedAt', timestamp);
     } else {

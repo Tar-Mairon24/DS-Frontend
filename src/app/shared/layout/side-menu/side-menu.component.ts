@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { UserStateService } from '@services/user-state.service';
@@ -11,39 +11,68 @@ import { MfaComponent } from '@auth/mfa/mfa.component';
   templateUrl: './side-menu.component.html',
   styleUrls: ['./side-menu.component.css']
 })
-export class SideMenuComponent {
+export class SideMenuComponent implements OnInit {
+
+  @Input() propsRole: string = '';
+
+  isCollapsed: boolean = false;
+  propsEmail: string = '';
+  userEmail: string = '';
+  showMfa: boolean = false;
+  pendingRoute: string = '';
+  propsReason: string = '';
 
   constructor(
     private router: Router,
     private userStateService: UserStateService
   ) {}
 
-  @Input() propsRole: string = '';
-  propsEmail: string = '';
-  showMfa: boolean = false;
-  pendingRoute: string = '';
-  propsReason: string = '';
-
-  logout() {
-    this.userStateService.clearUserData();
-    this.router.navigate(['/login']);
+  ngOnInit() {
+    this.userEmail = this.userStateService.getUserEmail();
   }
 
-  goDashboardAdmin() {
-    this.propsEmail = this.userStateService.getUserEmail();
-    this.pendingRoute = '/dashboard-admin';
-    this.propsReason = 'Abrir administración de usuarios';
-    this.showMfa = true;
+  toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
   }
+
+  // ── Navigation (no MFA needed) ──
 
   goDashboard() {
     this.router.navigate(['/dashboard']);
   }
 
+  goProperties() {
+    this.router.navigate(['/properties']);
+  }
+
+  goCalendar() {
+    this.router.navigate(['/calendar']);
+  }
+
+  goDocuments() {
+    this.router.navigate(['/documents']);
+  }
+
+  goContact() {
+    this.router.navigate(['/contact']);
+  }
+
+  // ── Navigation (MFA protected) ──
+
   goSettings() {
+    this.navigateWithMfa('/configuracion', 'Abrir configuración');
+  }
+
+  goUsers() {
+    this.navigateWithMfa('/dashboard', 'Abrir administración de usuarios');
+  }
+
+  // ── MFA flow ──
+
+  private navigateWithMfa(route: string, reason: string) {
     this.propsEmail = this.userStateService.getUserEmail();
-    this.pendingRoute = '/configuracion';
-    this.propsReason = 'Abrir configuración';
+    this.pendingRoute = route;
+    this.propsReason = reason;
     this.showMfa = true;
   }
 
@@ -53,14 +82,18 @@ export class SideMenuComponent {
   }
 
   onMfaVerified(code: string) {
-    console.log('MFA verificado con código:', code);
     this.showMfa = false;
-
     this.userStateService.setMfaVerified(true);
-
     if (this.pendingRoute) {
       this.router.navigate([this.pendingRoute]);
       this.pendingRoute = '';
     }
+  }
+
+  // ── Auth ──
+
+  logout() {
+    this.userStateService.clearUserData();
+    this.router.navigate(['/login']);
   }
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '@services/auth.service';
+import { UserService } from '@services/user.service';
 import { Router } from '@angular/router';
 import { MfaComponent } from '@auth/mfa/mfa.component';
 
@@ -19,7 +19,7 @@ export class RegisterComponent {
   successMsg = '';
   showMfa = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
     this.registerForm = this.fb.group({
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -43,7 +43,7 @@ export class RegisterComponent {
     this.submitted = true;'./side-menu.component.html'
     if (this.registerForm.invalid) return;
 
-    this.authService.register(this.registerForm.value).subscribe({
+    this.userService.createUser(this.registerForm.value).subscribe({
       next: () => {
         this.successMsg = 'Usuario registrado correctamente';
         this.showMfa = true;

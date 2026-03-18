@@ -45,34 +45,25 @@ export class MfaComponent implements OnInit {
   onCodeInput(event: any) {
     this.code = event.target.value;
 
-    // Clear any existing timeout
     if (this.verifyTimeout) {
       clearTimeout(this.verifyTimeout);
     }
 
-    // Automatically verify when 6 digits are entered (with small delay)
     if (this.code.length === 6) {
       this.verifyTimeout = setTimeout(() => {
         this.verifyCode();
-      }, 300); // 300ms delay for better UX
+      }, 300);
     }
   }
 
   verifyCode() {
     if (this.code.length === 6) {
-      console.log("Código ingresado:", this.code);
       const credentials = { email: this.propsEmail, code: this.code };
 
       this.mfaService.verifyMfa(credentials).subscribe({
         next: (response) => {
           console.log("Respuesta de verificación MFA:", response);
-          if (response.success) {
-            this.handleSuccessfulVerification();
-          } else {
-            console.log("Código MFA incorrecto.");
-            alert("Código incorrecto. Intenta nuevamente.");
-            this.code = ""; // Clear the code on error
-          }
+          this.handleSuccessfulVerification();
         },
         error: (err) => {
           console.error("Error al verificar MFA:", err);

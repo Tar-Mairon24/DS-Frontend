@@ -2,21 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '@services/user.service';
-import { UserDTO } from '@shared/models/user';
+import { User } from '@shared/models/user';
 import { Router } from '@angular/router';
 import { SideMenuComponent } from '@shared/layout/side-menu/side-menu.component';
-import { UserStateService } from '@services/user-state.service';
 
 @Component({
-  selector: 'app-dashboard-admin',
+  selector: 'app-dashboard-users',
   standalone: true,
   imports: [CommonModule, FormsModule, SideMenuComponent],
-  templateUrl: './dashboard-admin.component.html',
-  styleUrls: ['./dashboard-admin.component.css']
+  templateUrl: './dashboard-users.component.html',
+  styleUrls: ['./dashboard-users.component.css']
 })
-export class DashboardAdminComponent implements OnInit {
+export class DashboardUsersComponent implements OnInit {
 
-  users: UserDTO[] = [];
+  users: User[] = [];
 
   constructor(private userService: UserService, private router: Router) {}
 
@@ -25,15 +24,14 @@ export class DashboardAdminComponent implements OnInit {
   }
   loadUsers() {
     this.userService.getUsers().subscribe({
-      next: (data) => {
-        this.users = data;
+      next: (response) => {
+        this.users = response.data || [];
       },
       error: (err) => {
         console.error('Error al cargar usuarios:', err);
       }
     });
   }
-  // Estado de modales
   showDeleteModal = false;
   showPasswordModal = false;
 
@@ -43,7 +41,6 @@ export class DashboardAdminComponent implements OnInit {
   confirmPassword = '';
   passwordError = '';
 
-  // ✔️ Validaciones dinámicas de la contraseña
   get passHasMinLength() {
     return this.newPassword.length >= 8;
   }
@@ -85,7 +82,7 @@ export class DashboardAdminComponent implements OnInit {
   }
 
   // --- Abrir modal cambiar contraseña ---
-  openPasswordModal(user: UserDTO) {
+  openPasswordModal(user: User) {
     this.selectedUserId = user.id;
     this.newPassword = '';
     this.confirmPassword = '';

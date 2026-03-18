@@ -1,6 +1,6 @@
-export interface UserDTO {
+export interface User {
   id: number;
-  nombre: string;
+  username: string;
   email: string;
   password: string;
   role: string;
