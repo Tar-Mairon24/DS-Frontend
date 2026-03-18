@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PropertyCardComponent } from '../property-card/property-card.component';
 import { EmptyStateComponent } from '@shared/components/errors/empty-state.component';
-import { DashboardLayoutComponent } from '@shared/layout/dashboard-layout/dashboard-layout.component';
 import { PropertyService } from '@services/property.service';
 import { UserStateService } from '@services/user-state.service';
 import { Property } from '@models/property';
@@ -13,7 +12,6 @@ import { Property } from '@models/property';
   standalone: true,
   imports: [
     CommonModule,
-    DashboardLayoutComponent,
     PropertyCardComponent,
     EmptyStateComponent,
   ],

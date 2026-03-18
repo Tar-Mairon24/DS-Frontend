@@ -1,41 +1,125 @@
-.dashboard-layout {
-  display: flex;
-  height: 100vh;
+.dashboard {
+  padding: 2rem;
 }
 
-.dashboard-wrapper {
-  flex: 1;
-  min-height: 100vh;
-  overflow-y: auto;
-  background: #f5f4f0;
+.dashboard-header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 2rem;
 }
 
-.content-center {
-  text-align: center;
+.dashboard-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #16a34a;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-add:hover {
+  background: #15803d;
+}
+
+.btn-add svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.properties-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .properties-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .properties-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1280px) {
+  .properties-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Delete confirm dialog */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.confirm-dialog {
   background: white;
-  padding: 3rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.content-center h1 {
-  color: #1e40af;
-  margin-bottom: 1rem;
-  font-size: 2.2rem;
-}
-
-.content-center h2 {
-  color: #555;
-  margin-bottom: 1.5rem;
-  font-weight: 400;
-}
-
-.welcome-gif {
-  max-width: 400px;
+  border-radius: 0.75rem;
+  padding: 2rem;
   width: 100%;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 28rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
+
+.confirm-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: #111827;
+}
+
+.confirm-message {
+  color: #6b7280;
+  margin: 0 0 1.5rem;
+  font-size: 0.875rem;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.btn-cancel {
+  padding: 0.5rem 1rem;
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.15s;
+}
+
+.btn-cancel:hover { background: #e5e7eb; }
+
+.btn-delete {
+  padding: 0.5rem 1rem;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.15s;
+}
+
+.btn-delete:hover { background: #b91c1c; }
