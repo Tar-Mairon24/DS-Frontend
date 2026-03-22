@@ -32,7 +32,6 @@ export class MfaComponent implements OnInit {
     this.mfaService.sendMfaCode({email: this.propsEmail, reason: this.propsReason}).subscribe({
       next: (response) => {
         console.log("Código MFA enviado:", response);
-        alert("Código de verificación enviado a tu correo.");
         this.sentCode = true;
       },
       error: (err) => {
@@ -68,7 +67,7 @@ export class MfaComponent implements OnInit {
         error: (err) => {
           console.error("Error al verificar MFA:", err);
           alert("Código incorrecto. Intenta nuevamente.");
-          this.code = ""; // Clear the code on error
+          this.code = "";
         }
       });
     }

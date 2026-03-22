@@ -70,7 +70,13 @@ export class LoginComponent {
         this.userEmail = response.data.email;
         this.userRole = response.data.role;
         this.userName = response.data.username;
-        this.showMfa = true;
+        const mfaEnabled = response.data.mfaEnabled === true;
+        this.userStateService.setMfaEnabled(mfaEnabled);
+        if (mfaEnabled) {
+          this.showMfa = true;
+        } else {
+          this.completeLogin();
+        }
       },
       error: (err) => {
         this.errorMsg = err.error?.error || 'Error al iniciar sesión';
@@ -82,12 +88,16 @@ export class LoginComponent {
     this.showMfa = false;
   }
 
-  onMfaVerified(code: string) {
-    this.showMfa = false;
+  private completeLogin(): void {
     this.userStateService.setUserName(this.userName);
     this.userStateService.setUserRole(this.userRole);
     this.userStateService.setUserEmail(this.userEmail);
-    this.userStateService.setMfaVerified(true);
     this.router.navigate(['/dashboard']);
+  }
+
+  onMfaVerified(code: string) {
+    this.showMfa = false;
+    this.userStateService.setMfaVerified(true);
+    this.completeLogin();
   }
 }

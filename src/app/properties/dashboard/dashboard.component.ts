@@ -33,12 +33,19 @@ export class DashboardComponent implements OnInit {
     this.fetchProperties();
   }
 
+  isLoading = true;
+
   fetchProperties(): void {
+    this.isLoading = true;
     this.propertyService.getAllProperties().subscribe({
-      next: (data) => { this.properties = data; },
+      next: (data) => {
+        this.properties = data;
+        this.isLoading = false;
+      },
       error: (err) => {
         console.error('Error fetching properties:', err);
         this.properties = [];
+        this.isLoading = false;
         if (err.status === 401) this.router.navigate(['/login']);
       }
     });

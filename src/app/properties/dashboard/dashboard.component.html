@@ -1,16 +1,29 @@
 <div class="dashboard">
-
   <div class="dashboard-header">
     <h1 class="dashboard-title">Mis Propiedades</h1>
     <button class="btn-add" (click)="addProperty()">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H4a1 1 0 110-2h6V4a1 1 0 011-1z" clip-rule="evenodd" />
+        <path
+          fill-rule="evenodd"
+          d="M10 3a1 1 0 011 1v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H4a1 1 0 110-2h6V4a1 1 0 011-1z"
+          clip-rule="evenodd"
+        />
       </svg>
       Agregar Propiedad
     </button>
   </div>
 
-  @if (properties.length > 0) {
+  @if (isLoading) {
+    <div class="skeleton-grid">
+      @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-line long"></div>
+          <div class="skeleton-line short"></div>
+        </div>
+      }
+    </div>
+  } @else if (properties.length > 0) {
     <div class="properties-grid">
       @for (property of properties; track property.id) {
         <app-property-card
@@ -44,5 +57,4 @@
       </div>
     </div>
   }
-
 </div>
