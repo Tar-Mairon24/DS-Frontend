@@ -53,6 +53,9 @@ export interface Property {
 export enum PropertyType {
   Casa = 'Casa',
   Apartamento = 'Apartamento',
+  Loft = 'Loft',
+  Condominio = 'Condominio',
+  Local = 'Local',
   Terreno = 'Terreno',
   Comercial = 'Comercial',
   Almacén = 'Almacén',

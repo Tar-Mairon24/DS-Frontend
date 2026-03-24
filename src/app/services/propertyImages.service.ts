@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { BaseHttpService } from '@services/http.service';
 import { Image, PropertyImageMain } from '@shared/models/image';
 
@@ -8,7 +9,9 @@ import { Image, PropertyImageMain } from '@shared/models/image';
 })
 export class PropertyImagesService extends BaseHttpService {
   getPropertyImagesByPropertyId(propertyId: number): Observable<Image[]> {
-    return this.get(`/properties/${propertyId}/images`);
+    return this.get<{ data: Image[] }>(`/properties/${propertyId}/images`).pipe(
+      map(response => response?.data || [])
+    );
   }
 
   getPropertyMainImageByPropertyId(propertyId: number): Observable<PropertyImageMain> {

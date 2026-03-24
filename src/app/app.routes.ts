@@ -10,6 +10,7 @@ import { mfaGuard } from '@auth/guards/mfa.guard';
 import { loggedInGuard } from '@auth/guards/logged-in.guard';
 import { NewPropertyComponent } from '@properties/new-property/new-property.component';
 import { UpdatePropertyComponent } from '@properties/update-property/update-property.component';
+import { PropertyDetailComponent } from '@properties/property-detail/property-detail.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -24,6 +25,7 @@ export const routes: Routes = [
       { path: 'configuracion', component: ConfiguracionComponent },
       { path: 'properties/new-property', component: NewPropertyComponent },
       { path: 'properties/update/:id', component: UpdatePropertyComponent },
+      { path: 'properties/:id', component: PropertyDetailComponent },
       // ... other user routes
     ]
   },

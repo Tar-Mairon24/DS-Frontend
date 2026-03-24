@@ -47,7 +47,9 @@ export class UpdatePropertyComponent implements OnInit {
 
   ngOnInit() {
     this.propertyId = +this.route.snapshot.paramMap.get('id')!;
-    if (!this.propertyId) {
+
+    if (!this.propertyId || isNaN(this.propertyId) || this.propertyId <= 0) {
+      console.error('Invalid property ID:', this.propertyId);
       this.router.navigate(['/dashboard']);
       return;
     }

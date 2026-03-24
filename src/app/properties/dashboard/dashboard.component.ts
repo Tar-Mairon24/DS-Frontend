@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit {
   }
 
   handleEdit(propertyId: number): void {
-    this.router.navigate(['/properties/edit', propertyId]);
+    this.router.navigate(['properties/update', propertyId]);
   }
 
   confirmDelete(propertyId: number): void {

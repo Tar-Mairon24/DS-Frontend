@@ -1,0 +1,50 @@
+.chars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.char-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.char-value {
+  font-size: 2rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.char-unit {
+  font-size: 10px;
+  font-weight: 500;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.condition-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.condition-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  background: #f5f5f5;
+  color: #999;
+}
+
+.condition-pill.active {
+  background: #f0fdf4;
+  color: #15803d;
+}

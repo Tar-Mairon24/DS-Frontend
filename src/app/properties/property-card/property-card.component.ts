@@ -25,8 +25,10 @@ export class PropertyCardComponent implements OnDestroy {
   constructor(private elRef: ElementRef) {}
 
   get showBedrooms(): boolean {
-    return this.property.property_type === 'house' ||
-           this.property.property_type === 'apartment';
+    return this.property.property_type === 'Casa' ||
+           this.property.property_type === 'Apartamento' ||
+           this.property.property_type === 'Loft' ||
+           this.property.property_type === 'Condominio';
   }
 
   onClick(): void {

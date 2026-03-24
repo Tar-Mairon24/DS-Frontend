@@ -1,0 +1,46 @@
+<div class="card">
+  <div class="card-header">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+        <line x1="8" y1="18" x2="21" y2="18"/>
+        <line x1="3" y1="6" x2="3.01" y2="6"/>
+        <line x1="3" y1="12" x2="3.01" y2="12"/>
+        <line x1="3" y1="18" x2="3.01" y2="18"/>
+      </svg>
+    </div>
+    <h3 class="card-title">Características</h3>
+  </div>
+
+  <div class="chars-grid">
+    <div class="char-item">
+      <span class="char-value">{{ property.garden_m2 }}</span>
+      <span class="char-unit">m² jardín</span>
+    </div>
+    <div class="char-item">
+      <span class="char-value">{{ property.construction_m2 }}</span>
+      <span class="char-unit">m² construidos</span>
+    </div>
+    <div class="char-item">
+      <span class="char-value">{{ property.land_m2 }}</span>
+      <span class="char-unit">m² terreno</span>
+    </div>
+  </div>
+
+  <div class="card-divider"></div>
+
+  <div class="condition-row">
+    <span class="condition-pill" [class.active]="!property.is_occupied">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      {{ property.is_occupied ? 'Ocupada' : 'Desocupada' }}
+    </span>
+    <span class="condition-pill" [class.active]="property.is_furnished">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      {{ property.is_furnished ? 'Amueblada' : 'Sin Amueblar' }}
+    </span>
+  </div>
+</div>
