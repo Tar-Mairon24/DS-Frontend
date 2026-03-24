@@ -17,4 +17,8 @@ export class AuthService extends BaseHttpService {
   verifyAuth(): Observable<any> {
     return this.get('/auth/status');
   }
+
+  refreshToken(): Observable<any> {
+    return this.post('/auth/refresh-token', {});
+  }
 }

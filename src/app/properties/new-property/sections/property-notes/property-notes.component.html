@@ -1,0 +1,36 @@
+<div class="section" [formGroup]="form">
+  <div class="section-header">
+    <div class="section-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+    </div>
+    <h3 class="section-title">Descripciones y Notas</h3>
+  </div>
+
+  <div class="grid-2">
+    <div class="field col-span-2">
+      <label>Descripción para el Listado</label>
+      <textarea formControlName="description" rows="4"
+        placeholder="Describe los detalles destacados que verán los clientes..."></textarea>
+    </div>
+    <div class="field col-span-2">
+      <label>Notas Internas <span class="notes-hint">(no visibles para clientes)</span></label>
+      <textarea formControlName="notes" rows="3"
+        placeholder="Información sensible, comisiones, tratos con el dueño..."></textarea>
+    </div>
+  </div>
+</div>
+
+<style>
+  .notes-hint {
+    font-size: 10px;
+    color: #bbb;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-left: 4px;
+  }
+</style>

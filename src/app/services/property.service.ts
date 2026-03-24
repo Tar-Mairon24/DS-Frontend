@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from '@services/http.service';
-import { Property } from '@shared/models/property';
+import { PropertyCard } from '@shared/models/property';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PropertyService extends BaseHttpService {
-  getAllProperties(): Observable<Property[]> {
+  getAllProperties(): Observable<PropertyCard[]> {
     return this.get('/properties');
   }
 
-  getPropertyById(id: number): Observable<Property> {
+  getPropertyById(id: number): Observable<PropertyCard> {
     return this.get(`/properties/${id}`);
   }
 
-  createProperty(property: Property): Observable<any> {
+  createProperty(property: PropertyCard): Observable<any> {
     return this.post('/properties', property);
   }
 
-  updateProperty(id: number, property: Property): Observable<any> {
+  updateProperty(id: number, property: PropertyCard): Observable<any> {
     return this.put(`/properties/${id}`, property);
   }
 

@@ -52,6 +52,10 @@
         <span>{{ property.bathrooms }} Baño(s)</span>
         <span>{{ property.construction_m2 }} m²</span>
       </div>
+    } @else {
+      <div class="card-specs">
+        <span>Propiedad de {{ property.construction_m2 }} m²</span>
+      </div>
     }
 
     <p class="card-meta">{{ property.city }}, {{ property.neighborhood }}</p>

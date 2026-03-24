@@ -8,6 +8,8 @@ import { ConfiguracionComponent } from '@pages/profile/configuracion/configuraci
 import { authGuard } from '@auth/guards/auth.guard';
 import { mfaGuard } from '@auth/guards/mfa.guard';
 import { loggedInGuard } from '@auth/guards/logged-in.guard';
+import { NewPropertyComponent } from '@properties/new-property/new-property.component';
+import { UpdatePropertyComponent } from '@properties/update-property/update-property.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -19,27 +21,22 @@ export const routes: Routes = [
     canActivate: [loggedInGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      {
-        path: 'configuracion',
-        component: ConfiguracionComponent,
-        canActivate: [mfaGuard]
-      },
-      // Add your new pages here as you build them:
-      // { path: 'properties', component: PropertiesComponent },
-      // { path: 'calendar', component: CalendarComponent },
-      // { path: 'documents', component: DocumentsComponent },
-      // { path: 'contact', component: ContactComponent },
+      { path: 'configuracion', component: ConfiguracionComponent },
+      { path: 'properties/new-property', component: NewPropertyComponent },
+      { path: 'properties/update/:id', component: UpdatePropertyComponent },
+      // ... other user routes
     ]
   },
 
-  // Admin-only routes (also inside the shell)
+  // Admin-only routes
   {
-    path: '',
+    path: 'admin',
     component: MainLayoutComponent,
     canActivate: [loggedInGuard, authGuard],
     data: { role: 'admin' },
     children: [
       { path: 'register', component: RegisterComponent },
+      // ... other admin routes
     ]
   },
 

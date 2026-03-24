@@ -3,7 +3,7 @@ import {
   OnInit, OnDestroy, HostListener, ElementRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Property } from '@models/property';
+import { PropertyCard } from '@models/property';
 
 @Component({
   selector: 'app-property-card',
@@ -13,10 +13,10 @@ import { Property } from '@models/property';
   styleUrls: ['./property-card.component.css']
 })
 export class PropertyCardComponent implements OnDestroy {
-  @Input() property!: Property;
+  @Input() property!: PropertyCard;
   @Input() image: string = '';
 
-  @Output() select = new EventEmitter<Property>();
+  @Output() select = new EventEmitter<PropertyCard>();
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
 

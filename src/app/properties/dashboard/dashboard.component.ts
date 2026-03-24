@@ -5,7 +5,7 @@ import { PropertyCardComponent } from '../property-card/property-card.component'
 import { EmptyStateComponent } from '@shared/components/errors/empty-state.component';
 import { PropertyService } from '@services/property.service';
 import { UserStateService } from '@services/user-state.service';
-import { Property } from '@models/property';
+import { PropertyCard } from '@models/property';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +19,7 @@ import { Property } from '@models/property';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  properties: Property[] = [];
+  properties: PropertyCard[] = [];
   showDeleteConfirm = false;
   propertyToDelete: number | null = null;
 
@@ -46,17 +46,16 @@ export class DashboardComponent implements OnInit {
         console.error('Error fetching properties:', err);
         this.properties = [];
         this.isLoading = false;
-        if (err.status === 401) this.router.navigate(['/login']);
       }
     });
   }
 
-  showDetails(property: Property): void {
-    this.router.navigate(['/property', property.id]);
+  showDetails(property: PropertyCard): void {
+    this.router.navigate(['/properties', property.id]);
   }
 
   handleEdit(propertyId: number): void {
-    this.router.navigate(['/property/edit', propertyId]);
+    this.router.navigate(['/properties/edit', propertyId]);
   }
 
   confirmDelete(propertyId: number): void {
@@ -82,6 +81,6 @@ export class DashboardComponent implements OnInit {
   }
 
   addProperty(): void {
-    this.router.navigate(['/property/new']);
+    this.router.navigate(['/properties/new-property']);
   }
 }

@@ -1,0 +1,54 @@
+<div class="page">
+
+  <div class="page-header">
+    <div>
+      <nav class="breadcrumb">
+        <span (click)="cancel()" class="breadcrumb-link">Propiedades</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">Nueva Propiedad</span>
+      </nav>
+      <h1 class="page-title">Nueva Propiedad</h1>
+      <p class="page-subtitle">Complete todos los detalles para el nuevo registro</p>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="form-card">
+
+      <app-property-media #mediaComponent />
+
+      <div class="section-divider"></div>
+
+      <app-property-location [form]="form" />
+
+      <div class="section-divider"></div>
+
+      <app-property-details [form]="form" />
+
+      <div class="section-divider"></div>
+
+      <app-property-services [form]="form" />
+
+      <div class="section-divider"></div>
+
+      <app-property-notes [form]="form" />
+
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancel()">
+        Cancelar
+      </button>
+      <div class="actions-right">
+        <button type="button" class="btn-draft" (click)="saveDraft()">
+          Guardar borrador
+        </button>
+        <button type="submit" class="btn-publish" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Publicando...' : 'Publicar Propiedad' }}
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>

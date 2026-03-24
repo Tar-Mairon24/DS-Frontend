@@ -1,0 +1,74 @@
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+    </div>
+    <h3 class="section-title">Servicios y Adicionales</h3>
+  </div>
+
+  <div class="services-grid">
+
+    <!-- Amenities -->
+    <div>
+      <p class="check-group-title">Amenities</p>
+      <div class="check-grid">
+        @for (opt of amenities; track opt.value) {
+          <label class="check-label">
+            <input type="checkbox"
+              [checked]="isChecked('amenities', opt.value)"
+              (change)="toggle('amenities', opt.value)"/>
+            {{ opt.label }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- Utilities -->
+    <div>
+      <p class="check-group-title">Servicios Públicos</p>
+      <div class="check-grid">
+        @for (opt of utilities; track opt.value) {
+          <label class="check-label">
+            <input type="checkbox"
+              [checked]="isChecked('utilities', opt.value)"
+              (change)="toggle('utilities', opt.value)"/>
+            {{ opt.label }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- Gas -->
+    <div>
+      <p class="check-group-title">Tipo de Gas</p>
+      <div class="check-grid">
+        @for (opt of gasTypes; track opt.value) {
+          <label class="check-label">
+            <input type="checkbox"
+              [checked]="isChecked('gas_types', opt.value)"
+              (change)="toggle('gas_types', opt.value)"/>
+            {{ opt.label }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- Extras -->
+    <div>
+      <p class="check-group-title">Extras / Otros</p>
+      <div class="check-grid">
+        @for (opt of extras; track opt.value) {
+          <label class="check-label">
+            <input type="checkbox"
+              [checked]="isChecked('extras', opt.value)"
+              (change)="toggle('extras', opt.value)"/>
+            {{ opt.label }}
+          </label>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

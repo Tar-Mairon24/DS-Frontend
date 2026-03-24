@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -24,12 +24,12 @@ export class LoginComponent {
   userRole: string = '';
   userName: string = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private userStateService: UserStateService
-  ) {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private userStateService = inject(UserStateService);
+
+  constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: [
@@ -92,6 +92,7 @@ export class LoginComponent {
     this.userStateService.setUserName(this.userName);
     this.userStateService.setUserRole(this.userRole);
     this.userStateService.setUserEmail(this.userEmail);
+
     this.router.navigate(['/dashboard']);
   }
 

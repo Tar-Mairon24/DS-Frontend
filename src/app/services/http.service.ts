@@ -42,7 +42,7 @@ export class BaseHttpService {
     return this.http.delete<T>(`${this.apiUrl}${endpoint}`, this.getOptions());
   }
 
-  protected patch<T>(endpoint: string, body: any): Observable<T> {
-    return this.http.patch<T>(`${this.apiUrl}${endpoint}`, body, this.getOptions());
+  protected patch<T>(endpoint: string): Observable<T> {
+    return this.http.patch<T>(`${this.apiUrl}${endpoint}`, this.getOptions());
   }
 }
