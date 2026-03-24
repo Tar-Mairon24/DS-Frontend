@@ -1,0 +1,11 @@
+@if (state.isOpen) {
+  <div class="overlay" (click)="close()">
+    <div class="error-dialog" (click)="$event.stopPropagation()">
+      <h3>{{ state.title }}</h3>
+      <p>{{ state.message }}</p>
+      <div class="actions">
+        <button class="btn-ok" (click)="close()">Entendido</button>
+      </div>
+    </div>
+  </div>
+}

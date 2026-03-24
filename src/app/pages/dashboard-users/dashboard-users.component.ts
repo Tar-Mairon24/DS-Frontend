@@ -5,6 +5,7 @@ import { UserService } from '@services/user.service';
 import { User } from '@shared/models/user';
 import { Router } from '@angular/router';
 import { SideMenuComponent } from '@shared/layout/side-menu/side-menu.component';
+import { ErrorModalService } from '@services/error-modal.service';
 
 @Component({
   selector: 'app-dashboard-users',
@@ -17,7 +18,11 @@ export class DashboardUsersComponent implements OnInit {
 
   users: User[] = [];
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private errorModal: ErrorModalService,
+  ) {}
 
   ngOnInit() {
     this.loadUsers();
@@ -69,7 +74,7 @@ export class DashboardUsersComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error al eliminar usuario:', err);
-          alert('Error al eliminar el usuario');
+          this.errorModal.showError('Error al eliminar el usuario');
           this.closeDeleteModal();
         }
       });

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PropertyImagesService } from '@services/propertyImages.service';
+import { ErrorModalService } from '@services/error-modal.service';
 import { Image } from '@shared/models/image';
 
 interface ImageSlot {
@@ -30,22 +31,32 @@ export class PropertyMediaComponent implements OnInit {
   // Pass propertyId after the property is created to enable uploads
   @Input() propertyId: number | null = null;
 
-  readonly MAX_IMAGES = 10;
+  readonly MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+  readonly MAX_FILE_SIZE_MB = 100;
   slots: ImageSlot[] = []; // New images to upload
   existingImages: ExistingImage[] = []; // Existing images from backend
 
-  constructor(private imagesService: PropertyImagesService) {}
+  constructor(
+    private imagesService: PropertyImagesService,
+    private errorModal: ErrorModalService,
+  ) {}
 
   ngOnInit() {}
 
   get totalImages() { return this.slots.length + this.existingImages.filter(i => !i.removed).length; }
-  get remaining() { return this.MAX_IMAGES - this.totalImages; }
-  get canAdd() { return this.totalImages < this.MAX_IMAGES; }
+  get remaining() { return Number.MAX_SAFE_INTEGER; }
+  get canAdd() { return true; }
   get mainIndex() { return this.slots.findIndex(s => s.isMain); }
 
   // Set existing images from backend (for update mode)
   setExistingImages(images: Image[]): void {
-    this.existingImages = images.map(img => ({ ...img, removed: false }));
+    console.log('Setting existing images:', images);
+    this.existingImages = images.map(img => ({
+      ...img,
+      removed: false,
+      // Ensure url is available by checking multiple possible field names
+      url: img.url || (img as any).path || (img as any).image_url || ''
+    }));
     // If no existing images marked as main, mark first new upload as main
     if (!this.existingImages.some(i => i.main_image)) {
       const firstSlot = this.slots[0];
@@ -53,6 +64,7 @@ export class PropertyMediaComponent implements OnInit {
         firstSlot.isMain = true;
       }
     }
+    console.log('Existing images after mapping:', this.existingImages);
   }
 
   openFilePicker() {
@@ -70,7 +82,16 @@ export class PropertyMediaComponent implements OnInit {
 
   addFiles(files: File[]) {
     const toAdd = files.slice(0, this.remaining);
+    const oversizedFiles: string[] = [];
+
     toAdd.forEach((file, i) => {
+      // Validate file size
+      if (file.size > this.MAX_FILE_SIZE) {
+        const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+        oversizedFiles.push(`${file.name} (${sizeMB}MB)`);
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
         const isFirst = this.totalImages === 0 && i === 0;
@@ -85,6 +106,11 @@ export class PropertyMediaComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     });
+
+    if (oversizedFiles.length > 0) {
+      const msg = `Los siguientes archivos superan el límite de ${this.MAX_FILE_SIZE_MB}MB:\n${oversizedFiles.join('\n')}`;
+      this.errorModal.show(msg, 'Archivos Demasiado Grandes');
+    }
   }
 
   setMain(index: number) {
@@ -94,7 +120,7 @@ export class PropertyMediaComponent implements OnInit {
     // If already uploaded, patch via API
     const slot = this.slots[index];
     if (slot.uploaded && slot.uploadedId && this.propertyId) {
-      this.imagesService.updatePropertyImageMain(slot.uploadedId).subscribe({
+      this.imagesService.updatePropertyImageMain(this.propertyId, slot.uploadedId).subscribe({
         error: (err) => console.error('Failed to set main image:', err)
       });
     }
@@ -104,9 +130,11 @@ export class PropertyMediaComponent implements OnInit {
     this.slots.forEach(s => s.isMain = false);
     this.existingImages.forEach(img => img.main_image = img.id === imageId);
 
-    this.imagesService.updatePropertyImageMain(imageId).subscribe({
-      error: (err) => console.error('Failed to set main image:', err)
-    });
+    if (this.propertyId) {
+      this.imagesService.updatePropertyImageMain(this.propertyId, imageId).subscribe({
+        error: (err) => console.error('Failed to set main image:', err)
+      });
+    }
   }
 
   removeSlot(index: number) {
@@ -171,7 +199,18 @@ export class PropertyMediaComponent implements OnInit {
         },
         error: (err) => {
           slot.uploading = false;
-          slot.error = 'Error al subir imagen';
+
+          // Provide specific error message based on status
+          if (err.status === 413) {
+            slot.error = `Archivo muy grande. Máximo ${this.MAX_FILE_SIZE_MB}MB permitido.`;
+          } else if (err.status === 400) {
+            slot.error = 'Formato de imagen inválido';
+          } else if (err.status === 500) {
+            slot.error = 'Error del servidor. Intenta de nuevo';
+          } else {
+            slot.error = 'Error al subir imagen';
+          }
+
           console.error('Upload error:', err);
           resolve();
         }

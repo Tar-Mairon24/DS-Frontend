@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -27,7 +27,7 @@ import { PropertyFormData } from '@shared/models/property-form.model';
   templateUrl: '../new-property/new-property.component.html',
   styleUrls: ['../new-property/new-property.component.css']
 })
-export class UpdatePropertyComponent implements OnInit {
+export class UpdatePropertyComponent implements OnInit, AfterViewInit {
   @ViewChild(PropertyMediaComponent) mediaComponent!: PropertyMediaComponent;
 
   form: FormGroup;
@@ -40,7 +40,8 @@ export class UpdatePropertyComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private propertyService: PropertyService,
-    private imagesService: PropertyImagesService
+    private imagesService: PropertyImagesService,
+    private cdr: ChangeDetectorRef
   ) {
     this.form = createPropertyForm(this.fb);
   }
@@ -55,6 +56,11 @@ export class UpdatePropertyComponent implements OnInit {
     }
 
     this.loadProperty();
+  }
+
+  ngAfterViewInit() {
+    // Load images after view is initialized so ViewChild is available
+    this.loadImages();
   }
 
   private loadProperty() {
@@ -90,9 +96,6 @@ export class UpdatePropertyComponent implements OnInit {
         };
 
         this.form = createPropertyForm(this.fb, formData);
-
-        // Load existing images
-        this.loadImages();
       },
       error: (err) => {
         console.error('Error loading property:', err);
@@ -102,13 +105,25 @@ export class UpdatePropertyComponent implements OnInit {
   }
 
   private loadImages() {
-    if (!this.propertyId) return;
+    if (!this.propertyId) {
+      console.warn('No propertyId available for loading images');
+      return;
+    }
+
+    console.log('Loading images for property:', this.propertyId);
+    console.log('MediaComponent available:', !!this.mediaComponent);
 
     this.imagesService.getPropertyImagesByPropertyId(this.propertyId).subscribe({
       next: (images) => {
+        console.log('Images loaded:', images.length, images);
+
         // Pass existing images to media component
         if (this.mediaComponent) {
           this.mediaComponent.setExistingImages(images);
+          // Trigger change detection to ensure UI updates
+          this.cdr.detectChanges();
+        } else {
+          console.error('MediaComponent not initialized yet');
         }
         this.isLoading = false;
       },
@@ -138,7 +153,37 @@ export class UpdatePropertyComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    this.propertyService.updateProperty(this.propertyId, this.form.value).subscribe({
+    // Build update payload with only updatable fields (exclude images which are handled separately)
+    const formValue = this.form.value;
+    const updatePayload: any = {
+      title: formValue.title,
+      status: formValue.status,
+      address: formValue.address,
+      neighborhood: formValue.neighborhood,
+      city: formValue.city,
+      zone: formValue.zone,
+      reference: formValue.reference,
+      transaction_type: formValue.transaction_type,
+      property_type: formValue.property_type,
+      price: formValue.price,
+      is_occupied: formValue.is_occupied,
+      is_furnished: formValue.is_furnished,
+      construction_m2: formValue.construction_m2,
+      land_m2: formValue.land_m2,
+      garden_m2: formValue.garden_m2,
+      floors: formValue.floors,
+      bedrooms: formValue.bedrooms,
+      bathrooms: formValue.bathrooms,
+      garage_size: formValue.garage_size,
+      amenities: formValue.amenities,
+      utilities: formValue.utilities,
+      gas_types: formValue.gas_types,
+      extras: formValue.extras,
+      description: formValue.description,
+      notes: formValue.notes,
+    };
+
+    this.propertyService.updateProperty(this.propertyId, updatePayload).subscribe({
       next: () => {
         // Upload any new images
         if (this.mediaComponent) {

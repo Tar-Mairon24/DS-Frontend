@@ -2,12 +2,38 @@
 
   @if (images.length > 0) {
     <div class="slider-track">
-      <img
-        [src]="getUrl(currentImage)"
-        [alt]="getDescription(currentImage) || 'Property image'"
-        class="slide-img"
-        (click)="openFullImage()"
-      />
+      <!-- 3D Carousel Container -->
+      <div class="carousel-viewport">
+        <!-- Previous Image -->
+        @if (images.length > 1) {
+          <img
+            [src]="getUrl(getPrevImage())"
+            [alt]="getDescription(getPrevImage()) || 'Previous image'"
+            class="carousel-img carousel-side carousel-prev"
+            (click)="prev()"
+            title="Anterior"
+          />
+        }
+
+        <!-- Current Image -->
+        <img
+          [src]="getUrl(currentImage)"
+          [alt]="getDescription(currentImage) || 'Property image'"
+          class="carousel-img carousel-center"
+          (click)="openFullImage()"
+        />
+
+        <!-- Next Image -->
+        @if (images.length > 1) {
+          <img
+            [src]="getUrl(getNextImage())"
+            [alt]="getDescription(getNextImage()) || 'Next image'"
+            class="carousel-img carousel-side carousel-next"
+            (click)="next()"
+            title="Siguiente"
+          />
+        }
+      </div>
 
       <!-- Main image badge -->
       @if (currentImage?.main_image) {
@@ -15,18 +41,6 @@
       }
 
       @if (hasMultiple) {
-        <!-- Prev button -->
-        <button class="nav-btn nav-prev" (click)="prev()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"/>
-          </svg>
-        </button>
-        <!-- Next button -->
-        <button class="nav-btn nav-next" (click)="next()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
         <!-- Dot indicators -->
         <div class="dots">
           @for (img of images; track img; let i = $index) {
@@ -39,6 +53,42 @@
         </div>
         <!-- Counter -->
         <span class="counter">{{ currentIndex + 1 }} / {{ images.length }}</span>
+
+        <!-- Action Buttons Container -->
+        <div class="action-buttons">
+          <!-- Set as Main Image Button -->
+          @if (!currentImage?.main_image) {
+            <button
+              class="set-main-btn"
+              (click)="setAsMainImage(currentImage.id)"
+              [disabled]="isSettingMainImage"
+              title="Establecer como imagen principal"
+            >
+              @if (!isSettingMainImage) {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+              } @else {
+                <span class="spinner"></span>
+                Guardando...
+              }
+            </button>
+          }
+
+          <!-- Download Button -->
+          <button
+            class="download-btn"
+            (click)="downloadImage()"
+            title="Descargar imagen"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </button>
+        </div>
       }
     </div>
 

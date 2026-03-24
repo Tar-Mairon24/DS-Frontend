@@ -1,67 +1,104 @@
 <div class="card" (click)="onClick()">
-  <img [src]="image" alt="Property" class="card-image" />
 
-  <div class="card-body">
-    <div class="card-header">
-      <h2 class="card-title">{{ property.title }}</h2>
+  <!-- Image + overlay badges -->
+  <div class="card-image-wrap">
+    <img [src]="image || 'assets/images/property-placeholder.jpg'"
+         alt="{{ property.title }}"
+         class="card-image" />
 
-      <div class="menu-wrapper">
-        <button
-          class="menu-trigger"
-          (click)="toggleMenu($event)"
-          [attr.aria-expanded]="isMenuOpen"
-          aria-haspopup="true"
-          title="More actions"
-        >
-          <svg class="dots-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <circle cx="5" cy="12" r="1.5"></circle>
-            <circle cx="12" cy="12" r="1.5"></circle>
-            <circle cx="19" cy="12" r="1.5"></circle>
-          </svg>
-        </button>
-
-        @if (isMenuOpen) {
-          <div class="dropdown">
-            <button class="dropdown-item" (click)="onEdit($event)">
-              <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 20h9"></path>
-                <path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path>
-              </svg>
-              Editar propiedad
-            </button>
-            <button class="dropdown-item danger" (click)="onDelete($event)">
-              <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
-                <path d="M10 11v6"></path>
-                <path d="M14 11v6"></path>
-                <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path>
-              </svg>
-              Borrar propiedad
-            </button>
-          </div>
-        }
-      </div>
+    <!-- Top-left: type + transaction badges -->
+    <div class="badge-row">
+      <span class="badge badge-type">{{ property.property_type }}</span>
+      <span class="badge badge-tx" [class]="'badge-tx--' + property.transaction_type.toLowerCase()">
+        {{ property.transaction_type }}
+      </span>
     </div>
 
-    <p class="card-price">${{ property.price.toLocaleString() }}</p>
+    <!-- Top-right: status -->
+    <span class="badge badge-status" [class]="'badge-status--' + property.status.toLowerCase()">
+      {{ property.status }}
+    </span>
+
+    <!-- 3-dot menu -->
+    <div class="menu-wrapper" (click)="$event.stopPropagation()">
+      <button class="menu-trigger" (click)="toggleMenu($event)">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+          <circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>
+        </svg>
+      </button>
+      @if (isMenuOpen) {
+        <div class="dropdown">
+          <button class="dropdown-item" (click)="onEdit($event)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+            </svg>
+            Editar
+          </button>
+          <button class="dropdown-item danger" (click)="onDelete($event)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+              <path d="M10 11v6"/><path d="M14 11v6"/>
+            </svg>
+            Eliminar
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Card body -->
+  <div class="card-body">
+
+    <h2 class="card-title">{{ property.title }}</h2>
+
+    <p class="card-location">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+      </svg>
+      {{ property.city }}{{ property.neighborhood ? ', ' + property.neighborhood : '' }}
+    </p>
+
+    <p class="card-price">${{ property.price | number:'1.0-0' }} <span class="currency">MXN</span></p>
 
     @if (showBedrooms) {
       <div class="card-specs">
-        <span>{{ property.bedrooms }} Habitaciones</span>
-        <span>{{ property.bathrooms }} Baño(s)</span>
-        <span>{{ property.construction_m2 }} m²</span>
+        <span class="spec">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          {{ property.bedrooms }} Hab
+        </span>
+        <span class="spec">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+            <path d="M3 7v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"/>
+            <path d="M3 7h3m15 0h-3M3 7a2 2 0 0 1 2-2h2V3h8v2h2a2 2 0 0 1 2 2"/>
+          </svg>
+          {{ property.bathrooms }} Baños
+        </span>
+        <span class="spec">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+          </svg>
+          {{ property.construction_m2 }} m²
+        </span>
       </div>
     } @else {
       <div class="card-specs">
-        <span>Propiedad de {{ property.construction_m2 }} m²</span>
+        <span class="spec">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+          </svg>
+          {{ property.construction_m2 }} m²
+        </span>
       </div>
     }
 
-    <p class="card-meta">{{ property.city }}, {{ property.neighborhood }}</p>
-    <p class="card-meta">Tipo: {{ property.property_type }}</p>
-    <p class="card-meta">Transacción: {{ property.transaction_type }}</p>
-    <p class="card-meta">Estado: {{ property.status }}</p>
-    <p class="card-date">Creado el: {{ formatDate(property.created_at) }}</p>
+    <div class="card-footer">
+      <span class="card-id">ID: {{ property.id }}</span>
+      <span class="card-date">{{ formatDate(property.created_at) }}</span>
+    </div>
+
   </div>
 </div>

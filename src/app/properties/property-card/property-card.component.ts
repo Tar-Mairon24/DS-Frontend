@@ -1,6 +1,6 @@
 import {
   Component, Input, Output, EventEmitter,
-  OnInit, OnDestroy, HostListener, ElementRef
+  OnDestroy, HostListener, ElementRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PropertyCard } from '@models/property';
@@ -17,7 +17,7 @@ export class PropertyCardComponent implements OnDestroy {
   @Input() image: string = '';
 
   @Output() select = new EventEmitter<PropertyCard>();
-  @Output() edit = new EventEmitter<number>();
+  @Output() edit   = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
 
   isMenuOpen = false;
@@ -25,15 +25,10 @@ export class PropertyCardComponent implements OnDestroy {
   constructor(private elRef: ElementRef) {}
 
   get showBedrooms(): boolean {
-    return this.property.property_type === 'Casa' ||
-           this.property.property_type === 'Apartamento' ||
-           this.property.property_type === 'Loft' ||
-           this.property.property_type === 'Condominio';
+    return ['Casa', 'Apartamento', 'Loft', 'Condominio'].includes(this.property.property_type);
   }
 
-  onClick(): void {
-    this.select.emit(this.property);
-  }
+  onClick(): void { this.select.emit(this.property); }
 
   toggleMenu(event: Event): void {
     event.stopPropagation();
@@ -59,11 +54,11 @@ export class PropertyCardComponent implements OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    // HostListener cleans up automatically
-  }
+  ngOnDestroy(): void {}
 
   formatDate(date: string): string {
-    return new Date(date).toLocaleDateString();
+    return new Date(date).toLocaleDateString('es-MX', {
+      day: '2-digit', month: 'short', year: 'numeric'
+    });
   }
 }

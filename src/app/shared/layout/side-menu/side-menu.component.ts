@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { UserStateService } from '@services/user-state.service';
@@ -12,6 +12,8 @@ import { MfaComponent } from '@auth/mfa/mfa.component';
   styleUrls: ['./side-menu.component.css']
 })
 export class SideMenuComponent implements OnInit {
+  private readonly MOBILE_BREAKPOINT = 768;
+  private wasMobileViewport = false;
 
   @Input() propsRole: string = '';
 
@@ -29,6 +31,22 @@ export class SideMenuComponent implements OnInit {
 
   ngOnInit() {
     this.userEmail = this.userStateService.getUserEmail();
+    this.syncCollapseWithViewport(true);
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.syncCollapseWithViewport(false);
+  }
+
+  private syncCollapseWithViewport(force: boolean): void {
+    const isMobileViewport = window.innerWidth <= this.MOBILE_BREAKPOINT;
+
+    if (force || isMobileViewport !== this.wasMobileViewport) {
+      // Mobile: collapsed by default. Desktop: open by default.
+      this.isCollapsed = isMobileViewport;
+      this.wasMobileViewport = isMobileViewport;
+    }
   }
 
   toggleCollapse() {

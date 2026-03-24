@@ -1,163 +1,387 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── Design tokens ── */
+:host {
+  --primary:            #002996;
+  --primary-container:  #2442B1;
+  --secondary:          #006e25;
+  --on-secondary:       #ffffff;
+  --surface:            #f8f9fa;
+  --surface-low:        #f3f4f5;
+  --surface-card:       #ffffff;
+  --on-surface:         #191c1d;
+  --on-surface-variant: #444653;
+  --ghost-border:       rgba(197, 197, 213, 0.18);
+  --shadow-ambient:     0 12px 40px rgba(25, 28, 29, 0.06);
+
+  display: block;
+  font-family: 'Inter', sans-serif;
+}
+
 .dashboard {
-  padding: 2rem;
+  padding: 2rem 2.5rem;
+  background: var(--surface);
+  min-height: 100%;
 }
 
-.dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
+/* Hidden by default, enabled only for mobile */
+.mobile-add-fab {
+  display: none;
 }
 
+/* ── Header ── */
+.dashboard-header { margin-bottom: 2rem; }
+
+/* headline-sm per design system: 1.5rem, bold, tight tracking */
 .dashboard-title {
-  font-size: 1.875rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #111827;
-  margin: 0;
+  color: var(--primary);
+  margin: 0 0 3px;
+  letter-spacing: -0.02em;
 }
 
-.btn-add {
+.dashboard-subtitle {
+  font-size: 0.75rem; /* label-md */
+  color: var(--on-surface-variant);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── Toolbar ── */
+.toolbar {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #16a34a;
-  color: white;
-  border: none;
-  border-radius: 0.375rem;
-  font-size: 0.9375rem;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* "Filtros Avanzados" uses ghost border — §5 Chips */
+.btn-filter-advanced {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  /* Ghost border fallback — outline-variant at 15% */
+  border: 1px solid rgba(197, 197, 213, 0.45);
+  background: var(--surface-card);
+  border-radius: 0.5rem;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.01em;
+  font-family: 'Inter', sans-serif;
+  color: var(--on-surface-variant);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  box-shadow: var(--shadow-ambient);
 }
 
-.btn-add:hover {
-  background: #15803d;
+.btn-filter-advanced:hover {
+  border-color: rgba(0, 41, 150, 0.3);
+  color: var(--primary);
+  background: var(--surface-card);
 }
 
-.btn-add svg {
-  width: 1.25rem;
-  height: 1.25rem;
+/* Filter tabs — surface-low container, white active pill */
+.filter-tabs {
+  display: flex;
+  background: var(--surface-low);
+  border-radius: 0.5rem;
+  padding: 3px;
+  gap: 2px;
 }
 
+.filter-tab {
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  border-radius: calc(0.5rem - 2px);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.filter-tab.active {
+  background: var(--surface-card);
+  color: var(--primary);
+  /* Ambient shadow lifts the active pill */
+  box-shadow: 0 2px 8px rgba(25, 28, 29, 0.08);
+}
+
+.filter-tab:not(.active):hover { color: var(--on-surface); }
+
+.sort-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sort-label {
+  font-size: 0.75rem; /* label-md */
+  color: var(--on-surface-variant);
+  white-space: nowrap;
+}
+
+/* Sort select — surface-card, ghost border */
+.sort-select {
+  padding: 7px 28px 7px 12px;
+  border: 1px solid rgba(197, 197, 213, 0.45);
+  border-radius: 0.5rem;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  color: var(--on-surface);
+  background: var(--surface-card);
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23757684' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  box-shadow: var(--shadow-ambient);
+  transition: border-color 0.15s;
+}
+
+.sort-select:focus {
+  border-color: rgba(0, 41, 150, 0.4);
+  /* §5 Input focus glow */
+  box-shadow: 0 0 0 3px rgba(0, 41, 150, 0.08);
+}
+
+/* ── Properties grid ── */
 .properties-grid {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  /* §5 Cards: use spacing-8 between items instead of dividers */
   gap: 1.5rem;
 }
 
-@media (min-width: 640px) {
-  .properties-grid { grid-template-columns: repeat(2, 1fr); }
+/* ── Add card —
+   Primary CTA: §5 Buttons uses secondary (green) gradient */
+.add-card {
+  /* No border — tonal separation from #f8f9fa surface */
+  background: var(--surface-card);
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 2rem 1rem;
+  min-height: 220px;
+  text-align: center;
+  box-shadow: var(--shadow-ambient);
+  transition: box-shadow 0.2s, transform 0.2s;
 }
 
-@media (min-width: 1024px) {
-  .properties-grid { grid-template-columns: repeat(3, 1fr); }
+.add-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 48px rgba(25, 28, 29, 0.09);
 }
 
-@media (min-width: 1280px) {
-  .properties-grid { grid-template-columns: repeat(4, 1fr); }
-}
-
-/* Delete confirm dialog */
-.confirm-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+/* Green CTA icon — §5 Primary Action Button */
+.add-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  /* Signature gradient: secondary → darker green */
+  background: linear-gradient(160deg, #006e25 0%, #004d1a 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 50;
+  box-shadow: 0 6px 20px rgba(0, 110, 37, 0.25);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.add-card:hover .add-card-icon {
+  transform: scale(1.06);
+  box-shadow: 0 10px 28px rgba(0, 110, 37, 0.32);
+}
+
+.add-card-icon svg {
+  width: 22px;
+  height: 22px;
+  color: white;
+  stroke-width: 2.5;
+}
+
+.add-card-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--secondary);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.add-card-hint {
+  font-size: 11px;
+  color: var(--on-surface-variant);
+  margin: 0;
+  max-width: 160px;
+  line-height: 1.55;
+  opacity: 0.7;
+}
+
+/* ── No results ── */
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  color: var(--on-surface-variant);
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* ── Skeletons ── */
+@keyframes shimmer {
+  0%   { background-position: -800px 0; }
+  100% { background-position: 800px 0; }
+}
+
+.skeleton-card {
+  /* Same tonal lift as real cards */
+  background: var(--surface-card);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-ambient);
+}
+
+.skeleton-img {
+  width: 100%;
+  aspect-ratio: 16/10;
+  background: linear-gradient(90deg, var(--surface-low) 25%, #ebebec 50%, var(--surface-low) 75%);
+  background-size: 1600px 100%;
+  animation: shimmer 1.6s infinite;
+}
+
+.skeleton-line {
+  height: 12px;
+  margin: 14px 16px 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--surface-low) 25%, #ebebec 50%, var(--surface-low) 75%);
+  background-size: 1600px 100%;
+  animation: shimmer 1.6s infinite;
+}
+
+.skeleton-line.long  { width: 62%; }
+.skeleton-line.short { width: 35%; margin-bottom: 16px; }
+
+/* ── Delete dialog — glassmorphism (§3 Glass & Gradient Rule) ── */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(25, 28, 29, 0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
 }
 
 .confirm-dialog {
-  background: white;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 0.75rem;
   padding: 2rem;
   width: 100%;
-  max-width: 28rem;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  max-width: 380px;
+  box-shadow: 0 24px 64px rgba(25, 28, 29, 0.12);
+  /* Ghost border — §4 */
+  border: 1px solid rgba(197, 197, 213, 0.22);
 }
 
 .confirm-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem;
-  color: #111827;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--on-surface);
+  letter-spacing: -0.01em;
 }
 
 .confirm-message {
-  color: #6b7280;
+  font-size: 13px;
+  color: var(--on-surface-variant);
   margin: 0 0 1.5rem;
-  font-size: 0.875rem;
+  line-height: 1.5;
 }
 
 .confirm-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1.25rem 1rem;
+  }
+
+  .mobile-add-fab {
+    position: fixed;
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+    width: 46px;
+    height: 46px;
+    border: none;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(160deg, #006e25 0%, #004d1a 100%);
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(0, 110, 37, 0.35);
+    z-index: 120;
+    cursor: pointer;
+  }
+
+  .mobile-add-fab svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .add-card {
+    display: none;
+  }
 }
 
 .btn-cancel {
-  padding: 0.5rem 1rem;
-  background: #f3f4f6;
-  color: #374151;
+  padding: 9px 18px;
+  background: var(--surface-low);
   border: none;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  color: var(--on-surface-variant);
   cursor: pointer;
-  font-size: 0.875rem;
   transition: background 0.15s;
 }
 
-.btn-cancel:hover { background: #e5e7eb; }
+.btn-cancel:hover { background: #eaebec; }
 
 .btn-delete {
-  padding: 0.5rem 1rem;
-  background: #dc2626;
+  padding: 9px 18px;
+  /* Signature gradient on destructive action too */
+  background: linear-gradient(160deg, #dc2626 0%, #b91c1c 100%);
   color: white;
   border: none;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.15s;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
 }
-
-.btn-delete:hover { background: #b91c1c; }
-
-@keyframes shimmer {
-  0% { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
-}
-
-.skeleton-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.skeleton-card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-
-.skeleton-img {
-  width: 100%;
-  height: 180px;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 800px 100%;
-  animation: shimmer 1.4s infinite;
-}
-
-.skeleton-line {
-  height: 14px;
-  margin: 16px 16px 8px;
-  border-radius: 6px;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 800px 100%;
-  animation: shimmer 1.4s infinite;
-}
-
-.skeleton-line.long  { width: 70%; }
-.skeleton-line.short { width: 40%; margin-bottom: 16px; }

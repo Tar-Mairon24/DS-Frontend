@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MfaService } from '@services/mfa.service';
+import { ErrorModalService } from '@services/error-modal.service';
 
 @Component({
   selector: 'app-mfa',
@@ -21,7 +22,10 @@ export class MfaComponent implements OnInit {
   private verifyTimeout: any;
   sentCode = false;
 
-  constructor(private mfaService: MfaService) {}
+  constructor(
+    private mfaService: MfaService,
+    private errorModal: ErrorModalService,
+  ) {}
 
   ngOnInit() {
     console.log("Enviando código MFA al abrir modal...");
@@ -36,7 +40,7 @@ export class MfaComponent implements OnInit {
       },
       error: (err) => {
         console.error("Error al enviar código MFA:", err);
-        alert("Error al enviar el código. Por favor intenta nuevamente.");
+        this.errorModal.showError("Error al enviar el código. Por favor intenta nuevamente.");
       }
     });
   }
@@ -66,7 +70,7 @@ export class MfaComponent implements OnInit {
         },
         error: (err) => {
           console.error("Error al verificar MFA:", err);
-          alert("Código incorrecto. Intenta nuevamente.");
+          this.errorModal.showError("Código incorrecto. Intenta nuevamente.");
           this.code = "";
         }
       });
@@ -75,7 +79,7 @@ export class MfaComponent implements OnInit {
 
   handleSuccessfulVerification() {
     console.log("MFA verificado exitosamente.");
-    alert("Verificación exitosa. Redirigiendo...");
+    this.errorModal.show("Verificación exitosa. Redirigiendo...", "Verificación Completada");
     this.verified.emit(this.code);
     this.closeModal();
   }
@@ -89,7 +93,7 @@ export class MfaComponent implements OnInit {
       },
       error: (err) => {
         console.error("Error al reenviar código MFA:", err);
-        alert("Error al reenviar el código. Intenta nuevamente más tarde.");
+        this.errorModal.showError("Error al reenviar el código. Intenta nuevamente más tarde.");
       }
     });
   }
@@ -97,12 +101,12 @@ export class MfaComponent implements OnInit {
   handleResendResponse() {
     this.resendCount++;
     if (this.resendCount > 3) {
-      alert("Has excedido el número máximo de reenvíos.");
+      this.errorModal.showError("Has excedido el número máximo de reenvíos.");
       this.closeModal();
     } else if (this.resendCount === 3) {
-      alert("Último intento de reenvío.");
+      this.errorModal.show("Último intento de reenvío.", "Aviso");
     } else {
-      alert("Código reenviado. Revisa tu correo.");
+      this.errorModal.show("Código reenviado. Revisa tu correo.", "Aviso");
     }
   }
 

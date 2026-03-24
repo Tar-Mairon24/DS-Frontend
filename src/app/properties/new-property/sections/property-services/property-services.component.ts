@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
@@ -11,7 +11,7 @@ interface CheckOption { label: string; value: string; }
   templateUrl: './property-services.component.html',
   styleUrls: ['../section.shared.css']
 })
-export class PropertyServicesComponent implements OnInit {
+export class PropertyServicesComponent implements OnInit, OnChanges {
   @Input() form!: FormGroup;
 
   amenities: CheckOption[] = [
@@ -49,6 +49,16 @@ export class PropertyServicesComponent implements OnInit {
   };
 
   ngOnInit() {
+    this.syncFormValues();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['form'] && !changes['form'].firstChange) {
+      this.syncFormValues();
+    }
+  }
+
+  private syncFormValues() {
     this.selected['amenities']  = this.form.get('amenities')?.value  || [];
     this.selected['utilities']  = this.form.get('utilities')?.value  || [];
     this.selected['gas_types']  = this.form.get('gas_types')?.value  || [];
