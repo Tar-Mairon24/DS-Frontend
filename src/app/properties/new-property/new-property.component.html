@@ -22,7 +22,7 @@
   <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
     <div class="form-card">
 
-      <app-property-media #mediaComponent />
+      <app-property-media [propertyId]="propertyId ?? null" [existingImages]="propertyImages ?? []" />
 
       <div class="section-divider"></div>
 

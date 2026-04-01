@@ -8,6 +8,7 @@ import { PropertyDetailsComponent } from './sections/property-details/property-d
 import { PropertyServicesComponent } from './sections/property-services/property-services.component';
 import { PropertyNotesComponent } from './sections/property-notes/property-notes.component';
 import { PropertyService } from '@services/property.service';
+import { Image } from '@shared/models/image';
 import { createPropertyForm } from '@shared/utils/property-form.utils';
 
 @Component({
@@ -31,6 +32,8 @@ export class NewPropertyComponent {
   form: FormGroup;
   isSubmitting = false;
   isUpdate = false;
+  propertyId: number | null = null;  // null until property is created; shared template needs this
+  propertyImages: Image[] = [];      // always empty here; shared template needs this
 
   constructor(
     private fb: FormBuilder,
@@ -45,12 +48,7 @@ export class NewPropertyComponent {
   }
 
   goBack() {
-    if (window.history.length > 1) {
-      window.history.back();
-      return;
-    }
-
-    this.router.navigate(['/dashboard']);
+    window.history.length > 1 ? window.history.back() : this.router.navigate(['/dashboard']);
   }
 
   submit() {
@@ -58,24 +56,20 @@ export class NewPropertyComponent {
       this.form.markAllAsTouched();
       return;
     }
+
     this.isSubmitting = true;
+
     this.propertyService.createProperty(this.form.value).subscribe({
       next: (response) => {
-        const propertyId = response?.id || response?.data?.id;
-        if (propertyId && this.mediaComponent) {
-          this.mediaComponent.propertyId = propertyId;
-          this.mediaComponent.uploadAll().then(() => {
-            this.router.navigate(['/dashboard']);
-          }).catch(() => {
-            console.warn('Some images failed to upload, navigating to dashboard');
-            this.router.navigate(['/dashboard']);
-          });
-        } else {
-          this.router.navigate(['/dashboard']);
+        const createdId = response?.id || response?.data?.id;
+        if (createdId && this.mediaComponent) {
+          this.mediaComponent.propertyId = createdId;
         }
+        this.mediaComponent.uploadAll().finally(() => {
+          this.router.navigate(['/dashboard']);
+        });
       },
-      error: (err) => {
-        console.error('Error creating property:', err);
+      error: () => {
         this.isSubmitting = false;
       }
     });

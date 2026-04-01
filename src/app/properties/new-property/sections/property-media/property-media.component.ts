@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PropertyImagesService } from '@services/propertyImages.service';
@@ -27,54 +27,39 @@ interface ExistingImage extends Image {
   templateUrl: './property-media.component.html',
   styleUrls: ['../section.shared.css', './property-media.component.css']
 })
-export class PropertyMediaComponent implements OnInit {
-  // Pass propertyId after the property is created to enable uploads
+export class PropertyMediaComponent {
   @Input() propertyId: number | null = null;
 
-  readonly MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+  // Replaces the old imperative setExistingImages() method.
+  // Parent just binds [existingImages]="images" and Angular handles updates.
+  @Input() set existingImages(images: Image[]) {
+    this._existingImages = images.map(img => ({
+      ...img,
+      // The Image model declares `url` but the API may return `path` or `image_url`.
+      // Normalise here so the template always has a reliable `url` to bind to.
+      url: img.url || (img as any).path || (img as any).image_url || '',
+      removed: false,
+    }));
+    if (this._existingImages.length > 0 && !this._existingImages.some(i => i.main_image)) {
+      this._existingImages[0].main_image = true;
+    }
+  }
+  get existingImages(): ExistingImage[] { return this._existingImages; }
+  private _existingImages: ExistingImage[] = [];
+
+  readonly MAX_FILE_SIZE = 100 * 1024 * 1024;
   readonly MAX_FILE_SIZE_MB = 100;
-  slots: ImageSlot[] = []; // New images to upload
-  existingImages: ExistingImage[] = []; // Existing images from backend
+  slots: ImageSlot[] = [];
 
   constructor(
     private imagesService: PropertyImagesService,
     private errorModal: ErrorModalService,
   ) {}
 
-  ngOnInit() {}
-
-  get totalImages() { return this.slots.length + this.existingImages.filter(i => !i.removed).length; }
-  get remaining() { return Number.MAX_SAFE_INTEGER; }
+  get totalImages() { return this.slots.length + this._existingImages.filter(i => !i.removed).length; }
   get canAdd() { return true; }
-  get mainIndex() { return this.slots.findIndex(s => s.isMain); }
-
-  // Set existing images from backend (for update mode)
-  setExistingImages(images: Image[]): void {
-    console.log('Setting existing images:', images);
-    this.existingImages = images.map(img => ({
-      ...img,
-      removed: false,
-      // Ensure url is available by checking multiple possible field names
-      url: img.url || (img as any).path || (img as any).image_url || ''
-    }));
-    // Ensure there's always a main image: first existing image, or first new upload
-    if (!this.existingImages.some(i => i.main_image)) {
-      if (this.existingImages.length > 0) {
-        // Mark the first existing image as main
-        this.existingImages[0].main_image = true;
-      } else {
-        // Otherwise mark the first new slot as main
-        const firstSlot = this.slots[0];
-        if (firstSlot) {
-          firstSlot.isMain = true;
-        }
-      }
-    }
-    console.log('Existing images after mapping:', this.existingImages);
-  }
 
   openFilePicker() {
-    if (!this.canAdd) return;
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
@@ -87,25 +72,20 @@ export class PropertyMediaComponent implements OnInit {
   }
 
   addFiles(files: File[]) {
-    const toAdd = files.slice(0, this.remaining);
     const oversizedFiles: string[] = [];
 
-    toAdd.forEach((file, i) => {
-      // Validate file size
+    files.forEach((file, i) => {
       if (file.size > this.MAX_FILE_SIZE) {
-        const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-        oversizedFiles.push(`${file.name} (${sizeMB}MB)`);
+        oversizedFiles.push(`${file.name} (${(file.size / (1024 * 1024)).toFixed(2)}MB)`);
         return;
       }
-
       const reader = new FileReader();
       reader.onload = (e) => {
-        const isFirst = this.totalImages === 0 && i === 0;
         this.slots.push({
           file,
           preview: e.target?.result as string,
           description: '',
-          isMain: isFirst,
+          isMain: this.totalImages === 0 && i === 0,
           uploading: false,
           uploaded: false,
         });
@@ -114,16 +94,17 @@ export class PropertyMediaComponent implements OnInit {
     });
 
     if (oversizedFiles.length > 0) {
-      const msg = `Los siguientes archivos superan el límite de ${this.MAX_FILE_SIZE_MB}MB:\n${oversizedFiles.join('\n')}`;
-      this.errorModal.show(msg, 'Archivos Demasiado Grandes');
+      this.errorModal.show(
+        `Los siguientes archivos superan el límite de ${this.MAX_FILE_SIZE_MB}MB:\n${oversizedFiles.join('\n')}`,
+        'Archivos Demasiado Grandes'
+      );
     }
   }
 
   setMain(index: number) {
     this.slots.forEach((s, i) => s.isMain = i === index);
-    this.existingImages.forEach(img => img.main_image = false);
+    this._existingImages.forEach(img => img.main_image = false);
 
-    // If already uploaded, patch via API
     const slot = this.slots[index];
     if (slot.uploaded && slot.uploadedId && this.propertyId) {
       this.imagesService.updatePropertyImageMain(this.propertyId, slot.uploadedId).subscribe({
@@ -132,9 +113,9 @@ export class PropertyMediaComponent implements OnInit {
     }
   }
 
-  setMainExisting(imageId: number): void {
+  setMainExisting(imageId: number) {
     this.slots.forEach(s => s.isMain = false);
-    this.existingImages.forEach(img => img.main_image = img.id === imageId);
+    this._existingImages.forEach(img => img.main_image = img.id === imageId);
 
     if (this.propertyId) {
       this.imagesService.updatePropertyImageMain(this.propertyId, imageId).subscribe({
@@ -145,74 +126,50 @@ export class PropertyMediaComponent implements OnInit {
 
   removeSlot(index: number) {
     this.slots.splice(index, 1);
-    // If removed was main, set first as main
-    if (this.totalImages > 0 && !this.slots.some(s => s.isMain) && !this.existingImages.some(i => i.main_image && !i.removed)) {
-      const firstUnremoved = this.existingImages.find(i => !i.removed);
-      if (firstUnremoved) {
-        firstUnremoved.main_image = true;
-      } else if (this.slots.length > 0) {
-        this.slots[0].isMain = true;
-      }
+    if (this.totalImages > 0 && !this.slots.some(s => s.isMain) && !this._existingImages.some(i => i.main_image && !i.removed)) {
+      const firstUnremoved = this._existingImages.find(i => !i.removed);
+      if (firstUnremoved) firstUnremoved.main_image = true;
+      else if (this.slots.length > 0) this.slots[0].isMain = true;
     }
   }
 
   removeExistingImage(imageId: number) {
-    const image = this.existingImages.find(i => i.id === imageId);
-    if (image) {
-      image.removed = true;
-      // If it was main, set another as main
-      if (image.main_image) {
-        const nextMain = this.existingImages.find(i => !i.removed) || this.slots[0];
-        if (nextMain instanceof Object && 'main_image' in nextMain) {
-          nextMain.main_image = true;
-        } else if (nextMain) {
-          nextMain.isMain = true;
-        }
-      }
+    const image = this._existingImages.find(i => i.id === imageId);
+    if (!image) return;
+    image.removed = true;
+    if (image.main_image) {
+      image.main_image = false;
+      const next = this._existingImages.find(i => !i.removed);
+      if (next) next.main_image = true;
+      else if (this.slots[0]) this.slots[0].isMain = true;
     }
   }
 
   restoreExistingImage(imageId: number) {
-    const image = this.existingImages.find(i => i.id === imageId);
-    if (image) {
-      image.removed = false;
-    }
+    const image = this._existingImages.find(i => i.id === imageId);
+    if (image) image.removed = false;
   }
 
-  // Called by parent after property creation/update
+  // Called by parent after property is created/saved.
   async uploadAll(): Promise<void> {
-    if (!this.propertyId) {
-      console.log('No propertyId, skipping uploadAll');
-      return Promise.resolve();
-    }
+    if (!this.propertyId) return;
 
-    const removedImages = this.existingImages.filter(i => i.removed);
-    console.log('Images to delete:', removedImages.length);
-
-    // Delete removed images one by one to ensure proper sequential handling
-    for (const img of removedImages) {
+    // Delete removed images first, sequentially
+    for (const img of this._existingImages.filter(i => i.removed)) {
       await this.deleteImage(img.id);
     }
 
-    // Upload new images
-    const pending = this.slots.filter(s => !s.uploaded);
-    console.log('Images to upload:', pending.length);
-
-    await Promise.all(pending.map(slot => this.uploadSlot(slot)));
-    console.log('uploadAll completed');
+    // Upload new images in parallel
+    await Promise.all(
+      this.slots.filter(s => !s.uploaded).map(slot => this.uploadSlot(slot))
+    );
   }
 
   private deleteImage(imageId: number): Promise<void> {
     return new Promise((resolve) => {
       this.imagesService.deletePropertyImage(imageId).subscribe({
-        next: () => {
-          console.log(`Image ${imageId} deleted successfully`);
-          resolve();
-        },
-        error: (err) => {
-          console.error(`Failed to delete image ${imageId}:`, err);
-          resolve(); // Still resolve to continue with other operations
-        }
+        next: () => resolve(),
+        error: (err) => { console.error(`Failed to delete image ${imageId}:`, err); resolve(); }
       });
     });
   }
@@ -236,19 +193,11 @@ export class PropertyMediaComponent implements OnInit {
         },
         error: (err) => {
           slot.uploading = false;
-
-          // Provide specific error message based on status
-          if (err.status === 413) {
-            slot.error = `Archivo muy grande. Máximo ${this.MAX_FILE_SIZE_MB}MB permitido.`;
-          } else if (err.status === 400) {
-            slot.error = 'Formato de imagen inválido';
-          } else if (err.status === 500) {
-            slot.error = 'Error del servidor. Intenta de nuevo';
-          } else {
-            slot.error = 'Error al subir imagen';
-          }
-
-          console.error('Upload error:', err);
+          slot.error = err.status === 413
+            ? `Archivo muy grande. Máximo ${this.MAX_FILE_SIZE_MB}MB permitido.`
+            : err.status === 400 ? 'Formato de imagen inválido'
+            : err.status === 500 ? 'Error del servidor. Intenta de nuevo'
+            : 'Error al subir imagen';
           resolve();
         }
       });

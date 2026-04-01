@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,7 +10,7 @@ import { PropertyNotesComponent } from '../new-property/sections/property-notes/
 import { PropertyService } from '@services/property.service';
 import { PropertyImagesService } from '@services/propertyImages.service';
 import { createPropertyForm } from '@shared/utils/property-form.utils';
-import { PropertyFormData } from '@shared/models/property-form.model';
+import { Image } from '@shared/models/image';
 
 @Component({
   selector: 'app-update-property',
@@ -27,14 +27,14 @@ import { PropertyFormData } from '@shared/models/property-form.model';
   templateUrl: '../new-property/new-property.component.html',
   styleUrls: ['../new-property/new-property.component.css']
 })
-export class UpdatePropertyComponent implements OnInit, AfterViewInit {
+export class UpdatePropertyComponent implements OnInit {
   @ViewChild(PropertyMediaComponent) mediaComponent!: PropertyMediaComponent;
 
   form: FormGroup;
   isSubmitting = false;
-  isLoading = true;
   isUpdate = true;
   propertyId: number | null = null;
+  propertyImages: Image[] = []; // Passed to media component via @Input binding in template
 
   constructor(
     private fb: FormBuilder,
@@ -42,7 +42,6 @@ export class UpdatePropertyComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private propertyService: PropertyService,
     private imagesService: PropertyImagesService,
-    private cdr: ChangeDetectorRef
   ) {
     this.form = createPropertyForm(this.fb);
   }
@@ -51,180 +50,82 @@ export class UpdatePropertyComponent implements OnInit, AfterViewInit {
     this.propertyId = +this.route.snapshot.paramMap.get('id')!;
 
     if (!this.propertyId || isNaN(this.propertyId) || this.propertyId <= 0) {
-      console.error('Invalid property ID:', this.propertyId);
       this.router.navigate(['/dashboard']);
       return;
     }
 
     this.loadProperty();
-  }
-
-  ngAfterViewInit() {
-    // Load images after view is initialized so ViewChild is available
     this.loadImages();
   }
 
   private loadProperty() {
     this.propertyService.getPropertyById(this.propertyId!).subscribe({
       next: (property: any) => {
-        // Pre-populate form with existing data
-        const formData: Partial<PropertyFormData> = {
+        // patchValue reuses the existing FormGroup — no replacement, no rebinding issues
+        this.form.patchValue({
           title: property.title,
           status: property.status,
-          address: property.address || '',
-          neighborhood: property.neighborhood || '',
+          address: property.address ?? '',
+          neighborhood: property.neighborhood ?? '',
           city: property.city,
-          zone: property.zone || '',
-          reference: property.reference || '',
+          zone: property.zone ?? '',
+          reference: property.reference ?? '',
           transaction_type: property.transaction_type,
           property_type: property.property_type,
           price: property.price,
-          is_occupied: property.is_occupied || false,
-          is_furnished: property.is_furnished || false,
-          construction_m2: property.construction_m2 || 0,
-          land_m2: property.land_m2 || 0,
-          garden_m2: property.garden_m2 || 0,
-          floors: property.floors || 1,
-          bedrooms: property.bedrooms || 0,
-          bathrooms: property.bathrooms || 0,
-          garage_size: property.garage_size || 0,
-          amenities: property.amenities || [],
-          utilities: property.utilities || [],
-          gas_types: property.gas_types || [],
-          extras: property.extras || [],
-          description: property.description || '',
-          notes: property.notes || '',
-        };
-
-        this.form = createPropertyForm(this.fb, formData);
-        this.form.markAsPristine(); // Mark as pristine so dirty check works correctly
+          is_occupied: property.is_occupied ?? false,
+          is_furnished: property.is_furnished ?? false,
+          construction_m2: property.construction_m2 ?? 0,
+          land_m2: property.land_m2 ?? 0,
+          garden_m2: property.garden_m2 ?? 0,
+          floors: property.floors ?? 1,
+          bedrooms: property.bedrooms ?? 0,
+          bathrooms: property.bathrooms ?? 0,
+          garage_size: property.garage_size ?? 0,
+          amenities: property.amenities ?? [],
+          utilities: property.utilities ?? [],
+          gas_types: property.gas_types ?? [],
+          extras: property.extras ?? [],
+          description: property.description ?? '',
+          notes: property.notes ?? '',
+        });
+        this.form.markAsPristine();
       },
-      error: (err) => {
-        console.error('Error loading property:', err);
-        this.router.navigate(['/dashboard']);
-      }
+      error: () => this.router.navigate(['/dashboard'])
     });
   }
 
   private loadImages() {
-    if (!this.propertyId) {
-      console.warn('No propertyId available for loading images');
-      return;
-    }
-
-    // Set propertyId on mediaComponent so it can delete/upload images
-    if (this.mediaComponent) {
-      this.mediaComponent.propertyId = this.propertyId;
-    }
-
-    console.log('Loading images for property:', this.propertyId);
-    console.log('MediaComponent available:', !!this.mediaComponent);
-
-    this.imagesService.getPropertyImagesByPropertyId(this.propertyId).subscribe({
-      next: (images) => {
-        console.log('Images loaded:', images.length, images);
-
-        // Pass existing images to media component
-        if (this.mediaComponent) {
-          this.mediaComponent.setExistingImages(images);
-          // Trigger change detection to ensure UI updates
-          this.cdr.detectChanges();
-        } else {
-          console.error('MediaComponent not initialized yet');
-        }
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error loading images:', err);
-        this.isLoading = false;
-      }
+    this.imagesService.getPropertyImagesByPropertyId(this.propertyId!).subscribe({
+      next: (images) => { this.propertyImages = images; },
+      error: (err) => console.error('Error loading images:', err)
     });
   }
 
-  cancel() {
-    this.router.navigate(['/dashboard']);
-  }
-
-  goBack() {
-    if (window.history.length > 1) {
-      window.history.back();
-      return;
-    }
-
-    this.router.navigate(['/dashboard']);
-  }
+  cancel() { this.router.navigate(['/dashboard']); }
+  goBack() { window.history.length > 1 ? window.history.back() : this.router.navigate(['/dashboard']); }
 
   submit() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
+    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     if (!this.propertyId) return;
 
     this.isSubmitting = true;
 
-    // If form has been modified, update property; otherwise just handle images
-    if (this.form.dirty) {
-      // Build update payload with only updatable fields (exclude images which are handled separately)
-      const formValue = this.form.value;
-      const updatePayload: any = {
-        title: formValue.title,
-        status: formValue.status,
-        address: formValue.address,
-        neighborhood: formValue.neighborhood,
-        city: formValue.city,
-        zone: formValue.zone,
-        reference: formValue.reference,
-        transaction_type: formValue.transaction_type,
-        property_type: formValue.property_type,
-        price: formValue.price,
-        is_occupied: formValue.is_occupied,
-        is_furnished: formValue.is_furnished,
-        construction_m2: formValue.construction_m2,
-        land_m2: formValue.land_m2,
-        garden_m2: formValue.garden_m2,
-        floors: formValue.floors,
-        bedrooms: formValue.bedrooms,
-        bathrooms: formValue.bathrooms,
-        garage_size: formValue.garage_size,
-        amenities: formValue.amenities,
-        utilities: formValue.utilities,
-        gas_types: formValue.gas_types,
-        extras: formValue.extras,
-        description: formValue.description,
-        notes: formValue.notes,
-      };
+    const save$ = this.form.dirty
+      ? this.propertyService.updateProperty(this.propertyId, this.form.value)
+      : null;
 
-      this.propertyService.updateProperty(this.propertyId, updatePayload).subscribe({
-        next: () => {
-          this.handleImageUpload();
-        },
-        error: (err) => {
-          console.error('Error updating property:', err);
-          this.isSubmitting = false;
-        }
-      });
-    } else {
-      this.handleImageUpload();
-    }
-  }
-
-  private handleImageUpload() {
-    if (this.mediaComponent) {
-      this.mediaComponent.uploadAll().then(() => {
-        console.log('All images processed successfully');
-        this.isSubmitting = false;
-        this.router.navigate(['/dashboard']);
-      }).catch((err) => {
-        console.error('Error during image upload/delete:', err);
+    const finish = () => {
+      this.mediaComponent.uploadAll().finally(() => {
         this.isSubmitting = false;
         this.router.navigate(['/dashboard']);
       });
+    };
+
+    if (save$) {
+      save$.subscribe({ next: finish, error: () => { this.isSubmitting = false; } });
     } else {
-      console.warn('MediaComponent not available');
-      this.isSubmitting = false;
-      this.router.navigate(['/dashboard']);
+      finish();
     }
   }
 }
