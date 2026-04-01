@@ -57,11 +57,17 @@ export class PropertyMediaComponent implements OnInit {
       // Ensure url is available by checking multiple possible field names
       url: img.url || (img as any).path || (img as any).image_url || ''
     }));
-    // If no existing images marked as main, mark first new upload as main
+    // Ensure there's always a main image: first existing image, or first new upload
     if (!this.existingImages.some(i => i.main_image)) {
-      const firstSlot = this.slots[0];
-      if (firstSlot) {
-        firstSlot.isMain = true;
+      if (this.existingImages.length > 0) {
+        // Mark the first existing image as main
+        this.existingImages[0].main_image = true;
+      } else {
+        // Otherwise mark the first new slot as main
+        const firstSlot = this.slots[0];
+        if (firstSlot) {
+          firstSlot.isMain = true;
+        }
       }
     }
     console.log('Existing images after mapping:', this.existingImages);
@@ -175,9 +181,40 @@ export class PropertyMediaComponent implements OnInit {
 
   // Called by parent after property creation/update
   async uploadAll(): Promise<void> {
-    if (!this.propertyId) return Promise.resolve();
+    if (!this.propertyId) {
+      console.log('No propertyId, skipping uploadAll');
+      return Promise.resolve();
+    }
+
+    const removedImages = this.existingImages.filter(i => i.removed);
+    console.log('Images to delete:', removedImages.length);
+
+    // Delete removed images one by one to ensure proper sequential handling
+    for (const img of removedImages) {
+      await this.deleteImage(img.id);
+    }
+
+    // Upload new images
     const pending = this.slots.filter(s => !s.uploaded);
+    console.log('Images to upload:', pending.length);
+
     await Promise.all(pending.map(slot => this.uploadSlot(slot)));
+    console.log('uploadAll completed');
+  }
+
+  private deleteImage(imageId: number): Promise<void> {
+    return new Promise((resolve) => {
+      this.imagesService.deletePropertyImage(imageId).subscribe({
+        next: () => {
+          console.log(`Image ${imageId} deleted successfully`);
+          resolve();
+        },
+        error: (err) => {
+          console.error(`Failed to delete image ${imageId}:`, err);
+          resolve(); // Still resolve to continue with other operations
+        }
+      });
+    });
   }
 
   private uploadSlot(slot: ImageSlot): Promise<void> {

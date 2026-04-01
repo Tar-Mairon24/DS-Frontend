@@ -30,6 +30,7 @@ export class NewPropertyComponent {
 
   form: FormGroup;
   isSubmitting = false;
+  isUpdate = false;
 
   constructor(
     private fb: FormBuilder,
@@ -43,9 +44,13 @@ export class NewPropertyComponent {
     this.router.navigate(['/dashboard']);
   }
 
-  saveDraft() {
-    console.log('Draft:', this.form.value);
-    // TODO: wire up draft endpoint
+  goBack() {
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+
+    this.router.navigate(['/dashboard']);
   }
 
   submit() {

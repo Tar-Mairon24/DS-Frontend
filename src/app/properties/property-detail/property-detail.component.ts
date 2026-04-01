@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyService } from '@services/property.service';
 import { PropertyImagesService } from '@services/propertyImages.service';
@@ -28,12 +28,18 @@ import { PropertyNotesViewComponent } from './sections/property-notes-view/prope
 export class PropertyDetailComponent implements OnInit {
   property: any = null;
   images: any[] = [];
-  isLoading = true;
+  propertyLoading = true;
+  imagesLoading = true;
   showDeleteConfirm = false;
+
+  get isLoading(): boolean {
+    return this.propertyLoading || this.imagesLoading;
+  }
 
   constructor(
     private route: ActivatedRoute,
     public router: Router,
+    private location: Location,
     private propertyService: PropertyService,
     private imagesService: PropertyImagesService,
   ) {}
@@ -55,21 +61,39 @@ export class PropertyDetailComponent implements OnInit {
     this.propertyService.getPropertyById(id).subscribe({
       next: (data) => {
         this.property = data;
-        this.isLoading = false;
+        this.propertyLoading = false;
       },
-      error: () => this.router.navigate(['/dashboard'])
+      error: () => {
+        this.propertyLoading = false;
+        this.router.navigate(['/dashboard']);
+      }
     });
   }
 
   loadImages(id: number) {
     this.imagesService.getPropertyImagesByPropertyId(id).subscribe({
-      next: (imgs) => this.images = imgs || [],
-      error: () => this.images = []
+      next: (imgs) => {
+        this.images = imgs || [];
+        this.imagesLoading = false;
+      },
+      error: () => {
+        this.images = [];
+        this.imagesLoading = false;
+      }
     });
   }
 
   goEdit() {
     this.router.navigate(['properties/update', this.property.id]);
+  }
+
+  goBack() {
+    if (window.history.length > 1) {
+      this.location.back();
+      return;
+    }
+
+    this.router.navigate(['/dashboard']);
   }
 
   confirmDelete() {

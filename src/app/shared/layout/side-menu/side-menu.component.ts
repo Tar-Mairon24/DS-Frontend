@@ -59,10 +59,6 @@ export class SideMenuComponent implements OnInit {
     this.router.navigate(['/dashboard']);
   }
 
-  goProperties() {
-    this.router.navigate(['/properties']);
-  }
-
   goCalendar() {
     this.router.navigate(['/calendar']);
   }

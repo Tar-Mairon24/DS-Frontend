@@ -33,6 +33,7 @@ export class UpdatePropertyComponent implements OnInit, AfterViewInit {
   form: FormGroup;
   isSubmitting = false;
   isLoading = true;
+  isUpdate = true;
   propertyId: number | null = null;
 
   constructor(
@@ -96,6 +97,7 @@ export class UpdatePropertyComponent implements OnInit, AfterViewInit {
         };
 
         this.form = createPropertyForm(this.fb, formData);
+        this.form.markAsPristine(); // Mark as pristine so dirty check works correctly
       },
       error: (err) => {
         console.error('Error loading property:', err);
@@ -108,6 +110,11 @@ export class UpdatePropertyComponent implements OnInit, AfterViewInit {
     if (!this.propertyId) {
       console.warn('No propertyId available for loading images');
       return;
+    }
+
+    // Set propertyId on mediaComponent so it can delete/upload images
+    if (this.mediaComponent) {
+      this.mediaComponent.propertyId = this.propertyId;
     }
 
     console.log('Loading images for property:', this.propertyId);
@@ -138,9 +145,13 @@ export class UpdatePropertyComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/dashboard']);
   }
 
-  saveDraft() {
-    console.log('Draft:', this.form.value);
-    // TODO: wire up draft endpoint
+  goBack() {
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+
+    this.router.navigate(['/dashboard']);
   }
 
   submit() {
@@ -153,54 +164,67 @@ export class UpdatePropertyComponent implements OnInit, AfterViewInit {
 
     this.isSubmitting = true;
 
-    // Build update payload with only updatable fields (exclude images which are handled separately)
-    const formValue = this.form.value;
-    const updatePayload: any = {
-      title: formValue.title,
-      status: formValue.status,
-      address: formValue.address,
-      neighborhood: formValue.neighborhood,
-      city: formValue.city,
-      zone: formValue.zone,
-      reference: formValue.reference,
-      transaction_type: formValue.transaction_type,
-      property_type: formValue.property_type,
-      price: formValue.price,
-      is_occupied: formValue.is_occupied,
-      is_furnished: formValue.is_furnished,
-      construction_m2: formValue.construction_m2,
-      land_m2: formValue.land_m2,
-      garden_m2: formValue.garden_m2,
-      floors: formValue.floors,
-      bedrooms: formValue.bedrooms,
-      bathrooms: formValue.bathrooms,
-      garage_size: formValue.garage_size,
-      amenities: formValue.amenities,
-      utilities: formValue.utilities,
-      gas_types: formValue.gas_types,
-      extras: formValue.extras,
-      description: formValue.description,
-      notes: formValue.notes,
-    };
+    // If form has been modified, update property; otherwise just handle images
+    if (this.form.dirty) {
+      // Build update payload with only updatable fields (exclude images which are handled separately)
+      const formValue = this.form.value;
+      const updatePayload: any = {
+        title: formValue.title,
+        status: formValue.status,
+        address: formValue.address,
+        neighborhood: formValue.neighborhood,
+        city: formValue.city,
+        zone: formValue.zone,
+        reference: formValue.reference,
+        transaction_type: formValue.transaction_type,
+        property_type: formValue.property_type,
+        price: formValue.price,
+        is_occupied: formValue.is_occupied,
+        is_furnished: formValue.is_furnished,
+        construction_m2: formValue.construction_m2,
+        land_m2: formValue.land_m2,
+        garden_m2: formValue.garden_m2,
+        floors: formValue.floors,
+        bedrooms: formValue.bedrooms,
+        bathrooms: formValue.bathrooms,
+        garage_size: formValue.garage_size,
+        amenities: formValue.amenities,
+        utilities: formValue.utilities,
+        gas_types: formValue.gas_types,
+        extras: formValue.extras,
+        description: formValue.description,
+        notes: formValue.notes,
+      };
 
-    this.propertyService.updateProperty(this.propertyId, updatePayload).subscribe({
-      next: () => {
-        // Upload any new images
-        if (this.mediaComponent) {
-          this.mediaComponent.uploadAll().then(() => {
-            this.router.navigate(['/dashboard']);
-          }).catch(() => {
-            console.warn('Some images failed to upload, navigating to dashboard');
-            this.router.navigate(['/dashboard']);
-          });
-        } else {
-          this.router.navigate(['/dashboard']);
+      this.propertyService.updateProperty(this.propertyId, updatePayload).subscribe({
+        next: () => {
+          this.handleImageUpload();
+        },
+        error: (err) => {
+          console.error('Error updating property:', err);
+          this.isSubmitting = false;
         }
-      },
-      error: (err) => {
-        console.error('Error updating property:', err);
+      });
+    } else {
+      this.handleImageUpload();
+    }
+  }
+
+  private handleImageUpload() {
+    if (this.mediaComponent) {
+      this.mediaComponent.uploadAll().then(() => {
+        console.log('All images processed successfully');
         this.isSubmitting = false;
-      }
-    });
+        this.router.navigate(['/dashboard']);
+      }).catch((err) => {
+        console.error('Error during image upload/delete:', err);
+        this.isSubmitting = false;
+        this.router.navigate(['/dashboard']);
+      });
+    } else {
+      console.warn('MediaComponent not available');
+      this.isSubmitting = false;
+      this.router.navigate(['/dashboard']);
+    }
   }
 }

@@ -2,13 +2,20 @@
 
   <div class="page-header">
     <div>
+      <button type="button" class="btn-back" (click)="goBack()" aria-label="Volver">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Volver
+      </button>
       <nav class="breadcrumb">
         <span (click)="cancel()" class="breadcrumb-link">Propiedades</span>
         <span class="breadcrumb-sep">›</span>
-        <span class="breadcrumb-current">Nueva Propiedad</span>
+        <span class="breadcrumb-current">{{ isUpdate ? 'Actualizar Propiedad' : 'Nueva Propiedad' }}</span>
       </nav>
-      <h1 class="page-title">Nueva Propiedad</h1>
-      <p class="page-subtitle">Complete todos los detalles para el nuevo registro</p>
+      <h1 class="page-title">{{ isUpdate ? 'Actualizar Propiedad' : 'Nueva Propiedad' }}</h1>
+      <p class="page-subtitle">{{ isUpdate ? 'Actualiza los detalles de la propiedad' : 'Complete todos los detalles para el nuevo registro' }}</p>
     </div>
   </div>
 
@@ -41,11 +48,8 @@
         Cancelar
       </button>
       <div class="actions-right">
-        <button type="button" class="btn-draft" (click)="saveDraft()">
-          Guardar borrador
-        </button>
         <button type="submit" class="btn-publish" [disabled]="isSubmitting">
-          {{ isSubmitting ? 'Publicando...' : 'Publicar Propiedad' }}
+          {{ isSubmitting ? (isUpdate ? 'Actualizando...' : 'Publicando...') : (isUpdate ? 'Guardar cambios' : 'Publicar Propiedad') }}
         </button>
       </div>
     </div>

@@ -1,7 +1,38 @@
 @if (isLoading) {
-  <div class="loading-state">
-    <div class="spinner"></div>
-    <p>Cargando propiedad...</p>
+  <div class="skeleton-page" aria-label="Cargando propiedad">
+    <div class="skeleton-block skeleton-slider"></div>
+
+    <div class="detail-body">
+      <div class="skeleton-header">
+        <div class="skeleton-title-group">
+          <div class="skeleton-block skeleton-breadcrumb"></div>
+          <div class="skeleton-block skeleton-title"></div>
+          <div class="skeleton-meta-row">
+            <div class="skeleton-block skeleton-pill"></div>
+            <div class="skeleton-block skeleton-price"></div>
+          </div>
+        </div>
+        <div class="skeleton-actions">
+          <div class="skeleton-block skeleton-btn"></div>
+          <div class="skeleton-block skeleton-btn"></div>
+        </div>
+      </div>
+
+      <div class="skeleton-block skeleton-quickspecs"></div>
+
+      <div class="bento-grid">
+        <div class="bento-left">
+          <div class="skeleton-block skeleton-card"></div>
+          <div class="skeleton-block skeleton-card"></div>
+          <div class="skeleton-block skeleton-card"></div>
+        </div>
+
+        <div class="bento-right">
+          <div class="skeleton-block skeleton-card skeleton-notes"></div>
+          <div class="skeleton-block skeleton-map"></div>
+        </div>
+      </div>
+    </div>
   </div>
 } @else if (property) {
 
@@ -13,6 +44,13 @@
     <!-- Breadcrumb + title + actions -->
     <div class="detail-header">
       <div class="header-left">
+        <button class="btn-back" (click)="goBack()" aria-label="Volver">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+          Volver
+        </button>
         <nav class="breadcrumb">
           <span class="breadcrumb-link" (click)="router.navigate(['/dashboard'])">Propiedades</span>
           <span class="breadcrumb-sep">›</span>

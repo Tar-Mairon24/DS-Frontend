@@ -29,4 +29,8 @@ export class PropertyImagesService extends BaseHttpService {
   updatePropertyImageMain(propertyId: number, imageId: number): Observable<any> {
     return this.patch(`/properties/${propertyId}/images/${imageId}/main`);
   }
+
+  deletePropertyImage(imageId: number): Observable<any> {
+    return this.delete(`/images/${imageId}`);
+  }
 }

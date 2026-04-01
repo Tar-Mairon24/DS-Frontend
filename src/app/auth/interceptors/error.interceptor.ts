@@ -1,17 +1,24 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, throwError, switchMap, filter, take } from 'rxjs';
+import { BehaviorSubject, catchError, throwError, switchMap, filter, take, finalize, timeout, retry } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import { ErrorModalService } from '@services/error-modal.service';
+import { UserStateService } from '@services/user-state.service';
 
 let isRefreshing = false;
-const refreshTokenSubject = new BehaviorSubject<string | null>(null);
+const refreshTokenSubject = new BehaviorSubject<boolean>(false);
 
 export const ErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const authService = inject(AuthService);
   const modal = inject(ErrorModalService);
+  const userState = inject(UserStateService);
+
+  // Skip interceptor for auth endpoints to avoid circular 401s
+  if (req.url.includes('/auth/refresh-token') || req.url.includes('/auth/login')) {
+    return next(req);
+  }
 
   return next(req).pipe(
     catchError((error) => {
@@ -20,32 +27,45 @@ export const ErrorInterceptor: HttpInterceptorFn = (req, next) => {
       if (error.status === 401) {
         if (!isRefreshing) {
           isRefreshing = true;
-          refreshTokenSubject.next(null);
+          refreshTokenSubject.next(false);
+
+          console.log('Token expired, attempting to refresh...');
 
           return authService.refreshToken().pipe(
+            retry({
+              count: 2,
+              delay: 500
+            }),
             switchMap((response: any) => {
-              isRefreshing = false;
-              // Emit new token so other pending requests can proceed
-              refreshTokenSubject.next(response.data?.token || response.token || '');
-              // Retry the original request
+              console.log('Token refreshed successfully');
+              refreshTokenSubject.next(true);
               return next(req);
             }),
             catchError((refreshError) => {
-              isRefreshing = false;
-              msg = 'Tu sesión ha expirado. Por favor inicia sesión nuevamente.';
               console.error('Token refresh failed:', refreshError);
+              msg = 'Tu sesión ha expirado. Por favor inicia sesión nuevamente.';
+              userState.clearUserData();
               router.navigate(['/login']);
               return throwError(() => new Error(msg));
+            }),
+            finalize(() => {
+              isRefreshing = false;
             })
           );
         } else {
-          // If already refreshing, wait for refresh to complete then retry
+          console.log('Waiting for token refresh to complete...');
           return refreshTokenSubject.pipe(
-            filter(token => token !== null),
+            filter(refreshed => refreshed === true),
             take(1),
-            switchMap(() => next(req)),
-            catchError(() => {
+            timeout(10000), // 10 second timeout to prevent infinite waiting
+            switchMap(() => {
+              console.log('Retrying request after token refresh');
+              return next(req);
+            }),
+            catchError((retryError) => {
+              console.error('Request retry failed after token refresh:', retryError);
               msg = 'Sesión expirada. Redirigiendo al login...';
+              userState.clearUserData();
               router.navigate(['/login']);
               return throwError(() => new Error(msg));
             })
