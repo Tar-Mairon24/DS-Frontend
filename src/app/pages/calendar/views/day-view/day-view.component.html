@@ -1,11 +1,10 @@
 <div class="day-wrap">
 
-  <!-- Header -->
-  <div class="day-header">
-    <div class="time-gutter"></div>
-    <div class="dh-main" [class.today]="isToday">
-      <span class="dh-count">{{ dayAppointments.length }} cita{{ dayAppointments.length !== 1 ? 's' : '' }}</span>
-    </div>
+  <!-- Appointment count subheader -->
+  <div class="day-subheader" [class.today]="isToday">
+    <span class="apt-count">
+      {{ dayAppointments.length }} cita{{ dayAppointments.length !== 1 ? 's' : '' }}
+    </span>
   </div>
 
   <!-- Scrollable timeline -->
@@ -23,7 +22,7 @@
       <!-- Event column -->
       <div class="event-col">
 
-        <!-- Now line -->
+        <!-- Current time indicator -->
         @if (isToday) {
           <div class="now-line" [style.top.px]="nowLineTop">
             <div class="now-dot"></div>
@@ -33,10 +32,10 @@
         <!-- Events -->
         @for (apt of dayAppointments; track apt.id) {
           <div class="day-event"
-            [ngStyle]="getEventStyle(apt)"
-            [style.background]="getColors(apt).bg"
-            [style.border-left]="'4px solid ' + getColors(apt).border"
-            [style.color]="getColors(apt).text"
+            [ngStyle]="eventStyle(apt)"
+            [style.background]="colors(apt).bg"
+            [style.border-left]="'4px solid ' + colors(apt).border"
+            [style.color]="colors(apt).text"
             (click)="eventClick.emit(apt.id)">
 
             <div class="dev-header">

@@ -8,31 +8,22 @@
   background: #fff;
 }
 
-/* ── Header ── */
-.day-header {
-  display: grid;
-  grid-template-columns: 56px 1fr;
+/* ── Subheader ── */
+.day-subheader {
+  padding: 10px 20px;
   border-bottom: 1px solid rgba(0,0,0,0.06);
   flex-shrink: 0;
 }
 
-.time-gutter {
-  border-right: 1px solid rgba(0,0,0,0.06);
-}
-
-.dh-main {
-  padding: 12px 20px;
-}
-
-.dh-count {
+.apt-count {
   font-size: 12px;
   font-weight: 600;
   color: #888;
 }
 
-.dh-main.today .dh-count { color: #002996; }
+.day-subheader.today .apt-count { color: #002996; }
 
-/* ── Scroll ── */
+/* ── Scroll area ── */
 .day-scroll {
   flex: 1;
   overflow-y: auto;
@@ -45,8 +36,7 @@
 
 .hour-row {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 0; right: 0;
   display: flex;
   align-items: flex-start;
   pointer-events: none;
@@ -75,14 +65,14 @@
   position: absolute;
   inset: 0;
   left: 56px;
-  padding: 0 16px;
+  padding: 0 12px;
 }
 
-/* ── Day events — wider than week, with more detail ── */
+/* ── Events ── */
 .day-event {
+  min-height: 16px;
   position: absolute;
-  left: 16px;
-  right: 16px;
+  left: 12px; right: 12px;
   border-radius: 8px;
   padding: 8px 14px;
   cursor: pointer;
@@ -93,7 +83,6 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
   transition: opacity 0.15s, box-shadow 0.15s, transform 0.15s;
 }
-
 .day-event:hover {
   opacity: 0.9;
   box-shadow: 0 6px 18px rgba(0,0,0,0.10);
@@ -155,20 +144,16 @@
 /* ── Now line ── */
 .now-line {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 0; right: 0;
   height: 2px;
   background: #ef4444;
   z-index: 10;
   pointer-events: none;
 }
-
 .now-dot {
   position: absolute;
-  left: -5px;
-  top: -5px;
-  width: 12px;
-  height: 12px;
+  left: -5px; top: -5px;
+  width: 12px; height: 12px;
   border-radius: 50%;
   background: #ef4444;
 }
@@ -176,10 +161,20 @@
 /* ── Empty state ── */
 .empty-day {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   font-size: 13px;
   color: #bbb;
   pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ── Hover expansion ── */
+.day-event:hover {
+  height: auto !important;
+  z-index: 20;
+}
+.day-event:hover .dev-desc {
+  -webkit-line-clamp: unset;
+  display: block;
 }

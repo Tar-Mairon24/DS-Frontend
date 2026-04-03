@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppointmentCalendarView, DayCell, eventPalette } from '../../appointment.model';
-
-const MONTHS_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-  'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+import {
+  AppointmentCalendarView, DayCell, eventPalette,
+  isSameDay, toDateStr, aptsForDate, formatTime
+} from '../../appointment.model';
 
 @Component({
   selector: 'app-month-view',
@@ -19,8 +19,8 @@ export class MonthViewComponent implements OnChanges {
   @Output() dayClick   = new EventEmitter<Date>();
 
   readonly DAY_LABELS = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'];
+  readonly today = new Date();
   grid: DayCell[][] = [];
-  today = new Date();
 
   ngOnChanges() { this.buildGrid(); }
 
@@ -30,22 +30,20 @@ export class MonthViewComponent implements OnChanges {
     const firstDay = new Date(year, month, 1);
     const lastDay  = new Date(year, month + 1, 0);
 
-    // Pad to start on Sunday
-    const start = new Date(firstDay);
-    start.setDate(start.getDate() - start.getDay());
+    // Pad grid to start on Sunday
+    const cursor = new Date(firstDay);
+    cursor.setDate(cursor.getDate() - cursor.getDay());
 
     this.grid = [];
-    const cursor = new Date(start);
-
-    for (let week = 0; week < 6; week++) {
+    while (true) {
       const row: DayCell[] = [];
       for (let d = 0; d < 7; d++) {
         const date = new Date(cursor);
         row.push({
           date,
           isCurrentMonth: date.getMonth() === month,
-          isToday: this.isSameDay(date, this.today),
-          appointments: this.aptsForDate(date)
+          isToday: isSameDay(date, this.today),
+          appointments: aptsForDate(this.appointments, date)
         });
         cursor.setDate(cursor.getDate() + 1);
       }
@@ -54,7 +52,7 @@ export class MonthViewComponent implements OnChanges {
     }
   }
 
-  getChipStyle(apt: AppointmentCalendarView) {
+  chipStyle(apt: AppointmentCalendarView) {
     const p = eventPalette(apt);
     return { background: p.bg, 'border-left': `3px solid ${p.border}`, color: p.text };
   }
@@ -64,33 +62,5 @@ export class MonthViewComponent implements OnChanges {
     this.eventClick.emit(apt.id);
   }
 
-  onDay(cell: DayCell) { this.dayClick.emit(cell.date); }
-
-  private aptsForDate(date: Date): AppointmentCalendarView[] {
-    const targetDateStr = this.formatDateToString(date);
-    return this.appointments.filter(a => {
-      // Extract date from ISO string without timezone conversion
-      // "2026-04-03T10:00:00-06:00" → "2026-04-03"
-      const aptDateStr = a.start_date.split('T')[0];
-      return aptDateStr === targetDateStr;
-    });
-  }
-
-  private isSameDay(a: Date, b: Date): boolean {
-    return a.getFullYear() === b.getFullYear() &&
-           a.getMonth()    === b.getMonth()    &&
-           a.getDate()     === b.getDate();
-  }
-
-  private formatDateToString(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  formatTime(iso: string): string {
-    const d = new Date(iso);
-    return d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: false });
-  }
+  formatTime = formatTime;
 }

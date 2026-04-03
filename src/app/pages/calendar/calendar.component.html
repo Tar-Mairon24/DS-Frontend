@@ -1,70 +1,200 @@
-<div class="cal-shell">
+<div class="cal-shell" (click)="showPicker && closePicker()">
 
   <!-- Top bar -->
   <div class="cal-topbar">
+
     <div class="nav-group">
       <button class="btn-back" (click)="goBack()" title="Volver">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
       </button>
+
       <button class="btn-nav" (click)="navigate(-1)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
           <polyline points="15 18 9 12 15 6"/>
         </svg>
       </button>
-      <h2 class="cal-header-label">{{ headerLabel }}</h2>
+
+      <!-- Clickable label opens picker -->
+      <button class="cal-header-label" (click)="$event.stopPropagation(); togglePicker()">
+        {{ headerLabel }}
+        <svg class="picker-caret" [class.open]="showPicker"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+
       <button class="btn-nav" (click)="navigate(1)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
           <polyline points="9 18 15 12 9 6"/>
         </svg>
       </button>
-      <button class="btn-today" (click)="goToday()">Hoy</button>
     </div>
 
+    <!-- View switcher (hidden on mobile) -->
     <div class="view-switcher">
+      <button class="btn-hoy" (click)="goToday()">Hoy</button>
+      <div class="switcher-divider"></div>
       <button [class.active]="view==='month'" (click)="setView('month')">Mes</button>
       <button [class.active]="view==='week'"  (click)="setView('week')">Semana</button>
-      <button [class.active]="view==='day'"   (click)="setView('day')">Día</button>
     </div>
 
     <button class="btn-crear">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
       </svg>
-      Crear Cita
+      <span class="btn-crear-label">Crear Cita</span>
     </button>
   </div>
 
-  <!-- Loading bar -->
+  <!-- Quick-navigation picker dropdown -->
+  @if (showPicker) {
+    <div class="picker-dropdown" (click)="$event.stopPropagation()">
+
+      <!-- Year selector -->
+      <div class="picker-year-row">
+        <button class="picker-yr-nav" (click)="pickerYear = pickerYear - 1; buildPickerWeeks()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+        <span class="picker-year-label">{{ pickerYear }}</span>
+        <button class="picker-yr-nav" (click)="pickerYear = pickerYear + 1; buildPickerWeeks()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Month grid (always shown) -->
+      <div class="picker-months">
+        @for (month of MONTHS_ES; track $index) {
+          <button class="picker-month-btn"
+            [class.active]="isPickerMonthActive($index)"
+            (click)="pickerSelectMonth($index)">
+            {{ month.slice(0, 3) }}
+          </button>
+        }
+      </div>
+
+      <!-- Week list (desktop week view): shows only weeks of selected month -->
+      @if (!isMobile && view === 'week') {
+        <div class="picker-weeks-section">
+          <div class="picker-weeks-title">Semanas de {{ MONTHS_ES[pickerMonth] }}</div>
+          <div class="picker-weeks-list">
+            @for (w of pickerWeekItems; track $index) {
+              <button class="picker-week-row"
+                [class.active]="isPickerWeekActive(w.anchor)"
+                (click)="pickerSelectWeek(w.anchor)">
+                {{ w.label }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+    </div>
+  }
+
   @if (isLoading) {
     <div class="loading-bar"><div class="loading-fill"></div></div>
   }
 
-  <!-- Views -->
-  <div class="cal-body">
-    @if (view === 'month') {
-      <app-month-view
-        [appointments]="appointments"
-        [currentDate]="currentDate"
-        (eventClick)="onEventClick($event)"
-        (dayClick)="onDayClick($event)"
-      />
-    }
-    @if (view === 'week') {
-      <app-week-view
-        [appointments]="appointments"
-        [currentDate]="currentDate"
-        (eventClick)="onEventClick($event)"
-      />
-    }
-    @if (view === 'day') {
-      <app-day-view
-        [appointments]="appointments"
-        [currentDate]="currentDate"
-        (eventClick)="onEventClick($event)"
-      />
-    }
-  </div>
+  <!-- ── DESKTOP layout ── -->
+  @if (!isMobile) {
+    <div class="cal-body">
+
+      <div class="main-view">
+        @if (view === 'month') {
+          <app-month-view
+            [appointments]="appointments"
+            [currentDate]="currentDate"
+            (eventClick)="onEventClick($event)"
+            (dayClick)="onDayClick($event)"
+          />
+        }
+        @if (view === 'week') {
+          <app-week-view
+            [appointments]="appointments"
+            [currentDate]="currentDate"
+            (eventClick)="onEventClick($event)"
+            (dayClick)="onDayClick($event)"
+          />
+        }
+      </div>
+
+      @if (panelDay !== null) {
+        <div class="day-panel">
+          <div class="panel-header">
+            <button class="btn-panel-nav" (click)="navigatePanel(-1)" title="Día anterior">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+            <div class="panel-title">
+              <div class="panel-date-badge">{{ panelDay.getDate() }}</div>
+              <span class="panel-date-label">{{ panelDayLabel }}</span>
+            </div>
+            <button class="btn-panel-nav" (click)="navigatePanel(1)" title="Día siguiente">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+            <button class="btn-close-panel" (click)="closePanel()" title="Cerrar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                   stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+          <app-day-view
+            [appointments]="appointments"
+            [currentDate]="panelDay"
+            (eventClick)="onEventClick($event)"
+          />
+        </div>
+      }
+
+    </div>
+  }
+
+  <!-- ── MOBILE layout ── -->
+  @if (isMobile) {
+    <div class="mobile-body">
+
+      <!-- 7-day horizontal strip -->
+      <div class="mobile-week-strip">
+        @for (day of mobileWeekDays; track day) {
+          <button class="mobile-day-btn"
+            [class.selected]="isMobileSelectedDay(day)"
+            [class.today]="isMobileToday(day)"
+            (click)="selectMobileDay(day)">
+            <span class="mday-label">{{ DAYS_SHORT[day.getDay()].slice(0,2) }}</span>
+            <span class="mday-num">{{ day.getDate() }}</span>
+          </button>
+        }
+      </div>
+
+      <!-- Day view fills remaining space -->
+      @if (panelDay !== null) {
+        <app-day-view
+          [appointments]="appointments"
+          [currentDate]="panelDay"
+          (eventClick)="onEventClick($event)"
+        />
+      }
+
+    </div>
+  }
 
 </div>

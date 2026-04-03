@@ -17,18 +17,30 @@
               [class.other-month]="!cell.isCurrentMonth"
               [class.today]="cell.isToday"
               [class.has-appointments]="cell.appointments.length > 0"
-              (click)="onDay(cell)">
+              (click)="dayClick.emit(cell.date)">
 
               <span class="day-num">{{ cell.date.getDate() }}</span>
 
               <div class="cell-events">
                 @for (apt of cell.appointments.slice(0,3); track apt.id) {
                   <div class="event-chip"
-                    [ngStyle]="getChipStyle(apt)"
+                    [ngStyle]="chipStyle(apt)"
                     (click)="onEvent(apt, $event)"
                     [title]="apt.title">
-                    <span class="chip-time">{{ formatTime(apt.start_date) }}</span>
-                    <span class="chip-title">{{ apt.title }}</span>
+                    <div class="chip-summary">
+                      <span class="chip-time">{{ formatTime(apt.start_date) }}</span>
+                      <span class="chip-title">{{ apt.title }}</span>
+                    </div>
+                    <!-- Expanded detail shown on hover -->
+                    <div class="chip-detail">
+                      <span class="chip-property">{{ apt.property.title }}</span>
+                      <span class="chip-time-range">
+                        {{ formatTime(apt.start_date) }} – {{ formatTime(apt.end_date) }}
+                      </span>
+                      <span class="chip-status-badge" [class]="'status-' + apt.status">
+                        {{ apt.status }}
+                      </span>
+                    </div>
                   </div>
                 }
                 @if (cell.appointments.length > 3) {

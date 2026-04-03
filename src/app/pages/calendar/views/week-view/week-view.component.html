@@ -1,10 +1,10 @@
 <div class="week-wrap">
 
-  <!-- Day headers -->
+  <!-- Day headers — clicking a header opens the day panel -->
   <div class="week-header">
     <div class="time-gutter"></div>
     @for (day of weekDays; track day.date) {
-      <div class="day-header-cell" [class.today]="day.isToday">
+      <div class="day-header-cell" [class.today]="day.isToday" (click)="dayClick.emit(day.date)" title="Ver día">
         <span class="dh-label">{{ day.label }}</span>
         <span class="dh-num" [class.today-num]="day.isToday">{{ day.num }}</span>
       </div>
@@ -25,11 +25,10 @@
 
       <!-- Day columns -->
       <div class="day-columns">
-
         @for (day of weekDays; track day.date) {
           <div class="day-col" [class.today-col]="day.isToday">
 
-            <!-- Current time line -->
+            <!-- Current time indicator -->
             @if (day.isToday && isCurrentWeek()) {
               <div class="now-line" [style.top.px]="nowLineTop">
                 <div class="now-dot"></div>
@@ -39,15 +38,23 @@
             <!-- Events -->
             @for (apt of day.appointments; track apt.id) {
               <div class="week-event"
-                [ngStyle]="getEventStyle(apt)"
-                [style.background]="getEventColors(apt).bg"
-                [style.border-left]="'3px solid ' + getEventColors(apt).border"
-                [style.color]="getEventColors(apt).text"
+                [ngStyle]="eventStyle(apt)"
+                [style.background]="eventColors(apt).bg"
+                [style.border-left]="'3px solid ' + eventColors(apt).border"
+                [style.color]="eventColors(apt).text"
                 (click)="eventClick.emit(apt.id)"
                 [title]="apt.title">
-                <span class="ev-type">{{ apt.property.title }}</span>
+
+                <div class="ev-header">
+                  <span class="ev-type">{{ apt.property.title }}</span>
+                  <span class="ev-status" [class]="'status-' + apt.status">{{ apt.status }}</span>
+                </div>
                 <span class="ev-title">{{ apt.title }}</span>
-                <span class="ev-time">{{ formatEventTime(apt.start_date) }} – {{ formatEventTime(apt.end_date) }}</span>
+                <span class="ev-time">{{ formatTime(apt.start_date) }} – {{ formatTime(apt.end_date) }}</span>
+                @if (apt.description) {
+                  <span class="ev-desc">{{ apt.description }}</span>
+                }
+
               </div>
             }
 
