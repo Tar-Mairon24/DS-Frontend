@@ -14,15 +14,15 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
-    "baseUrl": "src",
     "paths": {
-      "@auth/*": ["app/auth/*"],
-      "@properties/*": ["app/properties/*"],
-      "@shared/*": ["app/shared/*"],
-      "@pages/*": ["app/pages/*"],
-      "@services/*": ["app/services/*"],
-      "@models/*": ["app/shared/models/*"],
-      "@components/*": ["app/shared/components/*"]
+      "@auth/*": ["./src/app/auth/*"],
+      "@properties/*": ["./src/app/properties/*"],
+      "@shared/*": ["./src/app/shared/*"],
+      "@pages/*": ["./src/app/pages/*"],
+      "@services/*": ["./src/app/services/*"],
+      "@models/*": ["./src/app/shared/models/*"],
+      "@components/*": ["./src/app/shared/components/*"],
+      "@calendar/*": ["./src/app/pages/calendar/*"]
     }
   },
   "angularCompilerOptions": {

@@ -1,7 +1,7 @@
 <div class="side-menu" [class.collapsed]="isCollapsed">
 
   <div class="menu-header">
-    <span class="brand-name">InmoSoft</span>
+    <span class="brand-name">M&M Bienes Raices</span>
     <button class="toggle-btn" (click)="toggleCollapse()" [title]="isCollapsed ? 'Expandir' : 'Contraer'">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -12,7 +12,7 @@
 
   <nav class="menu-items">
 
-    <a class="menu-item" (click)="goDashboard()" title="Dashboard">
+    <a class="menu-item" (click)="goDashboard()" title="Mis Propiedades">
       <span class="icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -20,10 +20,10 @@
           <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
         </svg>
       </span>
-      <span class="label">Dashboard</span>
+      <span class="label">Mis Propiedades</span>
     </a>
 
-    <a class="menu-item" (click)="goCalendar()" title="Calendario">
+    <a class="menu-item" (click)="goCalendar()" title="Agenda">
       <span class="icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -32,7 +32,7 @@
           <line x1="3" y1="10" x2="21" y2="10"/>
         </svg>
       </span>
-      <span class="label">Calendario</span>
+      <span class="label">Agenda</span>
     </a>
 
     <a class="menu-item" (click)="goDocuments()" title="Documentos">
@@ -48,14 +48,14 @@
       <span class="label">Documentos</span>
     </a>
 
-    <a class="menu-item" (click)="goContact()" title="Contacto">
+    <a class="menu-item" (click)="goContacts()" title="Contactos">
       <span class="icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
       </span>
-      <span class="label">Contacto</span>
+      <span class="label">Contactos</span>
     </a>
 
     <a class="menu-item" (click)="goSettings()" title="Mi Usuario">

@@ -11,6 +11,7 @@ import { loggedInGuard } from '@auth/guards/logged-in.guard';
 import { NewPropertyComponent } from '@properties/new-property/new-property.component';
 import { UpdatePropertyComponent } from '@properties/update-property/update-property.component';
 import { PropertyDetailComponent } from '@properties/property-detail/property-detail.component';
+import { CalendarComponent } from '@pages/calendar/calendar.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -26,7 +27,7 @@ export const routes: Routes = [
       { path: 'properties/new-property', component: NewPropertyComponent },
       { path: 'properties/update/:id', component: UpdatePropertyComponent },
       { path: 'properties/:id', component: PropertyDetailComponent },
-      // ... other user routes
+      { path: 'calendar', component: CalendarComponent}
     ]
   },
 

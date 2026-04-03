@@ -1,0 +1,61 @@
+<div class="week-wrap">
+
+  <!-- Day headers -->
+  <div class="week-header">
+    <div class="time-gutter"></div>
+    @for (day of weekDays; track day.date) {
+      <div class="day-header-cell" [class.today]="day.isToday">
+        <span class="dh-label">{{ day.label }}</span>
+        <span class="dh-num" [class.today-num]="day.isToday">{{ day.num }}</span>
+      </div>
+    }
+  </div>
+
+  <!-- Scrollable time grid -->
+  <div class="week-scroll">
+    <div class="time-grid" [style.height.px]="totalHeight">
+
+      <!-- Hour lines + labels -->
+      @for (hour of hours; track hour) {
+        <div class="hour-row" [style.top.px]="(hour - 7) * HOUR_HEIGHT">
+          <span class="hour-label">{{ formatHour(hour) }}</span>
+          <div class="hour-line"></div>
+        </div>
+      }
+
+      <!-- Day columns -->
+      <div class="day-columns">
+
+        @for (day of weekDays; track day.date) {
+          <div class="day-col" [class.today-col]="day.isToday">
+
+            <!-- Current time line -->
+            @if (day.isToday && isCurrentWeek()) {
+              <div class="now-line" [style.top.px]="nowLineTop">
+                <div class="now-dot"></div>
+              </div>
+            }
+
+            <!-- Events -->
+            @for (apt of day.appointments; track apt.id) {
+              <div class="week-event"
+                [ngStyle]="getEventStyle(apt)"
+                [style.background]="getEventColors(apt).bg"
+                [style.border-left]="'3px solid ' + getEventColors(apt).border"
+                [style.color]="getEventColors(apt).text"
+                (click)="eventClick.emit(apt.id)"
+                [title]="apt.title">
+                <span class="ev-type">{{ apt.property.title }}</span>
+                <span class="ev-title">{{ apt.title }}</span>
+                <span class="ev-time">{{ formatEventTime(apt.start_date) }} – {{ formatEventTime(apt.end_date) }}</span>
+              </div>
+            }
+
+          </div>
+        }
+      </div>
+
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,189 @@
+:host { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+.week-wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* ── Header ── */
+.week-header {
+  display: grid;
+  grid-template-columns: 56px repeat(7, 1fr);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.time-gutter {
+  border-right: 1px solid rgba(0,0,0,0.06);
+}
+
+.day-header-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0 8px;
+  border-right: 1px solid rgba(0,0,0,0.05);
+  gap: 4px;
+}
+
+.day-header-cell:last-child { border-right: none; }
+
+.dh-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.dh-num {
+  font-size: 20px;
+  font-weight: 600;
+  color: #444;
+  line-height: 1;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.day-header-cell.today .dh-label { color: #002996; }
+.today-num {
+  background: #002996;
+  color: white !important;
+}
+
+/* ── Scrollable area ── */
+.week-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ── Time grid ── */
+.time-grid {
+  position: relative;
+  padding-left: 56px;
+}
+
+.hour-row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.hour-label {
+  width: 56px;
+  text-align: right;
+  padding-right: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  color: #aaa;
+  line-height: 1;
+  transform: translateY(-6px);
+  flex-shrink: 0;
+}
+
+.hour-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(0,0,0,0.06);
+}
+
+/* ── Day columns ── */
+.day-columns {
+  position: absolute;
+  inset: 0;
+  left: 56px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day-col {
+  position: relative;
+  border-right: 1px solid rgba(0,0,0,0.05);
+}
+
+.day-col:last-child { border-right: none; }
+.today-col { background: rgba(0, 41, 150, 0.015); }
+
+/* ── Events ── */
+.week-event {
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  border-radius: 5px;
+  padding: 4px 7px;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  transition: opacity 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.week-event:hover {
+  opacity: 0.88;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+  z-index: 5;
+}
+
+.ev-type {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.75;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ev-title {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.ev-time {
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+/* ── Now line ── */
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ef4444;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.now-dot {
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ef4444;
+}

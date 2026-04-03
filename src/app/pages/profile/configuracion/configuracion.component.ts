@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SideMenuComponent } from '@shared/layout/side-menu/side-menu.component';
 import { UserStateService } from '@services/user-state.service';
 
 @Component({
   selector: 'app-configuracion',
   standalone: true,
-  imports: [CommonModule, SideMenuComponent],
+  imports: [CommonModule],
   templateUrl: './configuracion.component.html',
   styleUrls: ['./configuracion.component.css']
 })

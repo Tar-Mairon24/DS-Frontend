@@ -1,0 +1,46 @@
+<div class="calendar-container">
+  <div class="month-wrap">
+
+    <!-- Day-of-week header -->
+    <div class="month-header">
+      @for (label of DAY_LABELS; track label) {
+        <div class="dow-label">{{ label }}</div>
+      }
+    </div>
+
+    <!-- Weeks -->
+    <div class="month-body">
+      @for (week of grid; track $index) {
+        <div class="week-row">
+          @for (cell of week; track cell.date) {
+            <div class="day-cell"
+              [class.other-month]="!cell.isCurrentMonth"
+              [class.today]="cell.isToday"
+              [class.has-appointments]="cell.appointments.length > 0"
+              (click)="onDay(cell)">
+
+              <span class="day-num">{{ cell.date.getDate() }}</span>
+
+              <div class="cell-events">
+                @for (apt of cell.appointments.slice(0,3); track apt.id) {
+                  <div class="event-chip"
+                    [ngStyle]="getChipStyle(apt)"
+                    (click)="onEvent(apt, $event)"
+                    [title]="apt.title">
+                    <span class="chip-time">{{ formatTime(apt.start_date) }}</span>
+                    <span class="chip-title">{{ apt.title }}</span>
+                  </div>
+                }
+                @if (cell.appointments.length > 3) {
+                  <div class="more-badge">+{{ cell.appointments.length - 3 }} más</div>
+                }
+              </div>
+
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+  </div>
+</div>

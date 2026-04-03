@@ -67,8 +67,8 @@ export class SideMenuComponent implements OnInit {
     this.router.navigate(['/documents']);
   }
 
-  goContact() {
-    this.router.navigate(['/contact']);
+  goContacts() {
+    this.router.navigate(['/contacts']);
   }
 
   // ── Navigation (MFA protected) ──
