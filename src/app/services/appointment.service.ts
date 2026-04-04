@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { BaseHttpService } from '@services/http.service';
 import { AppointmentCalendarView } from '../pages/calendar/appointment.model';
+import { AppointmentDetail } from '@calendar/appointment.model';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentService extends BaseHttpService {
@@ -30,12 +31,8 @@ export class AppointmentService extends BaseHttpService {
       );
   }
 
-  private normalizeAppointment(apt: AppointmentCalendarView): AppointmentCalendarView {
-    return apt;
-  }
-
-  private formatDateForDisplay(dateStr: string): string {
-    // No longer needed - keeping full ISO strings
-    return dateStr;
+  getById(id: number): Observable<AppointmentDetail> {
+    return this.get<{ data: AppointmentDetail }>(`/appointments/${id}`)
+      .pipe(map(r => r.data));
   }
 }

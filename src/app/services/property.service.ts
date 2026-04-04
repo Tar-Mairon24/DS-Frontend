@@ -15,6 +15,10 @@ export class PropertyService extends BaseHttpService {
     return this.get(`/properties/${id}`);
   }
 
+  getPropertyCard(id: number): Observable<PropertyCard> {
+    return this.get(`/properties/${id}/card`);
+  }
+
   createProperty(property: PropertyCard): Observable<any> {
     return this.post('/properties', property);
   }

@@ -228,7 +228,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   onDayClick(date: Date)   { this.openPanel(date); }
-  onEventClick(id: number) { console.log('open appointment:', id); }
+  onEventClick(id: number) { this.router.navigate(['/appointments', id]); }
 
   // ── Mobile week strip ─────────────────────────────────────────────────────
 

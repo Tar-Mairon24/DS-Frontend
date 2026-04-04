@@ -15,6 +15,7 @@ import { PropertyCard } from '@models/property';
 export class PropertyCardComponent implements OnDestroy {
   @Input() property!: PropertyCard;
   @Input() image: string = '';
+  @Input() showActions: boolean = true;
 
   @Output() select = new EventEmitter<PropertyCard>();
   @Output() edit   = new EventEmitter<number>();

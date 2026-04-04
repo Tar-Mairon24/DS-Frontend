@@ -20,6 +20,7 @@
     </span>
 
     <!-- 3-dot menu -->
+    @if (showActions) {
     <div class="menu-wrapper" (click)="$event.stopPropagation()">
       <button class="menu-trigger" (click)="toggleMenu($event)">
         <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
@@ -45,6 +46,7 @@
         </div>
       }
     </div>
+    }
   </div>
 
   <!-- Card body -->

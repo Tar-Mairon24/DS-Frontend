@@ -1,0 +1,55 @@
+.people-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.person-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.person-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.person-section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: #9ca3af;
+}
+
+.section-icon { color: #d1d5db; }
+
+.person-identity { display: flex; align-items: center; gap: 12px; }
+
+.avatar {
+  width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+  background: #dbeafe; color: #1d4ed8;
+  font-size: 15px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.avatar.owner { background: #dcfce7; color: #15803d; }
+
+.person-name { font-size: 15px; font-weight: 600; color: #111827; }
+.person-role { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+
+.person-contacts { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #f3f4f6; padding-top: 14px; }
+
+.contact-row {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: #6b7280;
+}
+
+.contact-row svg { flex-shrink: 0; color: #9ca3af; }
+
+@media (max-width: 640px) {
+  .people-grid { grid-template-columns: 1fr; }
+}

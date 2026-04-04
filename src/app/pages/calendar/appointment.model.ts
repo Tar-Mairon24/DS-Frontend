@@ -108,3 +108,32 @@ export function aptsForDate(
   const target = toDateStr(date);
   return appointments.filter(a => a.start_date.split('T')[0] === target);
 }
+
+// ── Appointment Detail (single appointment endpoint) ─────────────────────────
+
+export interface AppointmentAgent {
+  id: number;
+  username: string;
+  email: string;
+}
+
+export interface AppointmentDetail {
+  id: number;
+  title: string;
+  description: string;
+  notes: string | null;
+  start_date: string;
+  end_date: string;
+  status: 'scheduled' | 'completed' | 'cancelled';
+  property_id: number;
+  property_title: string;
+  property_address: string;
+  client_id: number;
+  client_name: string;
+  client_email: string;
+  client_phone: string;
+  owner_id: number;
+  owner_name: string;
+  owner_email: string;
+  agents: AppointmentAgent[];
+}

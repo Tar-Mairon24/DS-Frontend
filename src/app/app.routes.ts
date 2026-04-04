@@ -12,6 +12,7 @@ import { NewPropertyComponent } from '@properties/new-property/new-property.comp
 import { UpdatePropertyComponent } from '@properties/update-property/update-property.component';
 import { PropertyDetailComponent } from '@properties/property-detail/property-detail.component';
 import { CalendarComponent } from '@pages/calendar/calendar.component';
+import { AppointmentDetailComponent } from '@pages/calendar/appointments-detail/appointment-detail.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -27,7 +28,8 @@ export const routes: Routes = [
       { path: 'properties/new-property', component: NewPropertyComponent },
       { path: 'properties/update/:id', component: UpdatePropertyComponent },
       { path: 'properties/:id', component: PropertyDetailComponent },
-      { path: 'calendar', component: CalendarComponent}
+      { path: 'calendar', component: CalendarComponent },
+      { path: 'appointments/:id', component: AppointmentDetailComponent }
     ]
   },
 
