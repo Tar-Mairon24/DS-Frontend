@@ -12,7 +12,7 @@ export interface AppointmentCalendarView {
   description: string;
   start_date: string;
   end_date: string;
-  status: 'scheduled' | 'completed' | 'cancelled';
+  status: 'scheduled' | 'completed' | 'cancelled' | 'archived' | 'no-show';
   property: AppointmentProperty;
   client_id: number;
   owner_id: number;
@@ -52,6 +52,8 @@ export const EVENT_PALETTES = [
 export function eventPalette(apt: AppointmentCalendarView): (typeof EVENT_PALETTES)[0] {
   if (apt.status === 'cancelled') return { bg: '#fee2e2', border: '#ef4444', text: '#b91c1c' };
   if (apt.status === 'completed') return { bg: '#dcfce7', border: '#22c55e', text: '#15803d' };
+  if (apt.status === 'archived')  return { bg: '#f3f4f6', border: '#9ca3af', text: '#6b7280' };
+  if (apt.status === 'no-show')   return { bg: '#fef3c7', border: '#f59e0b', text: '#92400e' };
   return EVENT_PALETTES[(apt.property?.id ?? apt.id) % EVENT_PALETTES.length];
 }
 
@@ -124,7 +126,7 @@ export interface AppointmentDetail {
   notes: string | null;
   start_date: string;
   end_date: string;
-  status: 'scheduled' | 'completed' | 'cancelled';
+  status: 'scheduled' | 'completed' | 'cancelled' | 'archived' | 'no-show';
   property_id: number;
   property_title: string;
   property_address: string;
@@ -136,4 +138,16 @@ export interface AppointmentDetail {
   owner_name: string;
   owner_email: string;
   agents: AppointmentAgent[];
+}
+
+/** Translate appointment status value to Spanish label. */
+export function statusLabel(status: string): string {
+  const map: Record<string, string> = {
+    'scheduled': 'Programada',
+    'completed': 'Completada',
+    'cancelled': 'Cancelada',
+    'archived':  'Archivada',
+    'no-show':   'No se presentó',
+  };
+  return map[status] ?? status;
 }

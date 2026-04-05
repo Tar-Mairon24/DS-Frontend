@@ -1,0 +1,143 @@
+.ctx-menu {
+  position: fixed;
+  z-index: 1000;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08);
+  padding: 6px;
+  min-width: 220px;
+  font-family: 'Inter', sans-serif;
+  animation: ctx-in 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes ctx-in {
+  from { opacity: 0; transform: scale(0.95) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* ── Normal menu ── */
+.ctx-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; padding: 8px 10px 6px;
+}
+.ctx-apt-title {
+  font-size: 12px; font-weight: 700; color: #374151;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;
+}
+.ctx-divider { height: 1px; background: #f3f4f6; margin: 4px 0; }
+
+.ctx-item {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 9px 10px;
+  border: none; background: transparent; border-radius: 7px;
+  font-size: 13px; font-weight: 500; font-family: 'Inter', sans-serif;
+  color: #374151; cursor: pointer; text-align: left;
+  transition: background 0.12s; position: relative;
+}
+.ctx-item:hover  { background: #f3f4f6; }
+.ctx-item svg    { flex-shrink: 0; color: #9ca3af; }
+.ctx-item--danger       { color: #dc2626; }
+.ctx-item--danger:hover { background: #fef2f2; }
+.ctx-item--danger svg   { color: #dc2626; }
+.ctx-item--has-sub { padding-right: 8px; }
+.ctx-chevron { margin-left: auto; color: #9ca3af; }
+
+/* ── Status dots ── */
+.ctx-status-dot, .status-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.dot-scheduled { background: #22c55e; }
+.dot-completed  { background: #3b82f6; }
+.dot-cancelled  { background: #ef4444; }
+.dot-archived   { background: #9ca3af; }
+.dot-no-show    { background: #f59e0b; }
+
+/* ── Status submenu ── */
+.ctx-submenu {
+  position: absolute; left: 100%; top: -4px;
+  background: #fff; border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08);
+  padding: 6px; min-width: 180px;
+  animation: ctx-in 0.1s cubic-bezier(0.4,0,0.2,1);
+}
+.ctx-status-item { gap: 10px; }
+.ctx-status-item.active { background: #f0f4ff; color: #002996; font-weight: 700; }
+
+/* ── Reschedule inline form ── */
+.ctx-reschedule {
+  padding: 4px 2px;
+  display: flex; flex-direction: column; gap: 10px;
+  animation: ctx-in 0.15s cubic-bezier(0.4,0,0.2,1);
+}
+
+.ctx-reschedule-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px 2px;
+}
+
+.ctx-back-btn {
+  width: 26px; height: 26px; flex-shrink: 0;
+  border: none; background: var(--surface-low, #f3f4f6);
+  border-radius: 6px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #6b7280; transition: background 0.15s;
+}
+.ctx-back-btn:hover { background: #e5e7eb; }
+
+.ctx-reschedule-title {
+  font-size: 13px; font-weight: 700; color: #111827;
+}
+
+.ctx-reschedule-apt {
+  font-size: 11px; color: #9ca3af;
+  padding: 0 10px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.ctx-field {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 0 10px;
+}
+
+.ctx-field-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; color: #9ca3af;
+}
+
+.ctx-datetime {
+  width: 100%; padding: 7px 10px;
+  border: 1.5px solid #e5e7eb; border-radius: 7px;
+  font-size: 13px; font-family: 'Inter', sans-serif;
+  color: #374151; background: #f9fafb;
+  outline: none; transition: border-color 0.15s;
+}
+.ctx-datetime:focus { border-color: #002996; background: #fff; }
+
+.ctx-validation-msg {
+  font-size: 11px; color: #ef4444;
+  padding: 0 10px; margin: 0;
+}
+
+.ctx-reschedule-actions {
+  display: flex; gap: 8px;
+  padding: 4px 10px 6px;
+}
+
+.ctx-btn-cancel, .ctx-btn-confirm {
+  flex: 1; padding: 8px;
+  border-radius: 7px; border: none;
+  font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer; transition: all 0.15s;
+}
+
+.ctx-btn-cancel {
+  background: #f3f4f6; color: #6b7280;
+}
+.ctx-btn-cancel:hover { background: #e5e7eb; }
+
+.ctx-btn-confirm {
+  background: #002996; color: white;
+}
+.ctx-btn-confirm:hover:not(:disabled) { background: #002070; }
+.ctx-btn-confirm:disabled { background: #d1d5db; color: #9ca3af; cursor: not-allowed; }

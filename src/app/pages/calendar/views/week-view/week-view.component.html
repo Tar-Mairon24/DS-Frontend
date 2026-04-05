@@ -43,11 +43,15 @@
                 [style.border-left]="'3px solid ' + eventColors(apt).border"
                 [style.color]="eventColors(apt).text"
                 (click)="eventClick.emit(apt.id)"
+                (contextmenu)="onContextMenu(apt, $event)"
+                (touchstart)="onTouchStart(apt, $event)"
+                (touchend)="onTouchEnd()"
+                (touchmove)="onTouchMove()"
                 [title]="apt.title">
 
                 <div class="ev-header">
                   <span class="ev-type">{{ apt.property.title }}</span>
-                  <span class="ev-status" [class]="'status-' + apt.status">{{ apt.status }}</span>
+                  <span class="ev-status" [class]="'status-' + apt.status">{{ statusLabel(apt.status) }}</span>
                 </div>
                 <span class="ev-title">{{ apt.title }}</span>
                 <span class="ev-time">{{ formatTime(apt.start_date) }} – {{ formatTime(apt.end_date) }}</span>

@@ -26,6 +26,10 @@
                   <div class="event-chip"
                     [ngStyle]="chipStyle(apt)"
                     (click)="onEvent(apt, $event)"
+                    (contextmenu)="onContextMenu(apt, $event)"
+                    (touchstart)="onTouchStart(apt, $event)"
+                    (touchend)="onTouchEnd()"
+                    (touchmove)="onTouchMove()"
                     [title]="apt.title">
                     <div class="chip-summary">
                       <span class="chip-time">{{ formatTime(apt.start_date) }}</span>
@@ -38,7 +42,7 @@
                         {{ formatTime(apt.start_date) }} – {{ formatTime(apt.end_date) }}
                       </span>
                       <span class="chip-status-badge" [class]="'status-' + apt.status">
-                        {{ apt.status }}
+                        {{ statusLabel(apt.status) }}
                       </span>
                     </div>
                   </div>

@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core
 import { CommonModule } from '@angular/common';
 import {
   AppointmentCalendarView, DayCell, eventPalette,
-  isSameDay, toDateStr, aptsForDate, formatTime
+  isSameDay, toDateStr, aptsForDate, formatTime, statusLabel
 } from '../../appointment.model';
 
 @Component({
@@ -15,8 +15,9 @@ import {
 export class MonthViewComponent implements OnChanges {
   @Input() appointments: AppointmentCalendarView[] = [];
   @Input() currentDate = new Date();
-  @Output() eventClick = new EventEmitter<number>();
-  @Output() dayClick   = new EventEmitter<Date>();
+  @Output() eventClick  = new EventEmitter<number>();
+  @Output() dayClick    = new EventEmitter<Date>();
+  @Output() contextMenu = new EventEmitter<{ apt: AppointmentCalendarView; x: number; y: number }>();
 
   readonly DAY_LABELS = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'];
   readonly today = new Date();
@@ -62,5 +63,39 @@ export class MonthViewComponent implements OnChanges {
     this.eventClick.emit(apt.id);
   }
 
-  formatTime = formatTime;
+  onContextMenu(apt: AppointmentCalendarView, e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.contextMenu.emit({ apt, x: e.clientX, y: e.clientY });
+  }
+
+
+  // ── Long press (mobile context menu) ─────────────────────────────────────
+
+  private longPressTimer: any = null;
+
+  onTouchStart(apt: AppointmentCalendarView, e: TouchEvent) {
+    this.longPressTimer = setTimeout(() => {
+      const touch = e.touches[0];
+      this.contextMenu.emit({ apt, x: touch.clientX, y: touch.clientY });
+    }, 450);
+  }
+
+  onTouchEnd() {
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer);
+      this.longPressTimer = null;
+    }
+  }
+
+  onTouchMove() {
+    // Cancel if the user scrolls
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer);
+      this.longPressTimer = null;
+    }
+  }
+
+  formatTime  = formatTime;
+  statusLabel = statusLabel;
 }

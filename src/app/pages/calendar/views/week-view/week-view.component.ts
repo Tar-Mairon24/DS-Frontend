@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   AppointmentCalendarView, eventPalette,
   DAYS_SHORT, HOUR_HEIGHT, START_HOUR, END_HOUR,
-  isSameDay, aptsForDate, formatHour, formatTime, weekStart
+  isSameDay, aptsForDate, formatHour, formatTime, weekStart, statusLabel
 } from '../../appointment.model';
 
 export interface WeekDay {
@@ -24,8 +24,9 @@ export interface WeekDay {
 export class WeekViewComponent implements OnChanges {
   @Input() appointments: AppointmentCalendarView[] = [];
   @Input() currentDate = new Date();
-  @Output() eventClick = new EventEmitter<number>();
-  @Output() dayClick   = new EventEmitter<Date>();  // clicking a day header
+  @Output() eventClick  = new EventEmitter<number>();
+  @Output() dayClick    = new EventEmitter<Date>();
+  @Output() contextMenu = new EventEmitter<{ apt: AppointmentCalendarView; x: number; y: number }>();  // clicking a day header
 
   readonly today = new Date();
   readonly HOUR_HEIGHT = HOUR_HEIGHT;
@@ -75,6 +76,40 @@ export class WeekViewComponent implements OnChanges {
     return this.weekDays.some(d => isSameDay(d.date, this.today));
   }
 
-  formatHour = formatHour;
-  formatTime = formatTime;
+  onContextMenu(apt: AppointmentCalendarView, e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.contextMenu.emit({ apt, x: e.clientX, y: e.clientY });
+  }
+
+
+  // ── Long press (mobile context menu) ─────────────────────────────────────
+
+  private longPressTimer: any = null;
+
+  onTouchStart(apt: AppointmentCalendarView, e: TouchEvent) {
+    this.longPressTimer = setTimeout(() => {
+      const touch = e.touches[0];
+      this.contextMenu.emit({ apt, x: touch.clientX, y: touch.clientY });
+    }, 450);
+  }
+
+  onTouchEnd() {
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer);
+      this.longPressTimer = null;
+    }
+  }
+
+  onTouchMove() {
+    // Cancel if the user scrolls
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer);
+      this.longPressTimer = null;
+    }
+  }
+
+  formatHour   = formatHour;
+  formatTime   = formatTime;
+  statusLabel  = statusLabel;
 }

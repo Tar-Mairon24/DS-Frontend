@@ -20,7 +20,8 @@ export class AptInfoComponent {
 
   get statusLabel(): string {
     const map: Record<string, string> = {
-      scheduled: 'Programada', completed: 'Completada', cancelled: 'Cancelada'
+      scheduled: 'Programada', completed: 'Completada', cancelled: 'Cancelada',
+      archived: 'Archivada', 'no-show': 'No se presentó'
     };
     return map[this.apt.status] ?? this.apt.status;
   }

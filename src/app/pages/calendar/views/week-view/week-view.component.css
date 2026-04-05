@@ -209,3 +209,9 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Prevent native browser long-press menu on touch devices */
+.event-chip, .week-event, .day-event {
+  -webkit-touch-callout: none;
+  user-select: none;
+}

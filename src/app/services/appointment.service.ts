@@ -35,4 +35,24 @@ export class AppointmentService extends BaseHttpService {
     return this.get<{ data: AppointmentDetail }>(`/appointments/${id}`)
       .pipe(map(r => r.data));
   }
+
+  update(id: number, data: Partial<AppointmentDetail>): Observable<any> {
+    return this.put(`/appointments/${id}`, data);
+  }
+
+  // PATCH /appointments/:id/status
+  updateStatus(id: number, status: 'scheduled' | 'completed' | 'cancelled' | 'archived' | 'no-show'): Observable<any> {
+    return this.patch(`/appointments/${id}/status`, { status });
+  }
+
+  // PATCH /appointments/:id/reschedule
+  reschedule(id: number, start_date: string, end_date: string): Observable<any> {
+    return this.patch(`/appointments/${id}/reschedule`, { start_date, end_date });
+  }
+ 
+
+  // DELETE /appointments/:id
+  deleteAppointment(id: number): Observable<any> {
+    return this.delete(`/appointments/${id}`);
+  }
 }

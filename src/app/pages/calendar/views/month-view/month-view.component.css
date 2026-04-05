@@ -243,3 +243,9 @@
   white-space: normal;
   font-weight: 700;
 }
+
+/* Prevent native browser long-press menu on touch devices */
+.event-chip, .week-event, .day-event {
+  -webkit-touch-callout: none;
+  user-select: none;
+}

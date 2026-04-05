@@ -36,11 +36,15 @@
             [style.background]="colors(apt).bg"
             [style.border-left]="'4px solid ' + colors(apt).border"
             [style.color]="colors(apt).text"
-            (click)="eventClick.emit(apt.id)">
+            (click)="eventClick.emit(apt.id)"
+            (contextmenu)="onContextMenu(apt, $event)"
+            (touchstart)="onTouchStart(apt, $event)"
+            (touchend)="onTouchEnd()"
+            (touchmove)="onTouchMove()">
 
             <div class="dev-header">
               <span class="dev-property">{{ apt.property.title }}</span>
-              <span class="dev-status" [class]="'status-' + apt.status">{{ apt.status }}</span>
+              <span class="dev-status" [class]="'status-' + apt.status">{{ statusLabel(apt.status) }}</span>
             </div>
             <span class="dev-title">{{ apt.title }}</span>
             <span class="dev-time">{{ formatTime(apt.start_date) }} – {{ formatTime(apt.end_date) }}</span>
