@@ -1,4 +1,5 @@
 export interface PropertyFormData {
+  owner_id: number | null;
   images: any[];
   title: string;
   status: string;

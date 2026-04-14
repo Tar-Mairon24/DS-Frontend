@@ -78,7 +78,7 @@ export class SideMenuComponent implements OnInit {
   }
 
   goUsers() {
-    this.navigateWithMfa('/dashboard', 'Abrir administración de usuarios');
+    this.navigateWithMfa('/users', 'Abrir administración de usuarios');
   }
 
   // ── MFA flow ──

@@ -30,7 +30,7 @@ export class DashboardUsersComponent implements OnInit {
   loadUsers() {
     this.userService.getUsers().subscribe({
       next: (response) => {
-        this.users = response.data || [];
+        this.users = response || [];
       },
       error: (err) => {
         console.error('Error al cargar usuarios:', err);

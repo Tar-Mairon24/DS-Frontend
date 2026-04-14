@@ -15,7 +15,7 @@
     <h3 class="section-title">Transacción y Especificaciones</h3>
   </div>
 
-  <!-- Top row: transaction, type, price, toggles -->
+  <!-- Top row: transaction, type, price, owner -->
   <div class="grid-4">
     <div class="field">
       <label>Transacción</label>
@@ -24,6 +24,7 @@
         <option value="Renta">Renta</option>
       </select>
     </div>
+
     <div class="field">
       <label>Tipo de Propiedad</label>
       <select formControlName="property_type">
@@ -37,6 +38,7 @@
         <option value="Otro">Otro</option>
       </select>
     </div>
+
     <div class="field">
       <label>Precio ($) *</label>
       <input
@@ -49,24 +51,44 @@
         [class.invalid]="isInvalid('price')"
       />
     </div>
-    <div class="field">
-      <label>Condición</label>
-      <div class="toggle-group">
-        <label class="toggle-label">
-          <span class="toggle-track">
-            <input type="checkbox" formControlName="is_occupied" />
-            <span class="toggle-thumb"></span>
-          </span>
-          Ocupada
-        </label>
-        <label class="toggle-label">
-          <span class="toggle-track">
-            <input type="checkbox" formControlName="is_furnished" />
-            <span class="toggle-thumb"></span>
-          </span>
-          Amueblada
-        </label>
-      </div>
+
+    <!-- Owner selector -->
+    <div class="field" style="position: relative;">
+      <label>Propietario *</label>
+      <input
+        type="text"
+        [formControl]="ownerSearch"
+        placeholder="Buscar propietario..."
+        (focus)="openOwnerSearch()"
+        (blur)="closeOwnerDropdown()"
+        [class.invalid]="isInvalid('owner_id')"
+        autocomplete="off"
+      />
+
+      @if (showOwnerDropdown) {
+        <div class="owner-dropdown">
+          @if (isLoadingOwners) {
+            <div class="owner-option owner-loading">Buscando...</div>
+          } @else {
+            @for (owner of ownerResults; track owner.id) {
+              <div class="owner-option" (mousedown)="selectOwner(owner)">
+                <span class="owner-name">{{ owner.username }}</span>
+                <span class="owner-email">{{ owner.email }}</span>
+              </div>
+            }
+            @if (ownerResults.length === 0) {
+              <div class="owner-option owner-empty">Sin resultados</div>
+            }
+          }
+          <div class="owner-option owner-create" (mousedown)="createNewOwner()">
+            + Crear nuevo propietario
+          </div>
+        </div>
+      }
+
+      @if (isInvalid('owner_id')) {
+        <div class="field-error">Selecciona un propietario</div>
+      }
     </div>
   </div>
 
@@ -100,6 +122,27 @@
       <div class="field">
         <label>Cocheras</label>
         <input formControlName="garage_size" type="number" min="0" />
+      </div>
+
+      <!-- Condición moved into the measures panel -->
+      <div class="field">
+        <label>Condición</label>
+        <div class="toggle-group">
+          <label class="toggle-label">
+            <span class="toggle-track">
+              <input type="checkbox" formControlName="is_occupied" />
+              <span class="toggle-thumb"></span>
+            </span>
+            Ocupada
+          </label>
+          <label class="toggle-label">
+            <span class="toggle-track">
+              <input type="checkbox" formControlName="is_furnished" />
+              <span class="toggle-thumb"></span>
+            </span>
+            Amueblada
+          </label>
+        </div>
       </div>
     </div>
   </div>

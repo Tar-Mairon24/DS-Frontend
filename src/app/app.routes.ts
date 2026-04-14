@@ -13,6 +13,7 @@ import { UpdatePropertyComponent } from '@properties/update-property/update-prop
 import { PropertyDetailComponent } from '@properties/property-detail/property-detail.component';
 import { CalendarComponent } from '@pages/calendar/calendar.component';
 import { AppointmentDetailComponent } from '@pages/calendar/appointments-detail/appointment-detail.component';
+import { DashboardUsersComponent } from '@pages/dashboard-users/dashboard-users.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -41,6 +42,7 @@ export const routes: Routes = [
     data: { role: 'admin' },
     children: [
       { path: 'register', component: RegisterComponent },
+      { path: 'users', component: DashboardUsersComponent },
       // ... other admin routes
     ]
   },

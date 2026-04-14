@@ -6,6 +6,7 @@ export function createPropertyForm(
   initialData?: Partial<PropertyFormData>
 ): FormGroup {
   const defaultValues: PropertyFormData = {
+    owner_id: null,
     images: [],
     title: '',
     status: 'Disponible',
@@ -37,6 +38,7 @@ export function createPropertyForm(
   const finalValues = { ...defaultValues, ...initialData };
 
   return fb.group({
+    owner_id: [finalValues.owner_id, Validators.required],
     images: [finalValues.images],
     title: [finalValues.title, Validators.required],
     status: [finalValues.status, Validators.required],

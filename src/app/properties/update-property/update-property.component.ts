@@ -63,6 +63,7 @@ export class UpdatePropertyComponent implements OnInit {
       next: (property: any) => {
         // patchValue reuses the existing FormGroup — no replacement, no rebinding issues
         this.form.patchValue({
+          owner_id: property.owner_id,
           title: property.title,
           status: property.status,
           address: property.address ?? '',
