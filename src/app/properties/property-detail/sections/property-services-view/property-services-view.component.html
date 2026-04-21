@@ -1,0 +1,63 @@
+<div class="card">
+  <div class="card-header">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 11 12 14 22 4"/>
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+    </div>
+    <h3 class="card-title">Servicios y Amenidades</h3>
+  </div>
+
+  @if (hasItems(property.utilities)) {
+    <div class="services-group">
+      <span class="group-label">Servicios Básicos</span>
+      <div class="tags">
+        @for (item of property.utilities; track item) {
+          <span class="tag tag-outline">{{ item }}</span>
+        }
+      </div>
+    </div>
+    <div class="card-divider"></div>
+  }
+
+  @if (hasItems(property.gas_types)) {
+    <div class="services-group">
+      <span class="group-label">Tipo de Gas</span>
+      <div class="tags">
+        @for (item of property.gas_types; track item) {
+          <span class="tag tag-outline">{{ item }}</span>
+        }
+      </div>
+    </div>
+    <div class="card-divider"></div>
+  }
+
+  @if (hasItems(property.amenities)) {
+    <div class="services-group">
+      <span class="group-label">Amenidades</span>
+      <div class="tags">
+        @for (item of property.amenities; track item) {
+          <span class="tag tag-primary">{{ item }}</span>
+        }
+      </div>
+    </div>
+  }
+
+  @if (hasItems(property.extras)) {
+    <div class="card-divider"></div>
+    <div class="services-group">
+      <span class="group-label">Extras</span>
+      <div class="tags">
+        @for (item of property.extras; track item) {
+          <span class="tag tag-primary">{{ item }}</span>
+        }
+      </div>
+    </div>
+  }
+
+  @if (!hasItems(property.utilities) && !hasItems(property.amenities) && !hasItems(property.gas_types) && !hasItems(property.extras)) {
+    <p class="no-services">Sin servicios registrados.</p>
+  }
+
+</div>

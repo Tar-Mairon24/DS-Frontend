@@ -1,0 +1,116 @@
+<div class="dashboard">
+
+  <!-- Mobile floating add button -->
+  <button
+    class="mobile-add-fab"
+    type="button"
+    aria-label="Agregar propiedad"
+    (click)="addProperty()"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"/>
+      <line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+  </button>
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div>
+      <h1 class="dashboard-title">Propiedades</h1>
+      <p class="dashboard-subtitle">Panel de gestión inmobiliaria</p>
+    </div>
+  </div>
+
+  <!-- Toolbar: filters + sort -->
+  <div class="toolbar">
+    <div class="filter-group">
+      <button class="btn-filter-advanced">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+          <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
+        </svg>
+        Filtros Avanzados
+      </button>
+      <div class="filter-tabs">
+        <button class="filter-tab" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">Todas</button>
+        <button class="filter-tab" [class.active]="activeFilter === 'Venta'" (click)="setFilter('Venta')">En Venta</button>
+        <button class="filter-tab" [class.active]="activeFilter === 'Renta'" (click)="setFilter('Renta')">En Renta</button>
+      </div>
+    </div>
+    <div class="sort-group">
+      <span class="sort-label">Ordenar por</span>
+      <select class="sort-select" [(ngModel)]="sortBy" (change)="applySort()">
+        <option value="recent">Recientes</option>
+        <option value="price-asc">Precio ↓</option>
+        <option value="price-desc">Precio ↑</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  @if (isLoading) {
+    <div class="properties-grid">
+      @for (item of [1,2,3,4,5,6]; track item) {
+        <div class="skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="skeleton-line long"></div>
+          <div class="skeleton-line short"></div>
+        </div>
+      }
+    </div>
+  } @else if (filtered.length > 0 || properties.length > 0 ) {
+    <div class="properties-grid">
+
+      @for (property of filtered; track property.id) {
+        <app-property-card
+          [property]="property"
+          [image]="property.main_image_path || ''"
+          (select)="showDetails($event)"
+          (delete)="confirmDelete($event)"
+          (edit)="handleEdit($event)"
+        />
+      }
+
+      <div class="add-card" (click)="addProperty()">
+        <div class="add-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </div>
+        <p class="add-card-label">Agregar Propiedad</p>
+        <p class="add-card-hint">Crea una nueva entrada en el inventario</p>
+      </div>
+
+    </div>
+  }
+
+  @if (!isLoading && filtered.length === 0 && properties.length > 0) {
+    <div class="no-results">
+      <p>No hay propiedades que coincidan con el filtro seleccionado.</p>
+    </div>
+  }
+
+  @if (!isLoading && properties.length === 0) {
+    <app-empty-state
+      title="Oops — No encontramos propiedades"
+      subtitle="No tenemos propiedades para mostrar en este momento."
+      actionLabel="Crear propiedad"
+      (retry)="fetchProperties()"
+      (action)="addProperty()"
+    />
+  }
+
+  <!-- Delete confirm -->
+  @if (showDeleteConfirm) {
+    <div class="confirm-overlay" (click)="handleDeleteCancel()">
+      <div class="confirm-dialog" (click)="$event.stopPropagation()">
+        <h3 class="confirm-title">Eliminar propiedad</h3>
+        <p class="confirm-message">¿Estás seguro? Esta acción no se puede deshacer.</p>
+        <div class="confirm-actions">
+          <button class="btn-cancel" (click)="handleDeleteCancel()">Cancelar</button>
+          <button class="btn-delete" (click)="handleDeleteConfirm()">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

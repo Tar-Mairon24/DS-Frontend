@@ -1,0 +1,55 @@
+<div class="section" [formGroup]="form">
+  <div class="section-header">
+    <div class="section-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+      </svg>
+    </div>
+    <h3 class="section-title">Información General y Ubicación</h3>
+  </div>
+
+  <div class="grid-3">
+    <div class="field col-span-2">
+      <label>Título de la Propiedad *</label>
+      <input formControlName="title" type="text" placeholder="Ej: Residencia Lomas de San Isidro"
+        [class.invalid]="isInvalid('title')"/>
+    </div>
+    <div class="field">
+      <label>Estado</label>
+      <select formControlName="status">
+        <option value="Disponible">Disponible</option>
+        <option value="Reservado">Reservado</option>
+        <option value="Vendido">Vendido</option>
+        <option value="Alquilado">Alquilado</option>
+      </select>
+    </div>
+
+    <div class="field col-span-3">
+      <label>Dirección Exacta *</label>
+      <input formControlName="address" type="text" placeholder="Calle y número"
+        [class.invalid]="isInvalid('address')"/>
+    </div>
+
+    <div class="field">
+      <label>Barrio / Colonia</label>
+      <input formControlName="neighborhood" type="text" placeholder="Nombre del barrio"/>
+    </div>
+    <div class="field">
+      <label>Ciudad</label>
+      <select formControlName="city">
+        <option value="Saltillo">Saltillo</option>
+        <option value="Ramos Arizpe">Ramos Arizpe</option>
+        <option value="Arteaga">Arteaga</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Zona / Región</label>
+      <input formControlName="zone" type="text" placeholder="Ej: Zona Norte"/>
+    </div>
+
+    <div class="field col-span-3">
+      <label>Referencia de Ubicación</label>
+      <input formControlName="reference" type="text" placeholder="Ej: A 200m del centro comercial..."/>
+    </div>
+  </div>
+</div>

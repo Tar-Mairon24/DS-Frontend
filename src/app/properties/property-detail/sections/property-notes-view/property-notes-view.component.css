@@ -1,0 +1,14 @@
+.notes-text {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.notes-empty {
+  font-size: 13px;
+  color: #bbb;
+  margin: 0;
+  font-style: italic;
+}

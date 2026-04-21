@@ -10,22 +10,14 @@ export class BaseHttpService {
 
   constructor(protected http: HttpClient) {}
 
-  // Base headers configuration
   protected getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
+    return new HttpHeaders({ 'Content-Type': 'application/json' });
   }
 
-  // Options to include credentials (cookies)
   protected getOptions() {
-    return {
-      headers: this.getHeaders(),
-      withCredentials: true
-    };
+    return { headers: this.getHeaders(), withCredentials: true };
   }
 
-  // HTTP methods with default options
   protected get<T>(endpoint: string): Observable<T> {
     return this.http.get<T>(`${this.apiUrl}${endpoint}`, this.getOptions());
   }
@@ -42,7 +34,7 @@ export class BaseHttpService {
     return this.http.delete<T>(`${this.apiUrl}${endpoint}`, this.getOptions());
   }
 
-  protected patch<T>(endpoint: string, body: any): Observable<T> {
+  protected patch<T>(endpoint: string, body: any = {}): Observable<T> {
     return this.http.patch<T>(`${this.apiUrl}${endpoint}`, body, this.getOptions());
   }
 }

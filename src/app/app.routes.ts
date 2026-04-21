@@ -1,43 +1,52 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
-import { authGuard } from './guards/auth.guard';
-import { ConfiguracionComponent } from './configuracion/configuracion.component';
-import { mfaGuard } from './guards/mfa.guard';
-import { ForbiddenComponent } from './forbidden/forbidden.component';
-import { loggedInGuard } from './guards/logged-in.guard';
+import { LoginComponent } from '@auth/login/login.component';
+import { RegisterComponent } from '@auth/register/register.component';
+import { ForbiddenComponent } from '@auth/forbidden/forbidden.component';
+import { MainLayoutComponent } from '@shared/layout/main-layout/main-layout.component';
+import { DashboardComponent } from '@properties/dashboard/dashboard.component';
+import { ConfiguracionComponent } from '@pages/profile/configuracion/configuracion.component';
+import { authGuard } from '@auth/guards/auth.guard';
+import { mfaGuard } from '@auth/guards/mfa.guard';
+import { loggedInGuard } from '@auth/guards/logged-in.guard';
+import { NewPropertyComponent } from '@properties/new-property/new-property.component';
+import { UpdatePropertyComponent } from '@properties/update-property/update-property.component';
+import { PropertyDetailComponent } from '@properties/property-detail/property-detail.component';
+import { CalendarComponent } from '@pages/calendar/calendar.component';
+import { AppointmentDetailComponent } from '@pages/calendar/appointments-detail/appointment-detail.component';
+import { DashboardUsersComponent } from '@pages/dashboard-users/dashboard-users.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+
   {
-    path: 'register',
-    component: RegisterComponent,
-    canActivate: [authGuard],
-    data: { role: 'admin' }
+    path: '',
+    component: MainLayoutComponent,
+    canActivate: [loggedInGuard],
+    children: [
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'configuracion', component: ConfiguracionComponent },
+      { path: 'properties/new-property', component: NewPropertyComponent },
+      { path: 'properties/update/:id', component: UpdatePropertyComponent },
+      { path: 'properties/:id', component: PropertyDetailComponent },
+      { path: 'calendar', component: CalendarComponent },
+      { path: 'appointments/:id', component: AppointmentDetailComponent }
+    ]
   },
+
+  // Admin-only routes
   {
-    path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [loggedInGuard]
+    path: 'admin',
+    component: MainLayoutComponent,
+    canActivate: [loggedInGuard, authGuard],
+    data: { role: 'admin' },
+    children: [
+      { path: 'register', component: RegisterComponent },
+      { path: 'users', component: DashboardUsersComponent },
+      // ... other admin routes
+    ]
   },
-  {
-    path: 'dashboard-admin',
-    component: DashboardAdminComponent,
-    canActivate: [authGuard, mfaGuard],
-    data: { role: 'admin' }
-  },
-  {
-    path: 'configuracion',
-    component: ConfiguracionComponent,
-    canActivate: [loggedInGuard, mfaGuard]
-  },
-  {
-    path: 'forbidden',
-    component: ForbiddenComponent,
-    canActivate: [loggedInGuard]
-  },
+
+  { path: 'forbidden', component: ForbiddenComponent },
   { path: '**', redirectTo: '/login' }
 ];

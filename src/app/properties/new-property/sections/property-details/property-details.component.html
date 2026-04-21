@@ -1,0 +1,149 @@
+<div class="section" [formGroup]="form">
+  <div class="section-header">
+    <div class="section-icon">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="12" y1="1" x2="12" y2="23" />
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      </svg>
+    </div>
+    <h3 class="section-title">Transacción y Especificaciones</h3>
+  </div>
+
+  <!-- Top row: transaction, type, price, owner -->
+  <div class="grid-4">
+    <div class="field">
+      <label>Transacción</label>
+      <select formControlName="transaction_type">
+        <option value="Venta">Venta</option>
+        <option value="Renta">Renta</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Tipo de Propiedad</label>
+      <select formControlName="property_type">
+        <option value="Casa">Casa</option>
+        <option value="Apartamento">Apartamento</option>
+        <option value="Terreno">Terreno</option>
+        <option value="Comercial">Comercial</option>
+        <option value="Almacén">Almacén</option>
+        <option value="Oficina">Oficina</option>
+        <option value="Industrial">Industrial</option>
+        <option value="Otro">Otro</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Precio ($) *</label>
+      <input
+        formControlName="price"
+        type="text"
+        placeholder="$0 MX"
+        (input)="formatPrice($event)"
+        (focus)="onPriceFocus($event)"
+        (blur)="onPriceBlur()"
+        [class.invalid]="isInvalid('price')"
+      />
+    </div>
+
+    <!-- Owner selector -->
+    <div class="field" style="position: relative;">
+      <label>Propietario *</label>
+      <input
+        type="text"
+        [formControl]="ownerSearch"
+        placeholder="Buscar propietario..."
+        (focus)="openOwnerSearch()"
+        (blur)="closeOwnerDropdown()"
+        [class.invalid]="isInvalid('owner_id')"
+        autocomplete="off"
+      />
+
+      @if (showOwnerDropdown) {
+        <div class="owner-dropdown">
+          @if (isLoadingOwners) {
+            <div class="owner-option owner-loading">Buscando...</div>
+          } @else {
+            @for (owner of ownerResults; track owner.id) {
+              <div class="owner-option" (mousedown)="selectOwner(owner)">
+                <span class="owner-name">{{ owner.username }}</span>
+                <span class="owner-email">{{ owner.email }}</span>
+              </div>
+            }
+            @if (ownerResults.length === 0) {
+              <div class="owner-option owner-empty">Sin resultados</div>
+            }
+          }
+          <div class="owner-option owner-create" (mousedown)="createNewOwner()">
+            + Crear nuevo propietario
+          </div>
+        </div>
+      }
+
+      @if (isInvalid('owner_id')) {
+        <div class="field-error">Selecciona un propietario</div>
+      }
+    </div>
+  </div>
+
+  <!-- Measures panel -->
+  <div class="measures-panel">
+    <div class="grid-4">
+      <div class="field">
+        <label>Construidos (m²)</label>
+        <input formControlName="construction_m2" type="number" min="0" />
+      </div>
+      <div class="field">
+        <label>Terreno (m²)</label>
+        <input formControlName="land_m2" type="number" min="0" />
+      </div>
+      <div class="field">
+        <label>Jardín (m²)</label>
+        <input formControlName="garden_m2" type="number" min="0" />
+      </div>
+      <div class="field">
+        <label>Plantas / Pisos</label>
+        <input formControlName="floors" type="number" min="1" />
+      </div>
+      <div class="field">
+        <label>Habitaciones</label>
+        <input formControlName="bedrooms" type="number" min="0" />
+      </div>
+      <div class="field">
+        <label>Baños</label>
+        <input formControlName="bathrooms" type="number" min="0" />
+      </div>
+      <div class="field">
+        <label>Cocheras</label>
+        <input formControlName="garage_size" type="number" min="0" />
+      </div>
+
+      <!-- Condición moved into the measures panel -->
+      <div class="field">
+        <label>Condición</label>
+        <div class="toggle-group">
+          <label class="toggle-label">
+            <span class="toggle-track">
+              <input type="checkbox" formControlName="is_occupied" />
+              <span class="toggle-thumb"></span>
+            </span>
+            Ocupada
+          </label>
+          <label class="toggle-label">
+            <span class="toggle-track">
+              <input type="checkbox" formControlName="is_furnished" />
+              <span class="toggle-thumb"></span>
+            </span>
+            Amueblada
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

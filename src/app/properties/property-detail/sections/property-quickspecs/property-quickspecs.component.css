@@ -1,0 +1,66 @@
+.specs-bar {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.spec-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.spec-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #eff2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.spec-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: #1e40af;
+}
+
+.spec-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 2px;
+}
+
+.spec-value {
+  display: block;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
+}
+
+.spec-sep {
+  width: 1px;
+  height: 36px;
+  background: #eee;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .specs-bar { gap: 1rem; }
+  .spec-sep { display: none; }
+}

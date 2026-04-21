@@ -1,0 +1,115 @@
+/* Shared card styles for property-detail sub-components */
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.card-icon {
+  width: 30px;
+  height: 30px;
+  background: #eff2ff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-icon svg {
+  width: 15px;
+  height: 15px;
+  stroke: #1e40af;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e40af;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+/* ── Field label / value pairs ── */
+.field-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.field-value {
+  font-size: 14px;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.field-value.italic { font-style: italic; color: #555; }
+
+/* ── Info grid ── */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem 2rem;
+}
+
+.info-grid .span-2 { grid-column: span 2; }
+
+/* ── Tag pills ── */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.tag {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tag-outline {
+  border: 1.5px solid #e0e0e0;
+  color: #555;
+  background: transparent;
+}
+
+.tag-primary {
+  background: #eff2ff;
+  color: #1e40af;
+  border: none;
+}
+
+/* ── Divider ── */
+.card-divider {
+  height: 1px;
+  background: #f0f0f0;
+  margin: 1.25rem 0;
+}
+
+/* ── Group label ── */
+.group-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  display: block;
+  margin-bottom: 10px;
+}

@@ -1,0 +1,43 @@
+<div class="card">
+  <div class="card-header">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+      </svg>
+    </div>
+    <h3 class="card-title">Información General</h3>
+  </div>
+
+  <div class="info-grid">
+    <div>
+      <span class="field-label">Dirección</span>
+      <p class="field-value">{{ property.address }}</p>
+    </div>
+    <div>
+      <span class="field-label">Colonia / Barrio</span>
+      <p class="field-value">{{ property.neighborhood || '—' }}</p>
+    </div>
+    <div>
+      <span class="field-label">Ciudad</span>
+      <p class="field-value">{{ property.city }}</p>
+    </div>
+    <div>
+      <span class="field-label">Zona</span>
+      <p class="field-value">{{ property.zone || '—' }}</p>
+    </div>
+    <div>
+      <span class="field-label">Tipo</span>
+      <p class="field-value">{{ property.property_type }} · {{ property.transaction_type }}</p>
+    </div>
+    <div>
+      <span class="field-label">Pisos</span>
+      <p class="field-value">{{ property.floors }} Nivel{{ property.floors !== 1 ? 'es' : '' }}</p>
+    </div>
+    @if (property.reference) {
+      <div class="span-2">
+        <span class="field-label">Referencia</span>
+        <p class="field-value italic">{{ property.reference }}</p>
+      </div>
+    }
+  </div>
+</div>

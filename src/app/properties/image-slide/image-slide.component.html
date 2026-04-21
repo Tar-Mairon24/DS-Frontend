@@ -1,0 +1,29 @@
+<div class="slide-wrapper">
+  <div class="slide-viewport">
+    <img [src]="images[currentIndex]" alt="Property" class="slide-image" />
+  </div>
+
+  @if (hasMultiple) {
+    <button class="slide-btn slide-btn--left" (click)="previous()">
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+
+    <button class="slide-btn slide-btn--right" (click)="next()">
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+
+    <div class="slide-dots">
+      @for (image of images; track $index) {
+        <button
+          class="dot"
+          [class.dot--active]="$index === currentIndex"
+          (click)="goTo($index)"
+        ></button>
+      }
+    </div>
+  }
+</div>

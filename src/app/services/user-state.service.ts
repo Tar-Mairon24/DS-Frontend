@@ -48,7 +48,6 @@ export class UserStateService {
     this.mfaVerifiedSubject.next(verified);
 
     if (verified) {
-      // Store the timestamp when MFA was verified
       const timestamp = Date.now().toString();
       localStorage.setItem('mfaVerifiedAt', timestamp);
     } else {
@@ -76,6 +75,14 @@ export class UserStateService {
     return true;
   }
 
+  setMfaEnabled(enabled: boolean) {
+    localStorage.setItem('mfaEnabled', String(enabled ?? false));
+  }
+
+  isMfaEnabled(): boolean {
+    return localStorage.getItem('mfaEnabled') === 'true';
+  }
+
   clearUserData() {
     this.userNameSubject.next('');
     this.userRoleSubject.next('');
@@ -86,5 +93,6 @@ export class UserStateService {
     localStorage.removeItem('userRole');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('mfaVerifiedAt');
+    localStorage.removeItem('mfaEnabled');
   }
 }

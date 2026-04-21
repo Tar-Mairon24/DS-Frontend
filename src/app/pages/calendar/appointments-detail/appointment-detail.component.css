@@ -1,0 +1,138 @@
+:host {
+  display: block;
+  height: 100%;
+  overflow-y: auto;
+  background: #f8f9fa;
+  font-family: 'Inter', sans-serif;
+}
+
+.detail-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 32px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Loading / Error ── */
+.loading-state, .error-state {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 12px; padding: 80px 0;
+  color: #9ca3af; font-size: 14px;
+}
+
+.spinner {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 3px solid #e5e7eb;
+  border-top-color: #002996;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Top bar ── */
+.detail-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-back {
+  display: flex; align-items: center; gap: 8px;
+  border: none; background: transparent; cursor: pointer;
+  font-size: 14px; font-weight: 600; color: #6b7280;
+  font-family: inherit; padding: 6px 0;
+  transition: color 0.15s;
+}
+.btn-back:hover { color: #002996; }
+
+.topbar-actions { display: flex; gap: 10px; }
+
+.btn-secondary {
+  padding: 9px 18px; border: 1.5px solid #d1d5db;
+  background: #fff; border-radius: 8px;
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  color: #374151; cursor: pointer; transition: all 0.15s;
+}
+.btn-secondary:hover { border-color: #002996; color: #002996; }
+
+.btn-primary {
+  padding: 9px 18px;
+  background: #002996; color: white;
+  border: none; border-radius: 8px;
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-primary:hover { background: #002070; }
+
+/* ── Title row ── */
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.detail-title {
+  font-size: 1.8rem; font-weight: 800; color: #002996;
+  margin: 0; letter-spacing: -0.02em; flex: 1;
+}
+
+.status-badge {
+  padding: 5px 14px; border-radius: 999px;
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+.status-scheduled { background: #d1fae5; color: #065f46; }
+.status-completed  { background: #dbeafe; color: #1e40af; }
+.status-cancelled  { background: #fee2e2; color: #991b1b; }
+
+/* ── Two-column body ── */
+.detail-body {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  align-items: start;
+}
+
+.left-col {
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+/* ── Right column ── */
+.right-col { display: flex; flex-direction: column; gap: 12px; }
+
+.property-card-wrap {
+  display: flex; flex-direction: column; gap: 0;
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+/* Make the card non-interactive looking (no hover lift) since we have our own button */
+.property-card-wrap app-property-card { cursor: default; }
+
+.btn-view-property {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 12px;
+  background: #002996; color: white;
+  border: none; font-size: 14px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-view-property:hover { background: #002070; }
+
+/* Fallback card when property fetch fails */
+.property-fallback {
+  background: #fff; border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.fallback-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #9ca3af; }
+.fallback-title { font-size: 16px; font-weight: 700; color: #111827; }
+.fallback-address { font-size: 13px; color: #6b7280; }
+
+@media (max-width: 900px) {
+  .detail-body { grid-template-columns: 1fr; }
+  .right-col { order: -1; } /* show property card above content on mobile */
+  .detail-shell { padding: 16px 16px 40px; }
+}

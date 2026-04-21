@@ -1,0 +1,67 @@
+<div class="day-wrap">
+
+  <!-- Appointment count subheader -->
+  <div class="day-subheader" [class.today]="isToday">
+    <span class="apt-count">
+      {{ dayAppointments.length }} cita{{ dayAppointments.length !== 1 ? 's' : '' }}
+    </span>
+  </div>
+
+  <!-- Scrollable timeline -->
+  <div class="day-scroll">
+    <div class="time-grid" [style.height.px]="totalHeight">
+
+      <!-- Hour rows -->
+      @for (hour of hours; track hour) {
+        <div class="hour-row" [style.top.px]="(hour - 7) * HOUR_HEIGHT">
+          <span class="hour-label">{{ formatHour(hour) }}</span>
+          <div class="hour-line"></div>
+        </div>
+      }
+
+      <!-- Event column -->
+      <div class="event-col">
+
+        <!-- Current time indicator -->
+        @if (isToday) {
+          <div class="now-line" [style.top.px]="nowLineTop">
+            <div class="now-dot"></div>
+          </div>
+        }
+
+        <!-- Events -->
+        @for (apt of dayAppointments; track apt.id) {
+          <div class="day-event"
+            [ngStyle]="eventStyle(apt)"
+            [style.background]="colors(apt).bg"
+            [style.border-left]="'4px solid ' + colors(apt).border"
+            [style.color]="colors(apt).text"
+            (click)="eventClick.emit(apt.id)"
+            (contextmenu)="onContextMenu(apt, $event)"
+            (touchstart)="onTouchStart(apt, $event)"
+            (touchend)="onTouchEnd()"
+            (touchmove)="onTouchMove()">
+
+            <div class="dev-header">
+              <span class="dev-property">{{ apt.property.title }}</span>
+              <span class="dev-status" [class]="'status-' + apt.status">{{ statusLabel(apt.status) }}</span>
+            </div>
+            <span class="dev-title">{{ apt.title }}</span>
+            <span class="dev-time">{{ formatTime(apt.start_date) }} – {{ formatTime(apt.end_date) }}</span>
+            @if (apt.description) {
+              <span class="dev-desc">{{ apt.description }}</span>
+            }
+
+          </div>
+        }
+
+        @if (dayAppointments.length === 0) {
+          <div class="empty-day">Sin citas para este día</div>
+        }
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

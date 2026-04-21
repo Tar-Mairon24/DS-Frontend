@@ -1,0 +1,58 @@
+<div class="page">
+
+  <div class="page-header">
+    <div>
+      <button type="button" class="btn-back" (click)="goBack()" aria-label="Volver">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Volver
+      </button>
+      <nav class="breadcrumb">
+        <span (click)="cancel()" class="breadcrumb-link">Propiedades</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">{{ isUpdate ? 'Actualizar Propiedad' : 'Nueva Propiedad' }}</span>
+      </nav>
+      <h1 class="page-title">{{ isUpdate ? 'Actualizar Propiedad' : 'Nueva Propiedad' }}</h1>
+      <p class="page-subtitle">{{ isUpdate ? 'Actualiza los detalles de la propiedad' : 'Complete todos los detalles para el nuevo registro' }}</p>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="form-card">
+
+      <app-property-media [propertyId]="propertyId ?? null" [existingImages]="propertyImages" />
+
+      <div class="section-divider"></div>
+
+      <app-property-location [form]="form" />
+
+      <div class="section-divider"></div>
+
+      <app-property-details [form]="form" />
+
+      <div class="section-divider"></div>
+
+      <app-property-services [form]="form" />
+
+      <div class="section-divider"></div>
+
+      <app-property-notes [form]="form" />
+
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="cancel()">
+        Cancelar
+      </button>
+      <div class="actions-right">
+        <button type="submit" class="btn-publish" [disabled]="isSubmitting">
+          {{ isSubmitting ? (isUpdate ? 'Actualizando...' : 'Publicando...') : (isUpdate ? 'Guardar cambios' : 'Publicar Propiedad') }}
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>

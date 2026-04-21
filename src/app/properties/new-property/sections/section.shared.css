@@ -1,0 +1,243 @@
+/* Shared section styles for new-property sub-components */
+
+.section {
+  padding: 2rem 2.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.section-icon {
+  width: 32px;
+  height: 32px;
+  background: #eff2ff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.section-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: #1e40af;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e40af;
+  letter-spacing: -0.01em;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 11px;
+}
+
+/* ── Grid layouts ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1rem; }
+.col-span-2 { grid-column: span 2; }
+.col-span-3 { grid-column: span 3; }
+.col-span-4 { grid-column: span 4; }
+
+/* ── Form field ── */
+.field { display: flex; flex-direction: column; gap: 6px; }
+
+.field label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.field input,
+.field select,
+.field textarea {
+  padding: 10px 14px;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: #1a1a1a;
+  background: #fafafa;
+  transition: border-color 0.15s, background 0.15s;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: #1e40af;
+  background: #fff;
+}
+
+.field input.invalid,
+.field select.invalid {
+  border-color: #e53e3e;
+}
+
+.field textarea { resize: vertical; min-height: 90px; }
+
+/* ── Toggle switch ── */
+.toggle-group {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #555;
+  font-weight: 500;
+  user-select: none;
+}
+
+.toggle-track {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background: #ddd;
+  border-radius: 11px;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.toggle-track input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  margin: 0;
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  pointer-events: none;
+}
+
+.toggle-track:has(input:checked) { background: #1e40af; }
+.toggle-track:has(input:checked) .toggle-thumb { transform: translateX(18px); }
+
+/* ── Checkbox group ── */
+.check-group-title {
+  font-size: 11px;
+  font-weight: 500;
+  color: #1e40af;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 12px;
+}
+
+.check-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.check-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.check-label:hover { color: #1a1a1a; }
+
+.check-label input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: #1e40af;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Measures panel ── */
+.measures-panel {
+  background: #f8f9ff;
+  border: 1px solid #eef0ff;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-top: 1rem;
+}
+
+/* ── Services grid ── */
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .col-span-2, .col-span-3, .col-span-4 { grid-column: span 1; }
+  .services-grid { grid-template-columns: 1fr; }
+  .section { padding: 1.5rem; }
+}
+
+.owner-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 100;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.owner-option {
+  padding: 10px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.owner-option:hover { background: #f5f5f5; }
+
+.owner-name { font-weight: 500; font-size: 14px; }
+.owner-email { font-size: 12px; color: #888; }
+
+.owner-loading,
+.owner-empty { color: #aaa; font-size: 13px; cursor: default; }
+.owner-empty:hover { background: none; }
+
+.owner-create {
+  border-top: 1px solid #eee;
+  color: #4f6ef7;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.field-error { font-size: 12px; color: #e53935; margin-top: 4px; }

@@ -1,28 +1,36 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { BaseHttpService } from './http.service';
+import { Observable, map } from 'rxjs';
+import { BaseHttpService } from '@services/http.service';
+import { User } from '@shared/models/user';
 
-export interface UserDTO {
-  id: number;
-  nombre: string;
-  email: string;
-  password: string;
-  role: string;
-}
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class UserService extends BaseHttpService {
-  getUsers(): Observable<any> {
-    return this.get('/users/all');
+
+  getUsers(type: string = 'all', search: string = ''): Observable<User[]> {
+    const params = new URLSearchParams({ type });
+    if (search) params.set('q', search);
+    return this.get<{ data: User[] }>(`/users?${params}`).pipe(
+      map(r => r.data ?? [])
+    );
+  }
+
+  getOwners(search: string = ''): Observable<User[]> {
+    return this.getUsers('owner', search);
   }
 
   getUserById(id: string): Observable<any> {
     return this.get(`/users/${id}`);
   }
 
-  updateUser(id: string, data: any): Observable<any> {
+  createOwner(data: { username: string; email?: string; phone?: string }): Observable<{ data: User }> {
+    return this.post('/users/owners', data);
+  }
+
+  createUser(user: User): Observable<any> {
+    return this.post('/users/create', user);
+  }
+
+  updateUser(id: string, data: User): Observable<any> {
     return this.put(`/users/${id}`, data);
   }
 

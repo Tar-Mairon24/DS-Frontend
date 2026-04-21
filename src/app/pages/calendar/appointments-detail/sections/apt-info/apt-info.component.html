@@ -1,0 +1,56 @@
+<div class="info-card">
+
+  <div class="info-grid">
+
+    <div class="info-block">
+      <span class="block-label">Fecha y Hora</span>
+      <div class="block-content">
+        <div class="block-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <div>
+          <div class="block-primary">{{ formatDate(apt.start_date) }}</div>
+          <div class="block-secondary">{{ formatTime(apt.start_date) }} — {{ formatTime(apt.end_date) }} ({{ durationMin }} min)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-block">
+      <span class="block-label">Referencia de Cita</span>
+      <div class="block-content">
+        <div class="block-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="block-primary">ID: #AE-{{ paddedId }}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="info-block">
+    <span class="block-label">Descripción de la Visita</span>
+    <p class="description">{{ apt.description }}</p>
+  </div>
+
+  @if (apt.notes) {
+    <div class="notes-block">
+      <div class="notes-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        <span class="block-label">Notas Internas</span>
+      </div>
+      <p class="notes-text">{{ apt.notes }}</p>
+    </div>
+  }
+
+</div>
