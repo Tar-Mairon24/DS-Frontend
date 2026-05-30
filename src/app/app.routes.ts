@@ -6,7 +6,6 @@ import { MainLayoutComponent } from '@shared/layout/main-layout/main-layout.comp
 import { DashboardComponent } from '@properties/dashboard/dashboard.component';
 import { ConfiguracionComponent } from '@pages/profile/configuracion/configuracion.component';
 import { authGuard } from '@auth/guards/auth.guard';
-import { mfaGuard } from '@auth/guards/mfa.guard';
 import { loggedInGuard } from '@auth/guards/logged-in.guard';
 import { NewPropertyComponent } from '@properties/new-property/new-property.component';
 import { UpdatePropertyComponent } from '@properties/update-property/update-property.component';

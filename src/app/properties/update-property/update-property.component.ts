@@ -107,6 +107,7 @@ export class UpdatePropertyComponent implements OnInit {
   goBack() { window.history.length > 1 ? window.history.back() : this.router.navigate(['/dashboard']); }
 
   submit() {
+    console.log('Submitting update for property ID:', this.propertyId);
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     if (!this.propertyId) return;
 
