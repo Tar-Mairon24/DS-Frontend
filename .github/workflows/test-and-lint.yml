@@ -1,4 +1,4 @@
-gname: Frontend Linting
+name: Frontend Linting
 
 on:
   push:
